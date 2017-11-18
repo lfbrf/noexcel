@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta content="text/html;charset=UTF-8" />
+        <title>My HTML</title>
+    </head>
+    <body>
+        <h1>MyHTML</h1>
+        <p id="mytext">Hello World! This is a test.</p>
+        <div>
+            <input type="button" value="Alert" onclick="displayAlert()" />
+            <input type="button" value="Say hello" onclick="showAndroidToast('Hello Android!')" />
+            <input type="button" value="Open Dialog" onclick="openAndroidDialog()" />
+            <input type="button" value="Add highlight" onclick="changeColor()" />
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+            function showAndroidToast(toast) {
+                JSInterface.showToast(toast);
+            }
+
+            function openAndroidDialog() {
+                JSInterface.openAndroidDialog();
+            }
+
+            function callFromActivity(msg) {
+                alert(msg);
+                var oldHTML = document.getElementById("mytext");
+                alert(oldHTML);
+                var newHTML = "<span style='color:#ff0000'>" + msg + "</span>";
+                alert(newHTML);
+                document.getElementById("mytext").innerHTML = newHTML;
+            }
+
+            function changeColor() {
+                var oldHTML = document.getElementById("mytext").innerHTML;
+                alert(document.getElementById("mytext").value);
+                var newHTML = "<span style='color:#ff0000'>" + oldHTML + "</span>";
+                document.getElementById("mytext").innerHTML = newHTML;
+            }
+
+            function displayAlert() {
+
+                window.alert("I am here!");
+
+            }
+            //]]>
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Project 4</title>
+
+        <style type="text/css">
+            .error {
+                border:2px solid red;
+            }
+        </style>
+    </head>
+
+    <body>
+        <form name="myForm" onsubmit="return validateForm()">
+            Phone Number:<input type="text" id="phone">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <script type="text/javascript">
+
+            //at first, we define a variable stating that an event listener has been attached onto the field
+            var validatePhoneOnKeyUpAttached = false;
+
+            function validateForm() {
+
+                //then, we attach the event listened to the field after the submit, if it has not been done so far
+                if (!validatePhoneOnKeyUpAttached) {
+                    document.getElementById("phone").onkeyup = checkPhone;
+                    validatePhoneOnKeyUpAttached = true;
+                }
+
+                return checkPhone();
+            }
+
+            function checkPhone() {
+                var phone = document.forms["myForm"]["phone"].value;
+                var phoneNum = phone.replace(/[^\d]/g, '');
+                if (phoneNum.length > 6 && phoneNum.length < 11) {
+                    document.getElementById("phone").style.borderLeft = "transparent";//and you want to remove invalid style
+                    return true;
+                } else if (phoneNum.length < 7 || phoneNum.length > 10) {
+                    //document.getElementById("phone").className = document.getElementById("phone").className + " error";
+                    //document.getElementById("phone").className = document.getElementById("phone").className.replace(" error", "");
+                    document.getElementById("phone").style.borderLeftColor = "red";
+
+                    return false;
+
+                }
+            }
+        </script>
+    </body>
+</html>

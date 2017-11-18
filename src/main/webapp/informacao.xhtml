@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+
+                template="./WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <!-- intro -->
+        <h:head>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgLv8F4ynpKxMvwM_K9V0rx6A7SFefvGI"
+            type="text/javascript"></script>
+
+        </h:head>
+
+        <div class="utf-intro green accent-3 z-depth-1" style="padding: 5%" >
+            <h1 class="grey-text text-lighten-5">No Excel</h1>
+            <h3>Quem somos?</h3>
+            <h5> Somos um restaurante universitário, localizado na UTFPR campûs Guarapuava, possuimos os melhores cárdapios da cidade venha conferir! </h5>
+            <h5>Nossa missão é atender os nosso clientes com respeito e seriedade,
+                pensando em nossos consumidores disponibilizamos essa ferramenta, para evitar filas e economizar tempo.
+            </h5>
+            <h3>Qual a finalidade?</h3>
+            <h5>voce pode adicionar uma
+                quantia em dinheiro com o atendente do restaurante e quando precisar mediante apresentação de um documento poderá creditar de seu saldo,
+                evitando assim que seja necessário andar com dinheiro todos os dias,
+                além disso ainda pode ter acesso a todos os seus gastos pela internet. O melhor de tudo isso é que é de graça. Ainda não é cadastrado
+                <a href="cadastrocliente.jsf">clieque aqui</a></h5>
+
+
+            <h3>Endereço e Localização</h3>
+            <div class="row" style="padding-left: 17%">
+                <h:form prependId="false">
+                    <a id="link-map">Av. Profa. Laura Pacheco Bastos, 800 - Industrial, Guarapuava - PR, 85053-525</a>
+                    <h:outputLabel  binding="#{requestScope.foo}" >
+                        <p:gmap  id="x" center="-25.3518883, -51.480559" zoom="15" type="HYBIRD"
+                                 class="my-map my-hide-map" />
+                    </h:outputLabel>
+                </h:form>
+
+            </div>
+            <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+            <script>
+
+                window.onload = function () {
+                    var linkMap = document.getElementById("link-map");
+
+                    linkMap.onclick = function (e) {
+                        e.preventDefault();
+                        $("#x").removeClass("my-hide-map").addClass("my-show-map");
+                    }
+                }
+            </script>
+        </div>
+        <!-- intro -->
+    </ui:define>
+
+</ui:composition>

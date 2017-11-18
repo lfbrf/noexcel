@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <h:outputLink rel="icon" type="image/png" value="favicon.png"></h:outputLink>
+
+        <!-- Compiled and minified JavaScript -->
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+
+        <!-- CSS -->
+
+        <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css"/-->
+        <h:outputStylesheet library="styles" name="materialize.css"></h:outputStylesheet>
+        <h:outputStylesheet library="styles" name="common.css"></h:outputStylesheet>
+        <h:outputStylesheet library="styles" name="template.css"></h:outputStylesheet>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"></link>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:200,700' rel='stylesheet' type='text/css'></link>
+
+        <title>No Excel</title>
+    </h:head>
+
+    <h:body>
+        <header>
+            <div class="navbar-fixed" style="z-index: 999">
+                <nav >
+                    <div class="nav-wrapper green">
+                        <div class="container">
+                            <a class="brand-logo" href="index.jsf" >
+                                <h:graphicImage library="images" name="utfpr.png" class="utf-logo"></h:graphicImage>
+                            </a>
+                            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                            <ul class="right hide-on-med-and-down" >
+                                <li><a href="index.jsf">Inicio</a></li>
+                                <li><a href="cadastro.jsf">Cadastro de Cliente</a></li>
+                                <li><a href="login.jsf">Login</a></li>
+                                <li><a href="informacao.jsf" >Informações</a></li>
+                                <h:panelGroup rendered="#{sessionScope.loggedIn}">
+                                    <li ><h:form>
+                                            <h:commandLink action="#{loginBean.logoutB()}" value="Logout"></h:commandLink>
+                                        </h:form></li>
+                                </h:panelGroup>
+                            </ul>
+                            <ul class="side-nav white" id="mobile-demo">
+                                <div class="row">
+                                    <div class="col s8 offset-s2">
+                                        <div class="center">
+                                            <h:graphicImage library="images" name="utfpr.png" class="responsive-img utf-logo"></h:graphicImage>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <li><a href="index.jsf">Inicio</a></li>
+                                <li><a href="login.jsf">Login</a></li>
+                                <li><a href="musica.jsf">Cadastro de Cliente</a></li>
+                                <li><a href="informacao.jsf" >Informações</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+
+        <main id="content" class="container">
+            <ui:insert name="content">
+            </ui:insert>
+        </main>
+
+        <!-- rodape-->
+        <footer class="page-footer green darken-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 center">
+                        <a href="http://www.utfpr.edu.br/guarapuava">
+                            <h:graphicImage library="images" name="utfpr.png" id="utfpr-footer" class=" img-responsive" height="70px"></h:graphicImage>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <div class="container">
+                    &#169; Copyright <span id="year"></span> - Todos os direitos reservados
+                </div>
+            </div>
+        </footer>
+        <!-- rodapé -->
+
+        <!--<script src="https://code.jquery.com/jquery-2.2.4.js"></script>-->
+        <!-- Para evitar conflito com o jQuery, é preciso referenciar a própria versão do jQuery que vem no PrimeFaces -->
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <!--<h:outputScript library="scripts" name="common.js"></h:outputScript> -->
+    </h:body>
+
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <!-- Change to "Production" when you are ready to deploy -->
+
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>br.edu.utfpr.jobs.QuartzListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.jsf</welcome-file>
+    </welcome-file-list>
+    <!-- TO LOGIN -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/login.jsf</form-login-page>
+            <form-error-page>/view/errors/login-error.jsf</form-error-page>
+        </form-login-config>
+    </login-config>
+    <security-role>
+        <role-name>ADM</role-name>
+    </security-role>
+    <security-role>
+        <role-name>USER</role-name>
+    </security-role>
+    <security-role>
+        <role-name>PENDING-USER</role-name>
+    </security-role>
+    <security-constraint>
+        <display-name>Segurança para o diretório de usuarios</display-name>
+        <web-resource-collection>
+            <web-resource-name>Somente Usuarios</web-resource-name>
+            <url-pattern>/pending-user/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>PENDING-USER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Segurança para o diretório de usuarios</display-name>
+        <web-resource-collection>
+            <web-resource-name>Somente Usuarios</web-resource-name>
+            <url-pattern>/user/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>USER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Segurança para o diretório de usuarios</display-name>
+        <web-resource-collection>
+            <web-resource-name>Somente Administrador</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Segurança para diretórios</display-name>
+        <web-resource-collection>
+            <web-resource-name>Todos os usuários autenticados</web-resource-name>
+            <url-pattern>/view/bairros/*</url-pattern>
+            <url-pattern>/view/ocorrencias/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADM</role-name>
+            <role-name>USER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <listener>
+        <listener-class>
+            org.quartz.ee.servlet.QuartzInitializerListener
+        </listener-class>
+    </listener>
+</web-app>

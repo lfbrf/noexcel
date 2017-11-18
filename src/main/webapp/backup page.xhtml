@@ -1,0 +1,468 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:head>
+            <title>Material Loin</title>
+            <h:head>
+                <title>Material Loin</title>
+                <!-- Compiled and minified CSS -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css"/>
+                <h:outputStylesheet name="common.css" library="styles" />
+                <!-- Compiled and minified JavaScript -->
+                <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+            </h:head>
+        </h:head>
+        <h:body styleClass="cyan-lighten-5">
+            <h1>Faca o Seu cadastro</h1>
+            <div class="valign-wrapper" >
+
+                <div class="container">
+                    <div class="center-align">
+                        <div class="valign-wrapper " >
+
+                            <div class="container">
+                                <div class="col s6 offset-3 "  >
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <img class="responsive-img" style="max-width: 94px;" src="resources/images/no-excel.png" />
+                                            <div class="left-align" >
+
+                                                <h:form id="login-fom"  prependId="false" >
+
+                                                    <div class="row">
+                                                        <div class="input-field col s12">
+                                                            <label for="client-email" class="active" style="font-size: 20px; color:black; font-family:Arial, Helvetica, sans-serif; padding-top: 5%; font-weight: bold;" >Selecione o seu vinculo com a UTFPR:</label>
+                                                        </div>
+                                                        <div  style="padding-top: 5%;" >
+                                                            <h:panelGrid columns="2" columnClasses="cellGridFormLabel,none,cellGridFormLabel,none">
+
+                                                                <p:selectOneRadio id="console"
+                                                                                  value="#{examinationFormBean.radioVal}"
+                                                                                  label="Action">
+                                                                    <f:selectItem  itemLabel="Aluno ou Professor" itemValue="student" id="student"  />
+
+                                                                    <f:selectItem itemLabel="Visitante" id="visitor"
+                                                                                  itemValue="visitor" />
+                                                                    <p:ajax process="console"
+                                                                            update="@form" />
+                                                                </p:selectOneRadio>
+                                                            </h:panelGrid>
+
+                                                        </div>
+                                                        <div class="input-field col s12" id="combo">
+                                                            <p:inputText id="compid"  label="cpf"  size="40" class="default-input" required="true" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'CPF');"
+                                                                         requiredMessage="Campo CPF e obrigatorio" title="Informe o CPF, somente numeros"
+                                                                         validatorMessage="Campo CPF e obrigatorio"
+                                                                         value="#{userBean.user.login}"
+                                                                         rendered="#{examinationFormBean.radioVal eq 'visitor'}"/>
+                                                            <p:tooltip id="tool1" for="compid" showEvent="focus" hideEvent="blur" />
+                                                            <p:watermark for="compid" value="CPF" />
+
+
+                                                            <p:inputText id="studentid" label="ra" size="40" class="default-input" required="true" onfocus="$(this).attr('placeholder', '');"
+                                                                         requiredMessage="Campo RA e obrigatorio" title="Informe o seu RA, somente digitos" onblur="$(this).attr('placeholder', 'RA');"
+
+                                                                         value="#{userBean.user.login}"
+                                                                         rendered="#{examinationFormBean.radioVal eq 'student'}"/>
+                                                            <p:tooltip id="tool2" for="studentid" showEvent="focus" hideEvent="blur" />
+                                                            <p:watermark for="studentid" value="RA " />
+                                                            <!--<p:messages for="studentid"  closable="true" autoUpdate="true" /> -->
+                                                        </div>
+                                                        <div class="col s12 input-field " >
+                                                            <h:inputText id="name"  class="default-input" value="#{userBean.user.name}" title="Informe seu nome completo"  onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Nome');"  required="true"  requiredMessage="Campo nome e obrigatorio " />
+                                                            <p:tooltip id="tool3" for="name" showEvent="focus" hideEvent="blur"  />
+                                                            <p:watermark for="name" value="Nome"   />
+
+
+                                                        </div>
+                                                        <div class="col s12 input-field">
+                                                            <h:inputText id="email" class="default-input"  title="Informe seu email"   value="#{userBean.user.email}" required="true"  onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Email');"  requiredMessage="Campo email e obrigatorio"/>
+                                                            <p:tooltip id="tool4" for="email" showEvent="focus" hideEvent="blur"  />
+                                                            <p:watermark for="email"  value="Email"  />
+
+                                                        </div>
+                                                        <div class="col s12 input-field">
+                                                            <p:password id="pass"  class="default-input" title="Informe sua senha, deve conter ao menos um numero e uma letra"  placeholder="Senha" value="#{userBean.user.password}"  requiredMessage="Campo  senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Senha');"  />
+                                                            <p:tooltip id="tool5" for="pass" showEvent="focus" hideEvent="blur"  />
+
+                                                        </div>
+                                                        <div class="col s12 input-field">
+                                                            <p:password  id="repass" class="default-input" title="Repita a senha"  placeholder="Repita a Senha" value="#{beanValidationView.passVerify}"   requiredMessage="Campo repitir senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Repita a Senha');"  />
+                                                            <p:tooltip id="tool6" for="repass" showEvent="focus" hideEvent="blur"  />
+
+                                                        </div>
+
+                                                        <div class="col s12 input-field enviar">
+                                                            <p:commandButton action="#{userBean.persist()}"   id="enviar" value="submit" ajax="true" validateClient="true" update="@form"  ></p:commandButton>
+                                                            <!--
+                                                            <button  disabled="true"    id="enviar" value="submit"  ajax="true" validateClient="true"  class="btn waves-effect waves-light" type="submit" name="action">Cadastrar
+                                                                <i class="material-icons right ">send</i>
+                                                            </button> -->
+
+                                                        </div>
+
+                                                        <div class="col s12 input-field wrong-grownl">
+                                                            <p:growl widgetVar="growlWV" life="1000" />
+                                                            <p:growl widgetVar="email-error" life="1000" />
+                                                            <p:growl widgetVar="ra-error" life="1000" />
+                                                            <p:growl widgetVar="ratio-error" life="1000" />
+                                                            <p:growl widgetVar="ratio-error-visitor" life="1000"/>
+                                                            <p:growl widgetVar="ratio-error-student" life="1000" />
+                                                            <p:growl widgetVar="cpf-error"  life="1000"/>
+                                                            <p:growl widgetVar="cpf-error-missing" life="1000" />
+                                                            <p:growl widgetVar="name-error" life="1000" />
+                                                            <p:growl widgetVar="email-error" life="1000" />
+                                                            <p:growl widgetVar="pass-error" life="1000"  />
+                                                            <p style="color:red; font-size: 12px">Todos os campos sao obrigatorios, senha deve conter ao menos uma letra e um numero</p>
+                                                            <p style="color:red; font-size: 12px">Atencao seu RA ou CPF serao usados para acesso ao sistema</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <script>
+
+                                                        /*Tratei eventos de borda input por input
+                                                         $("#studentid").mouseleave(function () {
+                                                         raBlur();
+                                                         });
+                                                         $("#studentid").mousemove()(function () {
+                                                         raBlur();
+                                                         });
+                                                         $("#compid").mouseleave(function () {
+                                                         cpfBlur();
+                                                         });
+                                                         $("#compid").mousemove()(function () {
+                                                         cpfBlur();
+                                                         });
+                                                         function isCpf(cpf) {
+                                                         var regex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
+                                                         return regex.test(cpf);
+                                                         }
+                                                         function cpfBlur() {
+
+                                                         var cpf = $('#compid').val();
+                                                         if (!isCpf()(cpf)) {
+                                                         $('input[id="compid"]').addClass('error');
+                                                         } else
+                                                         $('input[id="compid"]').removeClass('error');
+                                                         }
+                                                         function raBlur() {
+                                                         var ra = $('#studentid').val();
+                                                         if (!isRa(ra)) {
+                                                         $('input[id="studentid"]').addClass('error');
+                                                         } else
+                                                         $('input[id="studentid"]').removeClass('error');
+                                                         }
+                                                         function isRa(ra) {
+                                                         var regex = /^\d{8,8}$/;
+                                                         return regex.test(ra);
+                                                         }
+                                                         */
+
+                                                        $("#name").focus(function () {
+                                                            if (isCpf($('#compid').val())) {
+                                                                $('input[id="compid"]').removeClass('error');
+                                                                $('input[id="compid"]').addClass('default-input');
+                                                            } else
+                                                                $('input[id="compid"]').addClass('error');
+                                                        });
+                                                        $("#name").focus(function () {
+                                                            if (isRa($('#studentid').val())) {
+                                                                $('input[id="studentid"]').removeClass('error');
+                                                                $('input[id="studentid"]').addClass('default-input');
+                                                            } else
+                                                                $('input[id="studentid"]').addClass('error');
+                                                        });
+                                                        /*$("#email").focus(function () {
+                                                         if (isName($('#name').val())) {
+                                                         $('input[id="name"]').removeClass('error');
+                                                         $('input[id="name"]').addClass('default-input');
+                                                         } else
+                                                         $('input[id="name"]').addClass('error');
+                                                         }); */
+                                                        $("#repass").focus(function () {
+                                                            if (isPass($('#pass').val())) {
+                                                                $('input[id="pass"]').removeClass('error');
+                                                                $('input[id="pass"]').addClass('default-input');
+                                                            } else
+                                                                $('input[id="pass"]').addClass('error');
+                                                        });
+                                                        function isName(name) {
+                                                            var regex = /^[A-Z][a-z]+([ ][A-Z][a-z]+)*$/;
+                                                            return regex.test(name);
+                                                        }
+                                                        function isRa(ra) {
+                                                            var regex = /^\d{8,8}$/;
+                                                            return regex.test(ra);
+                                                        }
+                                                        function isCpf(cpf) {
+                                                            var regex = /([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})/;
+                                                            return regex.test(cpf);
+                                                        }
+                                                        $(".enviar").mouseover(function go() {
+
+                                                            var isChecked = jQuery("input[name=console]:checked").val();
+                                                            var booleanVlaueIsChecked = false;
+                                                            var cpf = $('#compid').val();
+                                                            var ra = $('#studentid').val();
+
+                                                            var opt = $('input[name="console"]:checked').val();
+
+
+                                                            if (!isChecked) {
+                                                                booleanVlaueIsChecked = true;
+                                                                PF('ratio-error').renderMessage({"summary": "Selecione seu vinculo com a faculdade",
+                                                                    "severity": "error"});
+                                                                $("#enviar").prop("disabled", true);
+                                                                return false;
+                                                            }
+                                                            if (opt == "student") {
+
+                                                                if (ra == "") {
+                                                                    PF('ratio-error-student').renderMessage({"summary": "Informe seu ra",
+                                                                        "severity": "error"});
+                                                                    $('input[id="studentid"]').addClass('error');
+                                                                } else if (!isRa(ra)) {
+
+                                                                    PF('ra-error').renderMessage({"summary": "RA incorreto, apenas numeros, por exemplo: 12345678",
+                                                                        "severity": "error"});
+                                                                    $('input[id="studentid"]').addClass('error');
+                                                                } else {
+
+                                                                    validateForm();
+
+                                                                }
+                                                            } else if (opt == "visitor") {
+                                                                if (cpf == "") {
+                                                                    PF('cpf-error-missing').renderMessage({"summary": "Informe o cpf",
+                                                                        "severity": "error"});
+                                                                    $('input[id="compid"]').addClass('error');
+                                                                } else if ((!isCpf(cpf))) {
+                                                                    PF('cpf-error').renderMessage({"summary": "CPF incorreto, apenas numeros, por exemplo: 12345678912",
+                                                                        "severity": "error"});
+                                                                    $('input[id="compid"]').addClass('error');
+                                                                } else {
+                                                                    validateForm();
+
+                                                                }
+                                                            }
+
+
+                                                        });
+                                                        function validaterePass() {
+                                                            var pass = $('#pass').val();
+                                                            var repass = $('#repass').val();
+                                                            if (pass == repass) {
+
+
+
+                                                            } else
+                                                                PF('pass-error').renderMessage({"summary": "As senhas nao conferem",
+                                                                    "severity": "error"});
+                                                        }
+                                                        function validatePass() {
+                                                            var pass = $('#pass').val();
+
+                                                            if (isPass(pass)) {
+                                                                validaterePass();
+                                                            } else
+                                                                PF('pass-error').renderMessage({"summary": "Snha incorreta, deve conter pelo menos um numero e uma letra, no minimo 6 digitos",
+                                                                    "severity": "error"});
+                                                            $('input[id="compid"]').addClass('error');
+
+                                                        }
+                                                        function validateForm() {
+                                                            var name = $('#name').val();
+                                                            var email = $('#email').val();
+                                                            if ($('#name').val() == "") {
+
+                                                                PF('name-error').renderMessage({"summary": "Informe seu nome respeitando caracters maisculos e minusculos",
+                                                                    "severity": "error"});
+                                                                // $('input[id="name"]').addClass('error');
+
+                                                            } else if (!isName(name)) {
+
+                                                                PF('name-error').renderMessage({"summary": "Nome nao aceito",
+                                                                    "severity": "error"});
+                                                            } else if ($('#email').val() == "") {
+                                                                PF('email-error').renderMessage({"summary": "Informe seu email",
+                                                                    "severity": "error"});
+                                                                $('input[id="email"]').addClass('error');
+                                                            } else if (!isEmail($('#email').val())) {
+
+                                                                PF('email-error').renderMessage({"summary": "Email incorreto, por exemplo: joao@domain.com",
+                                                                    "severity": "error"});
+                                                                $('input[id="email"]').addClass('error');
+                                                            } else
+                                                                validatePass();
+                                                        }
+
+
+                                                        function isEmail(email) {
+                                                            var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                                                            return regex.test(email);
+                                                        }
+                                                        function isPass(pass) {
+                                                            var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+                                                            return regex.test(pass);
+                                                        }
+                                                        $("input[id=studentid]").blur(function () {
+
+                                                            var studentid = $('#studentid').val();
+                                                            if (studentid == "" || studentid == null)
+                                                                $('input[id="studentid"]').addClass('error');
+                                                            else
+                                                                $('input[id="studentid"]').removeClass('error');
+                                                        });
+                                                        $("input[id=compid]").blur(function () {
+
+                                                            var compid = $('#compid').val();
+                                                            if (compid == "" || compid == null)
+                                                                $('input[id="compid"]').addClass('error');
+                                                            else
+                                                                $('input[id="compid"]').removeClass('error');
+                                                        });
+                                                        $("input[id=repass]").blur(function () {
+
+                                                            var repass = $('#repass').val();
+                                                            if (repass == "" || repass == null)
+                                                                $('input[id="repass"]').addClass('error');
+                                                            else
+                                                                $('input[id="repass"]').removeClass('error');
+                                                        });
+
+
+                                                        $("input[id=pass]").blur(function () {
+
+                                                            var pass = $('#pass').val();
+
+                                                            if (pass == "" || pass == null || !isPass(pass)) {
+                                                                $('input[id="pass"]').addClass('error');
+                                                                $('button').prop('disabled', true);
+                                                            } else
+                                                                $('input[id="pass"]').removeClass('error');
+                                                        });
+                                                        $('input[id=email]').blur(function () {
+
+                                                            var email = $('#email').val();
+                                                            if (email == "" || email == null) {
+                                                                $('input[id="email"]').addClass('error');
+                                                            } else
+                                                                $('input[id="email"]').removeClass('error');
+                                                        });
+
+                                                        $('input[id=compid]').focus(function () {
+                                                            PF('growlWV').renderMessage({"summary": "Informe seu CPF(somente numeros), por exemplo: 12312312312",
+                                                                "severity": "warn"});
+                                                        });
+                                                        $('input[id=studentid]').focus(function () {
+                                                            PF('growlWV').renderMessage({"summary": "Informe seu ra(somente numeros), por exemplo: 13207975",
+                                                                "severity": "warn"});
+                                                        });
+                                                        $('input[id=name]').focus(function () {
+
+                                                            PF('growlWV').renderMessage({"summary": "Informe seu nome completo",
+                                                                "severity": "warn"});
+                                                        });
+                                                        $('input[id=email]').focus(function () {
+                                                            PF('growlWV').renderMessage({"summary": "Informe seu email, por exemplo: joao@domain.com",
+                                                                "severity": "warn"});
+                                                        });
+                                                        $('input[id=pass]').focus(function () {
+                                                            PF('growlWV').renderMessage({"summary": "Informe sua senha, deve conter no minimo 6 digitos, uma letra e um numero.P exemplo: abc123",
+                                                                "severity": "warn"});
+                                                        });
+                                                        $('input[id=repass]').focus(function () {
+                                                            PF('growlWV').renderMessage({"summary": "Repita a senha",
+                                                                "severity": "warn"});
+                                                        });
+                                                        /*$('input[id=name]').blur(function () {
+                                                         var name = $('#name').val();
+                                                         if (name == "" || name == null)
+                                                         $('input[id="name"]').addClass('error');
+                                                         else
+                                                         $('input[id="name"]').removeClass('error');
+                                                         }); */
+
+
+
+
+                                                        $("input[id=ra]").bind('input propertychange', function () {
+                                                            alert("OK");
+                                                            alert($("input[id=ra]").val());
+                                                            var ra = $('#studentid').val();
+                                                            if (ra == "" || ra == null || !isRa(ra))
+                                                                $('input[id="studentid"]').addClass('error');
+                                                            else
+                                                                $('input[id="studentid"]').removeClass('error');
+                                                        });
+                                                        $("input[id=cpf]").bind('input propertychange', function () {
+                                                            alert("OK");
+                                                            alert($("input[id=compid]").val());
+                                                            var cpf = $('#compid').val();
+                                                            if (cpf == "" || cpf == null || !isCpf(cpf))
+                                                                $('input[id="compid"]').addClass('error');
+                                                            else
+                                                                $('input[id="compid"]').removeClass('error');
+                                                        });
+                                                        $("input[id=email]").bind('input propertychange', function () {
+                                                            alert("OK");
+                                                            alert($("input[id=email]").val());
+                                                            var email = $('#email').val();
+                                                            if (email == "" || email == null || !isEmail(email))
+                                                                $('input[id="email"]').addClass('error');
+                                                            else
+                                                                $('input[id="email"]').removeClass('error');
+                                                        });
+                                                        $("input[id=pass]").bind('input propertychange', function () {
+                                                            alert("OK");
+                                                            alert($("input[id=pass]").val());
+                                                            var pass = $('#pass').val();
+                                                            if (pass == "" || pass == null || !isPass(pass))
+                                                                $('input[id="pass"]').addClass('error');
+                                                            else
+                                                                $('input[id="pass"]').removeClass('error');
+                                                        });
+                                                        $("input[id=repass]").bind('input propertychange', function () {
+                                                            alert("OK");
+                                                            alert($("input[id=repass]").val());
+                                                            var repass = $('#repass').val();
+                                                            if (repass == "" || repass == null || !validaterePass(pass))
+                                                                $('input[id="repass"]').addClass('error');
+                                                            else
+                                                                $('input[id="repass"]').removeClass('error');
+                                                        });
+                                                        $("input[id=name]").bind('input propertychange', function () {
+                                                            alert("OK");
+                                                            alert($("input[id=name]").val());
+                                                            var name = $('#name').val();
+                                                            if (name == "" || name == null || !isName(name))
+                                                                $('input[id="name"]').addClass('error');
+                                                            else
+                                                                $('input[id="name"]').removeClass('error');
+                                                        });
+                                                    </script>
+                                                </h:form>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </h:body>
+        <!-- intro -->
+    </ui:define>
+
+</ui:composition>

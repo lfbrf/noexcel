@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <p:messages/>
+
+        <div class="container" >
+            <div class="row">
+                <h:form>
+                    <h2 style="text-align: center">Área administrativa!</h2>
+                    <p style="text-align: center">Cadastro de categorias</p>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <h:inputText id="category" value="#{userBean.user.name}"></h:inputText>
+                            <h:outputLabel for="category">Informe o nome</h:outputLabel>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <h:commandButton action="#{userBean.autocompleteUsuarios}" class="waves-effect waves-light btn" value="Registrar novo"></h:commandButton>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+
+                            <p:dataTable var="user" id="dtb"  value="#{userBean.findAll()}"  paginator="true" rows="5">
+
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{user.id}" />
+                                </p:column>
+
+                                <p:column headerText="Nome" filterBy="#{userBean.listapornomes}"
+                                          sortBy="#{user.name}">
+                                    <h:outputText value="#{user.name}"  />
+                                </p:column>
+
+                                <p:column headerText="">
+                                    <div class="row center">
+                                        <div class="col s12 ">
+                                            <h:commandLink action="#{userBean.edit(user)}" class="waves-effect waves-light btn blue darken-3 white-text">
+                                                <i class="material-icons">mode_edit</i>
+                                            </h:commandLink>
+                                        </div>
+                                        <div class="col s12">
+                                            <h:commandLink action="#{userBean.delete(user)}" class="waves-effect waves-light btn red darken-3 white-text">
+                                                <i class="material-icons">delete_forever</i>
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                    <p:outputLabel id="grid" value="País" for="pais" />
+                    <p:autoComplete id="pais" value="#{userBean.user.name}"
+                                    completeMethod="#{userBean.autocompleteUsuarios}"
+                                    forceSelection="true" minQueryLength="1" dropdown="true" >
+                        <p:ajax event="itemSelect" onstart="#{userBean.user.name}" update="dtb"/>
+                    </p:autoComplete>
+
+
+
+                </h:form>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+
+
+

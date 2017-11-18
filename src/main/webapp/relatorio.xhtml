@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h1>Relatório</h1> 
+        <div class="row">
+            <div class="col s12 m2 center">
+                <h:graphicImage library="images" name="music.png" class="responsive-img utf-report-image"></h:graphicImage>
+            </div>
+            <div class="col s12 m10">
+                <h5>Música</h5>
+                <p>
+                    Nome: <h:outputText value=""></h:outputText>
+                </p>
+                <p>
+                    Preço: <h:outputText value=""></h:outputText>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 center">
+                <h:graphicImage library="images" name="composer.png" class="responsive-img utf-report-image"></h:graphicImage>
+            </div>
+            <div class="col s12 m10">
+                <h5>Compositor</h5>
+                <p>
+                    Nome: <h:outputText value=""></h:outputText>
+                </p>
+                <p>
+                    Saldo: <h:outputText value=""></h:outputText>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m2 center">
+                <h:graphicImage library="images" name="artist.png" class="responsive-img utf-report-image"></h:graphicImage>
+            </div>
+            <div class="col s12 m10">
+                <h5>Artista</h5>
+                <p>
+                    Nome: <h:outputText value=""></h:outputText>
+                </p>
+                <p>
+                    Saldo: <h:outputText value=""></h:outputText>
+                </p>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
