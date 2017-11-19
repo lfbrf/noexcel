@@ -19,66 +19,63 @@
             </h:head>
         </h:head>
         <h:body styleClass="cyan-lighten-5">
-            <h1>Logar no Sistema</h1>
-            <div class="valign-wrapper" >
+            <h1>Seja bem-vindo!</h1>
 
-                <div class="container">
-                    <div class="center-align">
-                        <div class="valign-wrapper " >
+            <div class="card-panel red white-text" jsf:rendered="#{loginBean.isShowLoginError}">
+                <h:messages showDetail="true" ></h:messages>
+            </div>
+            <div class="row" style="margin-top: 4em">
+                <div class="col s6 offset-s3 card" >
+                    <div class="card-content center">
+                        <img class="responsive-img" style="max-width: 94px;" src="resources/images/no-excel.png" />
+                        <div class="left-align" >
 
-                            <div class="container">
-                                <div class="col s6 offset-3 "  >
-                                    <div class="card">
-                                        <div class="card-content">
-                                            <img class="responsive-img" style="max-width: 94px;" src="resources/images/no-excel.png" />
-                                            <div class="left-align" >
+                            <h:form id="login-fom"  prependId="false" >
 
-                                                <h:form id="login-fom"  prependId="false" >
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <label for="client-email" class="active" style="font-size: 20px; color:black; font-family:Arial, Helvetica, sans-serif; padding-top: 5%; font-weight: bold;">Login</label>
+                                    </div>
+                                    <div class="input-field col s11" id="combo">
+                                        <p:inputText id="compid"  label="Login"  size="40" class="default-input" required="true" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'CPF');"
+                                                     requiredMessage="Campo CPF e obrigatorio" title="Informe o CPF, somente numeros"
+                                                     validatorMessage="Campo CPF e obrigatorio"
+                                                     value="#{loginBean.usuario}"
+                                                     />
+                                        <p:tooltip id="tool1" for="compid" showEvent="focus" hideEvent="blur" />
+                                        <p:watermark for="compid" value="CPF" />
+                                        <!--<p:messages for="studentid"  closable="true" autoUpdate="true" /> -->
+                                    </div>
+                                    <dv class="s1">
+                                        <img class="responsive-img" id="error-id" style="max-width: 35px; padding-top: 20px; padding-left: 10px; display: none" src="resources/images/error.png" />
+                                    </dv>
+                                    <div class="col s1">
+                                        <img class="responsive-img" id="ok-id" style="max-width: 24px; padding-top: 20px; display: none" src="resources/images/ok.jpg" />
+                                    </div>
+                                    <div class="col s11 input-field">
+                                        <p:password  id="repass" required="true" class="default-input" title="Informe a Senha"  placeholder="Repita a Senha" value="#{loginBean.senha}"  requiredMessage="Campo repitir senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Repita a Senha');"  />
+                                        <p:tooltip id="tool6" for="repass" showEvent="focus" hideEvent="blur"  />
 
-                                                    <div class="row">
-                                                        <div class="input-field col s12">
-                                                            <label for="client-email" class="active" style="font-size: 20px; color:black; font-family:Arial, Helvetica, sans-serif; padding-top: 5%; font-weight: bold;" >Logar no sistema</label>
-                                                        </div>
-                                                        <div class="input-field col s11" id="combo">
-                                                            <p:inputText id="compid"  label="Login"  size="40" class="default-input" required="true" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'CPF');"
-                                                                         requiredMessage="Campo CPF e obrigatorio" title="Informe o CPF, somente numeros"
-                                                                         validatorMessage="Campo CPF e obrigatorio"
-                                                                         value="#{loginBean.usuario}"
-                                                                         />
-                                                            <p:tooltip id="tool1" for="compid" showEvent="focus" hideEvent="blur" />
-                                                            <p:watermark for="compid" value="CPF" />
-                                                            <!--<p:messages for="studentid"  closable="true" autoUpdate="true" /> -->
-                                                        </div>
-                                                        <dv class="s1">
-                                                            <img class="responsive-img" id="error-id" style="max-width: 35px; padding-top: 20px; padding-left: 10px; display: none" src="resources/images/error.png" />
-                                                        </dv>
-                                                        <div class="col s1">
-                                                            <img class="responsive-img" id="ok-id" style="max-width: 24px; padding-top: 20px; display: none" src="resources/images/ok.jpg" />
-                                                        </div>
-                                                        <div class="col s11 input-field">
-                                                            <p:password  id="repass" required="true" class="default-input" title="Informe a Senha"  placeholder="Repita a Senha" value="#{loginBean.senha}"  requiredMessage="Campo repitir senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Repita a Senha');"  />
-                                                            <p:tooltip id="tool6" for="repass" showEvent="focus" hideEvent="blur"  />
-
-                                                        </div>
-                                                        <div class="col s11 button center">
-                                                            <p:commandButton id="btEntrar" value="Entrar" ajax="false"
-                                                                             action="#{loginBean.onClickLogar()}"
-                                                                             class="btn green"/>
-                                                        </div>
-                                                    </div>
-                                                </h:form>
-
-
-                                            </div>
-
-                                        </div>
+                                    </div>
+                                    <div class="col s11 button center">
+                                        <p:commandButton id="btEntrar" value="Entrar" ajax="false"
+                                                         action="#{loginBean.onClickLogar()}"
+                                                         class="btn green"/>
                                     </div>
                                 </div>
-                            </div>
+                            </h:form>
+
+
                         </div>
+
                     </div>
+
                 </div>
             </div>
+
+
+
+
 
         </h:body>
         <!-- intro -->

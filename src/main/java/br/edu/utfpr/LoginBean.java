@@ -5,11 +5,16 @@
  */
 package br.edu.utfpr;
 
+import br.edu.utfpr.util.MessageUtil;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
@@ -23,13 +28,14 @@ import javax.servlet.http.HttpSession;
  * @author cabrito
  */
 @ManagedBean
-@SessionScoped
 public class LoginBean implements Serializable {
 
     private static final String PAGINA_INDEX = "/view/ocorrencias/inicio.xhtml";
 
     private String usuario;
     private String senha;
+
+    private boolean isShowLoginError = false;
 
     public LoginBean() {
     }
@@ -49,13 +55,25 @@ public class LoginBean implements Serializable {
 
     public String onClickLogar() throws IOException {
         FacesContext fc = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+        System.out.println("*****************************");
+        System.out.println("Login: " + this.usuario + " Senha: " + this.senha);
         boolean isloggedin = false;
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext.
                     getCurrentInstance().getExternalContext().getRequest();
 
+            //se usuário estiver logado, faz logout
+            Principal userPrincipal = request.getUserPrincipal();
+            if (request.getUserPrincipal() != null) {
+                request.logout();
+            }
+
+            //faz login. Caso as credenciais não confiram, será disparado um exception
             request.login(this.usuario, this.senha);
+            setIsShowLoginError(false);
+
+            //com parâmetro true, sempre retorna uma sessão
+            HttpSession session = (HttpSession) fc.getExternalContext().getSession(true);
             if (request.isUserInRole("PENDING-USER")) {
                 session.setAttribute("loggedIn", true);
                 return "pending-user/page?faces-redirect=true";
@@ -63,24 +81,34 @@ public class LoginBean implements Serializable {
             } else if (request.isUserInRole("ADMIN")) {
                 session.setAttribute("loggedIn", true);
                 return "admin/inicio?faces-redirect=true";
-
             }
             return "user/conta?faces-redirect=true";
         } catch (ServletException e) {
+            setIsShowLoginError(true);
+            MessageUtil.showMessage("Oppsss!!!", "Ocorreu uma falha na autenticação. Tente novamente!", FacesMessage.SEVERITY_ERROR);
             System.out.println(e);
         } finally {
             //tratar aqui mensagens de segurança que possam ter vindo
             //do Login Module exibindo-as na forma de FacesMessage
         }
-        String uri = "login.jsf";
-        FacesContext.getCurrentInstance().getExternalContext().dispatch(uri);
+//        String uri = "login.jsf";
+//        FacesContext.getCurrentInstance().getExternalContext().dispatch(uri);
         return "";
     }
 
     public void logoutB() {
         FacesContext fc = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.
+                getCurrentInstance().getExternalContext().getRequest();
+        try {
+            request.logout();
+        } catch (ServletException ex) {
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
-        session.invalidate();
+        if (session != null) {
+            session.invalidate();
+        }
     }
 
     public String getUsuario() {
@@ -97,6 +125,14 @@ public class LoginBean implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public boolean isIsShowLoginError() {
+        return isShowLoginError;
+    }
+
+    public void setIsShowLoginError(boolean isShowLoginError) {
+        this.isShowLoginError = isShowLoginError;
     }
 
 }

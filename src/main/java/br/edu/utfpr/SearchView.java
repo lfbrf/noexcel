@@ -8,8 +8,10 @@ package br.edu.utfpr;
 import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.dto.UserDTO;
 import br.edu.utfpr.model.service.UserService;
+import br.edu.utfpr.util.MessageUtil;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 /**
  *
  * @author Luiz
@@ -25,6 +27,11 @@ public class SearchView {
     private UserDTO userDTO = null;
     private String text1;
 
+    private boolean isShowImage = true;
+    private boolean isShowCredit = false;
+    private boolean isShowExtract = false;
+    private boolean isShowMeal = false;
+
     @PostConstruct
     public void init() {
         userService = new UserService();
@@ -33,9 +40,34 @@ public class SearchView {
     public void searchUser() {
         User user = userService.getByProperty("login", getText1());
         if (user == null) {
+            setIsShowImage(true);
+            MessageUtil.showMessage("", "Cliente não encontrado!", FacesMessage.SEVERITY_INFO);
             return;
         }
-        userDTO = new UserDTO(user.getLogin(), user.getName());
+
+        userDTO = new UserDTO(user.getLogin(), user.getName(), user.getBalance().toString());
+        setIsShowImage(false);
+    }
+
+    public String onCreditInsertion() {
+        setIsShowCredit(true);
+        setIsShowExtract(false);
+        setIsShowMeal(false);
+        return "";
+    }
+
+    public String onShowExtract() {
+        setIsShowCredit(false);
+        setIsShowExtract(true);
+        setIsShowMeal(false);
+        return "";
+    }
+
+    public String onRegisterMeal() {
+        setIsShowCredit(false);
+        setIsShowExtract(false);
+        setIsShowMeal(true);
+        return "";
     }
 
     public String getText1() {
@@ -62,6 +94,38 @@ public class SearchView {
 
     public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
+    }
+
+    public boolean isIsShowImage() {
+        return isShowImage;
+    }
+
+    public void setIsShowImage(boolean isShowImage) {
+        this.isShowImage = isShowImage;
+    }
+
+    public boolean isIsShowCredit() {
+        return isShowCredit;
+    }
+
+    public void setIsShowCredit(boolean isShowCredit) {
+        this.isShowCredit = isShowCredit;
+    }
+
+    public boolean isIsShowExtract() {
+        return isShowExtract;
+    }
+
+    public void setIsShowExtract(boolean isShowExtract) {
+        this.isShowExtract = isShowExtract;
+    }
+
+    public boolean isIsShowMeal() {
+        return isShowMeal;
+    }
+
+    public void setIsShowMeal(boolean isShowMeal) {
+        this.isShowMeal = isShowMeal;
     }
 
 }

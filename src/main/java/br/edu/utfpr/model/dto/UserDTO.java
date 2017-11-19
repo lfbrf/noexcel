@@ -13,13 +13,15 @@ public class UserDTO {
 
     private String ra;
     private String name;
+    private String balance;
 
     public UserDTO() {
     }
 
-    public UserDTO(String ra, String name) {
+    public UserDTO(String ra, String name, String balance) {
         this.ra = ra;
         this.name = name;
+        setBalance(balance);
     }
 
     public String getRa() {
@@ -36,6 +38,14 @@ public class UserDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBalance() {
+        return balance;
+    }
+
+    public void setBalance(String balance) {
+        this.balance = "R$ " + balance;
     }
 
 }
