@@ -19,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -43,6 +44,9 @@ public class User implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<UserRole> roles;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Transaction> transactions;
 
     public String getComment() {
         return comment;
@@ -101,17 +105,17 @@ public class User implements Serializable {
     public User() {
         super();
         this.roles = new HashSet<>();
+        this.transactions = new HashSet<>();
     }
 
     public User(String name, String email, String login, String password, BigDecimal balance, boolean checkuser, long time) {
-        super();
+        this();
         this.name = name;
         this.email = email;
         this.login = login;
         this.password = password;
         this.balance = balance;
         this.time = time;
-        this.roles = new HashSet<>();
     }
 
     public String getName() {
@@ -174,6 +178,14 @@ public class User implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
 }

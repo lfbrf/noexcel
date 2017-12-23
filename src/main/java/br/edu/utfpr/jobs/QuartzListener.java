@@ -40,7 +40,7 @@ public class QuartzListener implements ServletContextListener {
 
         JobDetail job = getJob(Job1.class, "a", "groupA");
 
-        Trigger trigger = getTrigger("a", "0/30 * * * * ?", "groupA");
+        Trigger trigger = getTrigger("a", "0 0 0/2 * * ?", "groupA");
 
         //schedule it
         Scheduler scheduler = null;

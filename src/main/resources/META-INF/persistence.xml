@@ -4,12 +4,13 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>br.edu.utfpr.model.User</class>
         <class>br.edu.utfpr.model.UserRole</class>
+        <class>br.edu.utfpr.model.Transaction</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/no_excel_db"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value="qwerty"/>
+            <property name="javax.persistence.jdbc.password" value="123mudar"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/new-no-excel">
-    <Realm className="org.apache.catalina.realm.JDBCRealm" connectionName="root" connectionPassword="qwerty" connectionURL="jdbc:mysql://localhost:3306/no_excel_db" digest="MD5" driverName="com.mysql.jdbc.Driver" roleNameCol="role" userCredCol="password" userNameCol="login" userRoleTable="user_role" userTable="user">
+    <Realm className="org.apache.catalina.realm.JDBCRealm"
+           connectionName="root" connectionPassword="123mudar"
+           connectionURL="jdbc:mysql://localhost:3306/no_excel_db"
+           digest="MD5" driverName="com.mysql.jdbc.Driver"
+           roleNameCol="role"
+           userCredCol="password"
+           userNameCol="login"
+           userRoleTable="user_role"
+           userTable="user">
     </Realm>
 </Context>

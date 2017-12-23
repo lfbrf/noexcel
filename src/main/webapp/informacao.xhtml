@@ -9,7 +9,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
+    <ui:define name="content" >
+
         <!-- intro -->
         <h:head>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgLv8F4ynpKxMvwM_K9V0rx6A7SFefvGI"
@@ -17,25 +18,29 @@
 
         </h:head>
 
-        <div class="utf-intro green accent-3 z-depth-1" style="padding: 5%" >
-            <h1 class="grey-text text-lighten-5">No Excel</h1>
-            <h3>Quem somos?</h3>
-            <h5> Somos um restaurante universitário, localizado na UTFPR campûs Guarapuava, possuimos os melhores cárdapios da cidade venha conferir! </h5>
-            <h5>Nossa missão é atender os nosso clientes com respeito e seriedade,
+        <div class="utf-intro  accent-3 z-depth-1 grey-text text-lighten-5" style="padding: 5%; background-image: url('resources/images/buffet.jpg');
+             background-repeat: no-repeat;
+             background-size: 100% 100%;
+             background-size: cover;
+             " >
+            <h1  class="orange-text text-darken-4">No Excel</h1>
+            <h2 class="orange-text text-darken-4">Quem somos?</h2>
+            <h4 class="white-text text-lighten-1"> Somos um restaurante universitário, localizado na UTFPR campûs Guarapuava, possuimos os melhores cárdapios da cidade venha conferir! </h4>
+            <h4 class="white-text text-lighten-1">Nossa missão é atender os nosso clientes com respeito e seriedade,
                 pensando em nossos consumidores disponibilizamos essa ferramenta, para evitar filas e economizar tempo.
-            </h5>
-            <h3>Qual a finalidade?</h3>
-            <h5>voce pode adicionar uma
+            </h4>
+            <h2 class="orange-text text-darken-4">Qual a finalidade?</h2>
+            <h4 class="white-text text-lighten-1">Voce pode adicionar uma
                 quantia em dinheiro com o atendente do restaurante e quando precisar mediante apresentação de um documento poderá creditar de seu saldo,
                 evitando assim que seja necessário andar com dinheiro todos os dias,
-                além disso ainda pode ter acesso a todos os seus gastos pela internet. O melhor de tudo isso é que é de graça. Ainda não é cadastrado
-                <a href="cadastrocliente.jsf">clieque aqui</a></h5>
+                além disso ainda pode ter acesso a todos os seus gastos pela internet. O melhor de tudo isso é que é de graça. Ainda não é cadastrado?
+                <a href="cadastrocliente.jsf" class="white-text text-lighten-1">clique aqui</a></h4>
 
 
-            <h3>Endereço e Localização</h3>
-            <div class="row" style="padding-left: 17%">
+            <h2 class="orange-text text-darken-4">Endereço e Localização</h2>
+            <div class="row center-align" >
                 <h:form prependId="false">
-                    <a id="link-map">Av. Profa. Laura Pacheco Bastos, 800 - Industrial, Guarapuava - PR, 85053-525</a>
+                    <h4 > <a id="link-map" class="white-text text-lighten-1">Av. Profa. Laura Pacheco Bastos, 800 - Industrial, Guarapuava - PR, 85053-525</a></h4>
                     <h:outputLabel  binding="#{requestScope.foo}" >
                         <p:gmap  id="x" center="-25.3518883, -51.480559" zoom="15" type="HYBIRD"
                                  class="my-map my-hide-map" />
@@ -45,7 +50,8 @@
             </div>
             <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
             <script>
-
+                document.getElementById("princ").classList.add('green');
+                document.getElementById("princ").classList.add('lighten-1');
                 window.onload = function () {
                     var linkMap = document.getElementById("link-map");
 
@@ -57,6 +63,8 @@
             </script>
         </div>
         <!-- intro -->
+
+
     </ui:define>
 
 </ui:composition>

@@ -19,7 +19,7 @@
             </h:head>
         </h:head>
         <h:body styleClass="cyan-lighten-5">
-            <h1>Seja bem-vindo!</h1>
+
 
             <div class="card-panel red white-text" jsf:rendered="#{loginBean.isShowLoginError}">
                 <h:messages showDetail="true" ></h:messages>
@@ -57,10 +57,10 @@
                                         <p:tooltip id="tool6" for="repass" showEvent="focus" hideEvent="blur"  />
 
                                     </div>
-                                    <div class="col s11 button center">
-                                        <p:commandButton id="btEntrar" value="Entrar" ajax="false"
+                                    <div class="col s11 center">
+                                        <h:commandButton id="btEntrar" value="Entrar"
                                                          action="#{loginBean.onClickLogar()}"
-                                                         class="btn green"/>
+                                                         class="waves-effect waves-light btn green"/>
                                     </div>
                                 </div>
                             </h:form>

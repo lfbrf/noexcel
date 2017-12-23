@@ -103,7 +103,7 @@
                                         </div>
 
 
-                                        <div class="col s12 button center">
+                                        <div class="col s12 button right-align">
                                             <p:growl widgetVar="growlWV" life="5000" />
                                             <p:growl widgetVar="email-error" life="5000" />
                                             <p:growl widgetVar="ra-error" life="5000" />
@@ -116,7 +116,7 @@
                                             <p:growl widgetVar="email-error" life="5000" />
                                             <p:growl widgetVar="pass-error" life="5000"  />
                                             <p:growl widgetVar="raerror" life="5000"  />
-                                            <p:commandButton action="#{userBean.persist()}"   id="enviar" value="Cadastrar" type="submit" ajax="true" validateClient="true" update="@form"  class="btn green"  ></p:commandButton>
+                                            <h:commandButton action="#{userBean.persist()}"   id="enviar" value="Cadastrar" type="submit" class="btn green"  ></h:commandButton>
                                         </div>
                                     </div>
                                 </h:form>

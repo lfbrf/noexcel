@@ -27,6 +27,14 @@ public class SearchView {
     private UserDTO userDTO = null;
     private String text1;
 
+    public float getCredit() {
+        return credit;
+    }
+
+    public void setCredit(float credit) {
+        this.credit = credit;
+    }
+    private float credit;
     private boolean isShowImage = true;
     private boolean isShowCredit = false;
     private boolean isShowExtract = false;
@@ -39,6 +47,7 @@ public class SearchView {
 
     public void searchUser() {
         User user = userService.getByProperty("login", getText1());
+
         if (user == null) {
             setIsShowImage(true);
             MessageUtil.showMessage("", "Cliente não encontrado!", FacesMessage.SEVERITY_INFO);
@@ -49,7 +58,13 @@ public class SearchView {
         setIsShowImage(false);
     }
 
+    public String teste() {
+        System.out.println("FUNCIONOU ATE AQUI");
+        return "";
+    }
+
     public String onCreditInsertion() {
+
         setIsShowCredit(true);
         setIsShowExtract(false);
         setIsShowMeal(false);
@@ -126,6 +141,10 @@ public class SearchView {
 
     public void setIsShowMeal(boolean isShowMeal) {
         this.isShowMeal = isShowMeal;
+    }
+
+    public void insertCredit() {
+        System.out.println("FUNCIONOU AGORA");
     }
 
 }

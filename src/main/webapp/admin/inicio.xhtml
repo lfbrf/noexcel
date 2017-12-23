@@ -19,6 +19,8 @@
 
         </style>
 
+
+
         <p:messages/>
 
         <div class="row" jsf:rendered="#{searchView.isShowImage}">
@@ -26,13 +28,13 @@
                 <img id="img-no-excel" src="http://lorempixel.com/200/200/"/>
             </div>
         </div>
+
         <div class="row ne-search">
             <div class="col s12 img-responsive">
-                <h:form>
+                <h:form >
                     <div class="row">
                         <div class="col s9 m10">
-                            <input type="text" jsf:value="#{searchView.text1}" required="true">
-                            </input>
+                            <input type="text" jsf:value="#{searchView.text1}" required="true" />
                         </div>
                         <div class="col s3 m2">
                             <h:commandLink class="waves-effect waves-light btn btn-large" action="#{searchView.searchUser()}">
@@ -41,6 +43,40 @@
                         </div>
                     </div>
                 </h:form>
+            </div>
+        </div>
+
+
+        <div jsf:id="ne-div-content">
+            <div class="row" jsf:rendered = "#{searchView.isShowCredit}">
+                <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito Fora da div renderiada esta ok!</h4></div>
+                <div class="col s12" style="padding: 3em 1em 1em 1em">
+                    Tela de inserção de crédito
+                    <h:form prependId="false">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">attach_money</i>
+
+                            <input type="text" jsf:value="#{transactionBean.credit}"  />
+                        </div>
+                        <p:commandButton  class="waves-effect waves-light btn btn-large" action="#{transactionBean.insertCredit()}">
+                            <i class="material-icons">send</i>
+                        </p:commandButton>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="row" jsf:rendered = "#{searchView.isShowExtract}">
+                <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
+                <div class="col s12" style="padding: 3em 1em 1em 1em">
+                    Dados do extrato
+                </div>
+            </div>
+            <div id="div-meal" class="row" jsf:rendered = "#{searchView.isShowMeal}">
+                <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
+                <div class="col s12" style="padding: 3em 1em 1em 1em">
+                    Tela de cadastro de refeição
+                </div>
             </div>
         </div>
         <h:form prependId="false">
@@ -74,26 +110,7 @@
                     </div>
                 </div>
             </div>
-            <div jsf:id="ne-div-content">
-                <div class="row" jsf:rendered = "#{searchView.isShowCredit}">
-                    <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito</h4></div>
-                    <div class="col s12" style="padding: 3em 1em 1em 1em">
-                        Tela de inserção de crédito
-                    </div>
-                </div>
-                <div class="row" jsf:rendered = "#{searchView.isShowExtract}">
-                    <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
-                    <div class="col s12" style="padding: 3em 1em 1em 1em">
-                        Dados do extrato
-                    </div>
-                </div>
-                <div id="div-meal" class="row" jsf:rendered = "#{searchView.isShowMeal}">
-                    <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
-                    <div class="col s12" style="padding: 3em 1em 1em 1em">
-                        Tela de cadastro de refeição
-                    </div>
-                </div>
-            </div>
+
         </h:form>
 
 

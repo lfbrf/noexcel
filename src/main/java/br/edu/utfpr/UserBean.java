@@ -39,7 +39,7 @@ import javax.persistence.TypedQuery;
  */
 @ManagedBean
 @RequestScoped
-@PersistenceUnit
+
 public class UserBean {
 
     private User user;
@@ -156,7 +156,7 @@ public class UserBean {
 
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         System.out.println("TIMEEEE");
-        user.setBalance(BigDecimal.ONE);
+        user.setBalance(BigDecimal.ZERO);
         if (user.getBalance().compareTo(BigDecimal.ZERO) == 0) {
             System.out.println("O VALOR E ZERO MESMO");
         }
@@ -166,11 +166,6 @@ public class UserBean {
 
         List<String> us = null;
         us = userService.listByNames();
-
-        for (String xx : us) {
-            System.out.println("FLAGG");
-            System.out.println(xx.toString());
-        }
 
         System.out.println("PASSOU");
 
