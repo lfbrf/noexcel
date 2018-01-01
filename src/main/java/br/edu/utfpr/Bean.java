@@ -1,28 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.utfpr;
 
+import br.edu.utfpr.model.Item;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-/**
- *
- * @author Luiz
- */
 @ManagedBean
 @ViewScoped
 public class Bean {
 
-    private boolean red;
+    private List<Item> items;
 
-    public String getCor() {
-        return "color:" + (red ? "red" : "blue");
+    @PostConstruct
+    public void init() {
+        items = new ArrayList<Item>();
     }
 
-    public void alteraCor() {
-        this.red = !red;
+    public void add() {
+        items.add(new Item());
     }
+
+    public void remove(Item item) {
+        items.remove(item);
+    }
+
+    public void save() {
+        System.out.println("AQUI");
+        System.out.println("items: " + items);
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
 }

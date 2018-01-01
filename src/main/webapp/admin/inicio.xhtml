@@ -19,7 +19,14 @@
 
         </style>
 
-
+        <h:form>
+            <h:dataTable value="#{bean.items}" var="item">
+                <h:column><h:inputText value="#{item.value}" /></h:column>
+                <h:column><h:commandButton value="remove" action="#{bean.remove(item)}" /></h:column>
+            </h:dataTable>
+            <h:commandButton value="add" action="#{bean.add}" />
+            <h:commandButton value="save" action="#{bean.save}" />
+        </h:form>
 
         <p:messages/>
 
@@ -47,36 +54,49 @@
         </div>
 
 
-        <div jsf:id="ne-div-content">
-            <div class="row" jsf:rendered = "#{searchView.isShowCredit}">
-                <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito Fora da div renderiada esta ok!</h4></div>
-                <div class="col s12" style="padding: 3em 1em 1em 1em">
-                    Tela de inserção de crédito
-                    <h:form prependId="false">
-                        <div class="input-field col s6">
-                            <i class="material-icons prefix">attach_money</i>
+        <div class="row" id="credito" style="display:none;">
+            <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito Fora da div renderiada esta ok!</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+                Tela de inserção de crédito
 
-                            <input type="text" jsf:value="#{transactionBean.credit}"  />
-                        </div>
-                        <p:commandButton  class="waves-effect waves-light btn btn-large" action="#{transactionBean.insertCredit()}">
-                            <i class="material-icons">send</i>
-                        </p:commandButton>
+                <h:form>
+                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
+                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">attach_money</i>
+                        <h:inputText value="#{transactionBean.credit}"></h:inputText>
+                    </div>
+                    <p:commandButton  ajax="false"  class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit()}">
+                        <i class="material-icons">send</i>
+                    </p:commandButton>
+                </h:form>
 
-                    </h:form>
-                </div>
             </div>
-
-            <div class="row" jsf:rendered = "#{searchView.isShowExtract}">
-                <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
-                <div class="col s12" style="padding: 3em 1em 1em 1em">
-                    Dados do extrato
-                </div>
+        </div>
+        <div class="row" id="extrato" style="display:none;">
+            <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+                Dados do extrato
             </div>
-            <div id="div-meal" class="row" jsf:rendered = "#{searchView.isShowMeal}">
-                <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
-                <div class="col s12" style="padding: 3em 1em 1em 1em">
-                    Tela de cadastro de refeição
-                </div>
+        </div>
+        <div  class="row" id="refeicao" style="display:none;">
+            <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+                Tela de cadastro de refeição
+
+                <h:form>
+                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
+                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
+                    <p:selectOneMenu   style="width:125px" value="#{transactionBean.productId}">
+                        <f:selectItems var="product" value="#{productBean.findAll()}" itemValue="#{product.id}" itemLabel="#{product.name}"/>
+                    </p:selectOneMenu>
+
+                    <p:commandButton  ajax="false"  class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
+                        <i class="material-icons">send</i>
+                    </p:commandButton>
+                </h:form>
+
+
             </div>
         </div>
         <h:form prependId="false">
@@ -91,12 +111,24 @@
                         <span class="ne-user-title">Saldo:</span> <h:outputText value="#{searchView.userDTO.balance}" />
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col s12 center" style="padding: 3em 1em 1em 1em">
-
-                        <h:commandLink value="Inserir Crédito" action="#{searchView.onCreditInsertion}"
+                        <p:commandLink value="Inserir Credito"  onclick=" document.getElementById('credito').style.display = 'block';
+                                document.getElementById('extrato').style.display = 'none';
+                                document.getElementById('refeicao').style.display = 'none';
+                                       " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
+                        <p:commandLink value="Ver etrato"  onclick=" document.getElementById('extrato').style.display = 'block';
+                                document.getElementById('credito').style.display = 'none';
+                                document.getElementById('refeicao').style.display = 'none';
+                                       " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
+                        <p:commandLink value="Refeicao"  onclick=" document.getElementById('refeicao').style.display = 'block';
+                                document.getElementById('extrato').style.display = 'none';
+                                document.getElementById('credito').style.display = 'none';
+                                       " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
+                        <h:commandLink value="Inserir Crédito"
                                        class="waves-effect waves-light btn btn-large green" style="margin-right: 2em">
-                            <f:ajax event="action" render=":ne-div-content"></f:ajax>
+                            <f:ajax event="click" listener="#{searchView.onCreditInsertion}" render=":ne-div-content"></f:ajax>
                         </h:commandLink>
                         <h:commandLink action="#{searchView.onShowExtract}" class="waves-effect waves-light btn btn-large green" style="margin-right: 2em">
                             <f:ajax event="action" render=":ne-div-content"></f:ajax>

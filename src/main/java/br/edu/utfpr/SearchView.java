@@ -78,6 +78,10 @@ public class SearchView {
         return "";
     }
 
+    public void myBeanMethod() {
+        System.out.println("My Bean Method Called when loading the JSF page");
+    }
+
     public String onRegisterMeal() {
         setIsShowCredit(false);
         setIsShowExtract(false);
