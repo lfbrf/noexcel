@@ -22,13 +22,13 @@ public final class JPAUtil {
         PERSISTENCE_UNIT = persistenceUnit;
         getEntityManager();
     }
-    
+
     /**
-     * 
+     *
      * Gera o schema do banco de dados
-     * 
+     *
      */
-    public static void generateSchema(){
+    public static void generateSchema() {
         Persistence.generateSchema(PERSISTENCE_UNIT, null);
     }
 
@@ -100,7 +100,7 @@ public final class JPAUtil {
     public static void closeEntityManager() {
         EntityManager em = threadLocal.get();
 
-        if (em != null) {            
+        if (em != null) {
             threadLocal.set(null);
             threadLocal.remove();
             em.close();

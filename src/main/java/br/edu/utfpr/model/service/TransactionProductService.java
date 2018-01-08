@@ -6,7 +6,10 @@
 package br.edu.utfpr.model.service;
 
 import br.edu.utfpr.model.Transaction;
+import br.edu.utfpr.model.TransactionProduct;
 import br.edu.utfpr.model.dao.TransactionDAO;
+import br.edu.utfpr.model.dao.TransactionProductDAO;
+import br.edu.utfpr.util.JPAUtil;
 import java.util.List;
 
 /**
@@ -22,15 +25,18 @@ import java.util.List;
  *
  * @author Filipe
  */
-public class TransactionService extends AbstractService<Long, Transaction> {
+public class TransactionProductService extends AbstractService<Long, TransactionProduct> {
 
-    public TransactionService() {
-        dao = new TransactionDAO();
+    public TransactionProductService() {
+        dao = new TransactionProductDAO();
 
     }
 
-    public List<Transaction> listbyRa(String ra) {
+    public List<TransactionProduct> listbyId(Long x) {
         //tratar transaçoes
-        return ((TransactionDAO) dao).listbyRa(ra);
+        System.out.println("PEGOUUU");
+        return ((TransactionProductDAO) dao).listbyId(x);
+
     }
+
 }

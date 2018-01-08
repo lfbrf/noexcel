@@ -6,9 +6,11 @@
 package br.edu.utfpr.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +36,17 @@ public class Transaction implements Serializable {
     @OneToMany(cascade = CascadeType.REMOVE)
     private Set<Product> products;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private Set<TransactionProduct> transaction_product;
+
+    public Set<TransactionProduct> getTransaction_product() {
+        return transaction_product;
+    }
+
+    public void setTransaction_product(Set<TransactionProduct> transaction_product) {
+        this.transaction_product = transaction_product;
+    }
+
     public Set<Product> getProducts() {
         return products;
     }
@@ -42,7 +55,7 @@ public class Transaction implements Serializable {
         this.products = products;
     }
 
-    private long value;
+    private BigDecimal value;
 
     public String getLogin() {
         return login;
@@ -69,11 +82,11 @@ public class Transaction implements Serializable {
         this.user = user;
     }
 
-    public long getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(long value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

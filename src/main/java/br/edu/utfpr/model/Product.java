@@ -25,14 +25,14 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    public Long getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Long value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
-    private Long value;
+    private BigDecimal value;
 
     public String getName() {
         return name;

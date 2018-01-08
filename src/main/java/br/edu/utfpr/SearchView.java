@@ -24,7 +24,7 @@ public class SearchView {
     private UserService userService;
     private User user = null;
 
-    private UserDTO userDTO = null;
+    UserDTO userDTO = null;
     private String text1;
 
     public float getCredit() {
@@ -43,19 +43,25 @@ public class SearchView {
     @PostConstruct
     public void init() {
         userService = new UserService();
+        user = new User();
+        userDTO = new UserDTO();
     }
 
     public void searchUser() {
-        User user = userService.getByProperty("login", getText1());
+        user = null;
+        userService = new UserService();
 
+        User user = userService.getByProperty("login", getText1());
         if (user == null) {
             setIsShowImage(true);
             MessageUtil.showMessage("", "Cliente não encontrado!", FacesMessage.SEVERITY_INFO);
             return;
         }
-
+        userDTO = new UserDTO();
         userDTO = new UserDTO(user.getLogin(), user.getName(), user.getBalance().toString());
+
         setIsShowImage(false);
+
     }
 
     public String teste() {
@@ -108,11 +114,13 @@ public class SearchView {
 //
 //    }
     public UserDTO getUserDTO() {
+
         return userDTO;
     }
 
     public void setUserDTO(UserDTO userDTO) {
         this.userDTO = userDTO;
+
     }
 
     public boolean isIsShowImage() {

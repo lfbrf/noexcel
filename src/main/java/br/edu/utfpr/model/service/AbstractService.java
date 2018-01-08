@@ -9,24 +9,26 @@ public class AbstractService<PK, T> {
     protected AbstractDAO<PK, T> dao;
 
     public boolean save(T entity) {
+        JPAUtil.closeEntityManager();
         boolean isSuccess = true;
         System.out.println("Salvando service");
         try {
             JPAUtil.beginTransaction();
             dao.save(entity);
-            JPAUtil.commit();            
+            JPAUtil.commit();
             System.out.println("deu commit");
         } catch (Exception e) {
             JPAUtil.rollBack();
             isSuccess = false;
             System.out.println("deu rollback");
-        } finally {            
+        } finally {
             JPAUtil.closeEntityManager();
         }
         return isSuccess;
     }
 
     public boolean update(T entity) {
+        JPAUtil.closeEntityManager();
         boolean isSuccess = true;
         try {
             JPAUtil.beginTransaction();
@@ -42,6 +44,7 @@ public class AbstractService<PK, T> {
     }
 
     public boolean delete(T entity) {
+        JPAUtil.closeEntityManager();
         boolean isSuccess = true;
         try {
             JPAUtil.beginTransaction();
@@ -51,12 +54,13 @@ public class AbstractService<PK, T> {
             JPAUtil.rollBack();
             isSuccess = false;
         } finally {
-            JPAUtil.closeEntityManager();            
+            JPAUtil.closeEntityManager();
         }
         return isSuccess;
     }
 
     public T getById(PK pk) {
+        JPAUtil.closeEntityManager();
         T entity = null;
 
         try {
@@ -73,6 +77,7 @@ public class AbstractService<PK, T> {
     }
 
     public T getByProperty(String propertyName, String propertyValue) {
+        JPAUtil.closeEntityManager();
         T entity = null;
         try {
             JPAUtil.beginTransaction();
@@ -87,30 +92,32 @@ public class AbstractService<PK, T> {
 
         return entity;
     }
-    
+
     public List<T> listByProperty(String propertyName, String propertyValue) {
+        JPAUtil.closeEntityManager();
         List<T> entity = null;
         try {
             JPAUtil.beginTransaction();
             entity = dao.listByProperty(propertyName, propertyValue);
             JPAUtil.commit();
         } catch (Exception e) {
-            JPAUtil.rollBack();            
+            JPAUtil.rollBack();
         } finally {
             JPAUtil.closeEntityManager();
         }
 
         return entity;
     }
-    
+
     public List<T> listByProperty(String propertyName, Long propertyValue) {
+        JPAUtil.closeEntityManager();
         List<T> entity = null;
         try {
             JPAUtil.beginTransaction();
             entity = dao.listByProperty(propertyName, propertyValue);
             JPAUtil.commit();
         } catch (Exception e) {
-            JPAUtil.rollBack();            
+            JPAUtil.rollBack();
         } finally {
             JPAUtil.closeEntityManager();
         }
@@ -119,6 +126,8 @@ public class AbstractService<PK, T> {
     }
 
     public List<T> findAll() {
+        JPAUtil.closeEntityManager();
         return dao.findAll();
+
     }
 }

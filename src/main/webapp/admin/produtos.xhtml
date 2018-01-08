@@ -18,16 +18,6 @@
             <div class="row">
                 <h:form>
 
-                    <h:selectOneMenu id="occurrence-category" value="#{transactionBean.productId}" >
-                        <f:selectItem itemValue="" itemLabel="Selecione uma categoria"></f:selectItem>
-                        <f:selectItems var="product" value="#{productBean.findAll()}" itemValue="#{product.id}" itemLabel="#{product.name}"/>
-                    </h:selectOneMenu>
-
-
-                    <p:selectOneMenu   style="width:125px">
-                        <f:selectItems var="product" value="#{productBean.findAll()}" itemValue="#{product.id}" itemLabel="#{product.name}"/>
-                    </p:selectOneMenu>
-
 
 
                     <h2 style="text-align: center">Área administrativa!</h2>
@@ -36,18 +26,18 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <h:inputText id="nam" value="#{productBean.product.name}"></h:inputText>
-                            <h:outputLabel for="name">Informe o Nome</h:outputLabel>
+                            <h:outputLabel for="name">Nome do Produto</h:outputLabel>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
                             <h:inputText id="valor"  value="#{productBean.product.value}"></h:inputText>
-                            <h:outputLabel for="valor">Informe o Preco</h:outputLabel>
+                            <h:outputLabel for="valor">Preco</h:outputLabel>
                         </div>
                     </div>
 
                     <div class="row">
-                        <h:commandButton action="#{productBean.persist()}" class="waves-effect waves-light btn" value="Registrar categoria"></h:commandButton>
+                        <h:commandButton action="#{productBean.persist()}" class="waves-effect waves-light btn" value="Cadastrar Produto"></h:commandButton>
                     </div>
 
                     <div class="row">

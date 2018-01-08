@@ -8,6 +8,7 @@ package br.edu.utfpr.jobs;
 import br.edu.utfpr.UserRoleBean;
 import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.UserRole;
+import br.edu.utfpr.model.service.UserRoleService;
 import br.edu.utfpr.model.service.UserService;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,30 +44,36 @@ class MyTask extends TimerTask {
 
     @Override
     public void run() {
-//        System.out.println("MUNDAO");
-//        List<User> usuarios = null;
-//        List<User> users = null;
-//        users = userService.findAll();
-//
-//        for (User user : users) {
-//
-//            if (user.isUserInRole(UserRole.USER) || user.isUserInRole(UserRole.ADMIN)) {
-//                continue;
-//            }
-//
-//            System.out.println("TIMEolDATE: ");
-//            if (user.getBalance() != null) {
-//                // setar role de usuario
-//                userRoleBean.getUserRole().setRole("USER");
-//                userRoleBean.persist();
-//                //1000 * 60 * 60 * 24 * 7
-//            } else if (getNewtime() - user.getTime() > 1000 * 60) {
-//                System.out.println("APAGAR");
-//                userService.delete(user);
-//            }
-//        }
-//
-//        System.out.println("Hi see you after 10 seconds");
+        System.out.println("MUNDAO");
+        List<User> usuarios = null;
+        List<User> users = null;
+
+        users = userService.findAll();
+        UserRoleService userRoleService = new UserRoleService();
+        for (User user : users) {
+
+            if (user.isUserInRole(UserRole.USER) || user.isUserInRole(UserRole.ADMIN)) {
+                continue;
+            }
+
+            System.out.println("TIMEolDATE: ");
+            UserRole userRole = userRoleService.getByProperty("login", user.getLogin());
+            if (user.getBalance() != null && user.isUserInRole(UserRole.USER_PENDING)) {
+                // setar role de usuario
+
+                //UserRole userRole = new UserRole(user.getLogin(), UserRole.USER
+                System.out.println("Ta vindo aqui");
+
+                userRole.setRole(UserRole.USER);
+                userRoleService.update(userRole);
+                //1000 * 60 * 60 * 24 * 7
+            } else if (getNewtime() - user.getTime() > 1000 * 60 && user.isUserInRole(UserRole.USER_PENDING)) {
+                System.out.println("APAGAR");
+                userService.delete(user);
+            }
+        }
+
+        System.out.println("Hi see you after 10 seconds");
     }
 
 }
