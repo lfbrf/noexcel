@@ -9,12 +9,20 @@
 
 
     <ui:define name="content">
-        <h:form id="form">
-            <p:dataTable var="op" value="#{transactionBean.findProducts(5)}"  paginator="true" rows="5">
-                <h:outputText value="#{op.data}"  />
-            </p:dataTable>
+        <h:form>
+            <h3 style="margin-top:0">Client</h3>
+            <p:tree value="#{treeBasicView.root}" var="node">
+                <p:treeNode>
+                    <h:outputText value="#{node}" />
+                </p:treeNode>
+            </p:tree>
 
-
+            <h3>Ajax</h3>
+            <p:tree value="#{treeBasicView.root}" var="node" dynamic="true">
+                <p:treeNode>
+                    <h:outputText value="#{node}" />
+                </p:treeNode>
+            </p:tree>
         </h:form>
     </ui:define>
 </ui:composition>

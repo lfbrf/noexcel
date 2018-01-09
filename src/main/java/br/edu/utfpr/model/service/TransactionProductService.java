@@ -32,7 +32,7 @@ public class TransactionProductService extends AbstractService<Long, Transaction
 
     }
 
-    public List<TransactionProduct> listbyId(String x) {
+    public List<TransactionProduct> listbyId(Long x) {
         //tratar transaçoes
         System.out.println("PEGOUUU");
         return ((TransactionProductDAO) dao).listbyId(x);

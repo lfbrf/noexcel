@@ -17,15 +17,13 @@ import javax.persistence.Query;
  */
 public class TransactionProductDAO extends AbstractDAO<Long, TransactionProduct> {
 
-    long y = 3;
-
-    public List<TransactionProduct> listbyId(String x) {
+    public List<TransactionProduct> listbyId(Long x) {
         this.entityManager = JPAUtil.getEntityManager();
-        String queryString = "SELECT o FROM TransactionProduct o where o.id" + " = :param";
+        String queryString = "SELECT o FROM TransactionProduct o where o.transaction_id" + " = :param";
 
         Query query = entityManager.createQuery(queryString);
 
-        query.setParameter("param", y);
+        query.setParameter("param", x);
 
         List<TransactionProduct> queryResult = query.getResultList();
 

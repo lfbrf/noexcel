@@ -41,6 +41,7 @@
                                 <i class="material-icons">search</i>
                             </h:commandLink>
                         </div>
+
                     </div>
                 </h:form>
             </div>
@@ -107,52 +108,51 @@
             <div class="col s12" style="padding: 3em 1em 1em 1em">
                 Dados do extrato
 
-                <h:form id="tabela" prependId="false">
+                <h:form id="tabela" prependId="false"  >
 
                     <div class="row">
                         <div class="col s12">
-                            <p:dataTable var="transaction" value="#{transactionBean.findAll()}"  paginator="true" rows="5">
+                            <p:dataTable var="transaction" value="#{transactionBean.findAll(searchView.userDTO.ra)}"   paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15" rows="4"  >
 
-                                <p:column headerText="Id">
-                                    <h:outputText value="#{transaction.id}"  />
-                                    <input  id="foo:bar"  value="#{transaction.id}" />
+                                <p:column headerText="Id" class="center-align" >
+                                    <h:outputText value="#{ transaction.id}"  />
+
                                 </p:column>
-                                <p:column style="width:36px"  >
-                                    <input type="hidden" name="trs" value="#{transaction.id}" />
-                                    <p:rowToggler   />
-                                </p:column>
-                                <p:column headerText="Nome">
+
+                                <p:column headerText="Cliente" class="center-align">
                                     <h:outputText value="#{transactionBean.getbyName(transaction)}" />
                                 </p:column>
-                                <p:column headerText="Valor">
+                                <p:column headerText="Valor Total" class="center-align">
                                     <h:outputText value="#{transaction.value}" />
                                     <input type="hidden" name="valor" value="#{transaction.value}" />
                                 </p:column>
+                                <p:column headerText="Produtos Consumidos">
+                                    <table>
 
-                                <p:rowExpansion>
-                                    <p:dataTable var="op" value="#{transactionBean.findProducts(5)}"  paginator="true" rows="5">
-                                        <h:outputText value="#{op.login}"  />
-                                    </p:dataTable>
+                                        <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}">
+                                            <tr>
+                                                <td> <h:outputText value="#{productBean.findByid(group.product_id).getName()}" /></td>
+                                                <td> R$-<h:outputText  value="#{productBean.findByid(group.product_id).getValue()}" /></td>
 
-                                    <h:outputText value="#{transaction.id}"  />
-                                    <h:outputLabel>OK</h:outputLabel>
-                                </p:rowExpansion>
+                                            </tr>
+                                        </ui:repeat>
+                                        <ui:repeat var="group" rendered="#{transaction.value>0}"  value="#{transactionBean.findProducts(transaction.id) == null}">
+                                            <tr>
+                                                <td> <h:outputText value="Adiçao" /></td>
+                                                <td> R$+<h:outputText  value="#{transaction.value}" /></td>
 
-                                <p:column headerText="Valor">
-                                    <h:outputText value="#{transaction.id}"  />
+                                            </tr>
+                                        </ui:repeat>
+
+                                    </table>
                                 </p:column>
 
                             </p:dataTable>
                         </div>
                     </div>
-
-
-
                 </h:form>
-
-
-
-
             </div>
         </div>
 

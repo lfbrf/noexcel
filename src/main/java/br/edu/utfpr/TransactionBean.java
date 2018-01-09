@@ -21,18 +21,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.Visibility;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class TransactionBean implements Serializable {
 
     private BigDecimal credit;
@@ -164,21 +165,15 @@ public class TransactionBean implements Serializable {
     private List<Transaction> transactionList;
     private List<TransactionProduct> producList;
 
-    @ManagedProperty(value = "#{searchView}")
-    private SearchView searchView;
-
-    public SearchView getSearchView() {
-        return searchView;
-    }
-
-    public void setSearchView(SearchView searchView) {
-        this.searchView = searchView;
-    }
-
-    public List<Transaction> findAll() {
-        System.out.println("AQUI" + searchView.userDTO.getRa());
-        transactionList = transactionsService.listbyRa(searchView.userDTO.getRa());
-
+    public List<Transaction> findAll(String x) {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        if (x != null && x != "") {
+            sessionMap.put("somekey", x);
+        } else {
+            x = (String) sessionMap.get("somekey");
+        }
+        transactionList = transactionsService.listbyRa(x);
         return transactionList;
     }
 
@@ -186,8 +181,10 @@ public class TransactionBean implements Serializable {
         // System.out.println("VALOR AQUI");
 
         //producList = transactionProductService.listbyId("1");
+        System.out.println("ATENCAO >" + x);
         List<TransactionProduct> tp = null;
-        tp = transactionProductService.listbyId("5");
+        long z = 11;
+        tp = transactionProductService.listbyId(x);
         for (TransactionProduct trs : tp) {
             System.out.println(trs.getData());
         }

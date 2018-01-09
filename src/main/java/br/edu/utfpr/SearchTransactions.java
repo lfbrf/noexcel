@@ -21,7 +21,7 @@ import javax.faces.bean.ViewScoped;
  * @author Luiz
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class SearchTransactions implements Serializable {
 
     public TransactionService getTransactionsService() {

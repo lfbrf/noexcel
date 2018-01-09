@@ -102,4 +102,8 @@ public class ProductBean {
         return productList = productService.findAll();
     }
 
+    public Product findByid(Long id) {
+        Product p = new Product();
+        return productService.getById(id);
+    }
 }
