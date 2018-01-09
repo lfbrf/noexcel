@@ -46,92 +46,6 @@
             </div>
         </div>
 
-
-        <div class="row" id="credito" style="display:none;">
-            <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito Fora da div renderiada esta ok!</h4></div>
-            <div class="col s12" style="padding: 3em 1em 1em 1em">
-
-
-                <h:form>
-                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
-                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
-                    <div class="input-field col s6">
-                        <i class="material-icons prefix">attach_money</i>
-
-                        <p:inputMask value="#{transactionBean.credit}"     mask="999.99"></p:inputMask>
-                    </div>
-
-                    <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit()}">
-                        <i class="material-icons">send</i>
-                    </h:commandLink>
-                </h:form>
-
-            </div>
-        </div>
-        <div class="row" id="extrato" style="display:none;">
-            <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
-            <div class="col s12" style="padding: 3em 1em 1em 1em">
-                Dados do extrato
-
-                <h:form id="tabela" prependId="false">
-
-                    <div class="row">
-                        <div class="col s12">
-                            <p:dataTable var="transaction" value="#{transactionBean.findAll()}" paginator="true" rows="5">
-
-                                <p:column  style="width:36px"  >
-                                    <p:rowToggler   />
-
-                                </p:column>
-
-                                <p:column headerText="Id">
-                                    <h:outputText value="#{transaction.id}"  />
-                                </p:column>
-
-                                <p:column headerText="Nome">
-                                    <h:outputText value="#{transactionBean.getbyName(transaction)}" />
-                                </p:column>
-                                <p:column headerText="Valor">
-                                    <h:outputText value="#{transaction.value}" />
-                                </p:column>
-
-
-                            </p:dataTable>
-                        </div>
-                    </div>
-
-
-
-                </h:form>
-
-
-
-
-
-            </div>
-        </div>
-
-        <div  class="row" id="refeicao" style="display:none;">
-            <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
-            <div class="col s12" style="padding: 3em 1em 1em 1em">
-
-
-                <h:form>
-                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
-                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
-
-                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
-                        <f:selectItems value="#{transactionBean.produtos}" var="city" itemLabel="#{city}" itemValue="#{city}" />
-                    </p:selectManyCheckbox>
-                    <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
-                        <i class="material-icons">send</i>
-                    </h:commandLink>
-
-                </h:form>
-
-
-            </div>
-        </div>
         <h:form prependId="false">
             <div class="row card light-green lighten-3" id="div-panel" style="margin-top: 4em; padding: 1.8em 0.5em">
                 <div class="col s12">
@@ -167,11 +81,104 @@
 
         </h:form>
 
+        <div class="row" id="credito" style="display:none;">
+            <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito Fora da div renderiada esta ok!</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
 
-        <!--h:panelGrid columns="2">
-            <p:commandButton process="@parent:@parent" update="@form" value="Process: @parent:parent (Form)" />
-            <p:commandButton process="@form:@child(1):txt1" update="@form" value="Process: @form:@child(1):txt1 (Text 1)" />
-        </h:panelGrid-->
+
+                <h:form>
+                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
+                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
+                    <div class="input-field col s6">
+                        <i class="material-icons prefix">attach_money</i>
+
+                        <p:inputMask value="#{transactionBean.credit}"     mask="999.99"></p:inputMask>
+                    </div>
+
+                    <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit()}">
+                        <i class="material-icons">send</i>
+                    </h:commandLink>
+                </h:form>
+
+            </div>
+        </div>
+        <div class="row" id="extrato" style="display:none;">
+            <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+                Dados do extrato
+
+                <h:form id="tabela" prependId="false">
+
+                    <div class="row">
+                        <div class="col s12">
+                            <p:dataTable var="transaction" value="#{transactionBean.findAll()}"  paginator="true" rows="5">
+
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{transaction.id}"  />
+                                    <input  id="foo:bar"  value="#{transaction.id}" />
+                                </p:column>
+                                <p:column style="width:36px"  >
+                                    <input type="hidden" name="trs" value="#{transaction.id}" />
+                                    <p:rowToggler   />
+                                </p:column>
+                                <p:column headerText="Nome">
+                                    <h:outputText value="#{transactionBean.getbyName(transaction)}" />
+                                </p:column>
+                                <p:column headerText="Valor">
+                                    <h:outputText value="#{transaction.value}" />
+                                    <input type="hidden" name="valor" value="#{transaction.value}" />
+                                </p:column>
+
+                                <p:rowExpansion>
+                                    <p:dataTable var="op" value="#{transactionBean.findProducts(5)}"  paginator="true" rows="5">
+                                        <h:outputText value="#{op.login}"  />
+                                    </p:dataTable>
+
+                                    <h:outputText value="#{transaction.id}"  />
+                                    <h:outputLabel>OK</h:outputLabel>
+                                </p:rowExpansion>
+
+                                <p:column headerText="Valor">
+                                    <h:outputText value="#{transaction.id}"  />
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+
+
+
+                </h:form>
+
+
+
+
+            </div>
+        </div>
+
+        <div  class="row" id="refeicao" style="display:none;">
+            <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+
+
+                <h:form>
+                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
+                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
+
+                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
+                        <f:selectItems value="#{transactionBean.produtos}" var="city" itemLabel="#{city}" itemValue="#{city}" />
+                    </p:selectManyCheckbox>
+                    <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
+                        <i class="material-icons">send</i>
+                    </h:commandLink>
+
+                </h:form>
+
+
+            </div>
+        </div>
+
+
 
 
 

@@ -14,6 +14,7 @@ import br.edu.utfpr.model.service.TransactionProductService;
 import br.edu.utfpr.model.service.TransactionService;
 import br.edu.utfpr.model.service.UserService;
 import br.edu.utfpr.util.MessageUtil;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,13 +26,14 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.Visibility;
 
 @ManagedBean
 @RequestScoped
-public class TransactionBean {
+public class TransactionBean implements Serializable {
 
     private BigDecimal credit;
 
@@ -149,6 +151,7 @@ public class TransactionBean {
         for (Product temp : products) {
             produtos.add(temp.getName());
         }
+
     }
 
     public String getMessage() {
@@ -173,22 +176,49 @@ public class TransactionBean {
     }
 
     public List<Transaction> findAll() {
+        System.out.println("AQUI" + searchView.userDTO.getRa());
         transactionList = transactionsService.listbyRa(searchView.userDTO.getRa());
 
         return transactionList;
     }
 
-    public List<TransactionProduct> findProducts() {
+    public List<TransactionProduct> findProducts(Long x) {
         // System.out.println("VALOR AQUI");
-        //producList = transactionProductService.listByProperty("transaction_id", transaction.getId());
 
+        //producList = transactionProductService.listbyId("1");
+        List<TransactionProduct> tp = null;
+        tp = transactionProductService.listbyId("5");
+        for (TransactionProduct trs : tp) {
+            System.out.println(trs.getData());
+        }
+        // System.out.println("INVOA" + transaction.getId());
         //List<TransactionProduct> productList = transactionProductService.listbyId(x);
-        String xx = FacesContext.getCurrentInstance().
-                getExternalContext().getRequestParameterMap().get("valor");
-        System.out.println("ÖLHA AQUI" + xx);
-        List<TransactionProduct> pl = transactionProductService.findAll();
+        //List<TransactionProduct> pl = transactionProductService.findAll();
         System.out.println("VALOR AQUI antes do return");
-        return pl;
+        return tp;
+    }
+
+    public void method() {
+        String ra = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap().get("trs");
+        System.out.println("INVOCADooo" + ra);
+
+    }
+
+    public void onRowToggle(ToggleEvent event) {
+        System.out.println("----------");
+        if (event.getVisibility() == Visibility.VISIBLE) {
+            // your code here
+        }
+    }
+
+    public void onRowToggle(Transaction trans) {
+        transaction = trans;
+        System.out.println(trans.getId() + "ALOU");
+        UIComponent table = FacesContext.getCurrentInstance().getViewRoot().findComponent("form:MasterDataTable:ChildDataTable");
+        if (table != null) {
+            table.setValueExpression("sortBy", null);
+        }
     }
 
     public String getbyName(Transaction transaction) {

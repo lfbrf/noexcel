@@ -19,6 +19,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 
 @ManagedBean
+
 public class SearchView {
 
     private UserService userService;

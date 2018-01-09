@@ -5,7 +5,6 @@
  */
 package br.edu.utfpr.model.dao;
 
-import br.edu.utfpr.model.Transaction;
 import br.edu.utfpr.model.TransactionProduct;
 
 import br.edu.utfpr.util.JPAUtil;
@@ -18,13 +17,15 @@ import javax.persistence.Query;
  */
 public class TransactionProductDAO extends AbstractDAO<Long, TransactionProduct> {
 
-    public List<TransactionProduct> listbyId(Long x) {
+    long y = 3;
+
+    public List<TransactionProduct> listbyId(String x) {
         this.entityManager = JPAUtil.getEntityManager();
-        String queryString = "SELECT o FROM TransactionProduct o where o.transaction_id" + " = :param";
+        String queryString = "SELECT o FROM TransactionProduct o where o.id" + " = :param";
 
         Query query = entityManager.createQuery(queryString);
 
-        query.setParameter("param", x);
+        query.setParameter("param", y);
 
         List<TransactionProduct> queryResult = query.getResultList();
 

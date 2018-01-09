@@ -21,6 +21,7 @@ public class UserRoleDAO extends AbstractDAO<Long, UserRole> {
         String queryString = "SELECT o FROM UserRole o where o.role" + " = :param";
 
         Query query = entityManager.createQuery(queryString);
+
         query.setParameter("param", "PENDING-USER");
 
         List<UserRole> queryResult = query.getResultList();
