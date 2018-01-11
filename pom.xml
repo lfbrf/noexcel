@@ -23,7 +23,12 @@
     </repositories>
 
     <dependencies>
-
+        <!-- Primefaces extension for money type -->
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>primefaces-extensions</artifactId>
+            <version>0.6.3</version>
+        </dependency>
         <!-- Quartz scheduler framework -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>

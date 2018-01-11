@@ -9,6 +9,8 @@ import br.edu.utfpr.model.User;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -27,6 +29,14 @@ public class UserDashBean {
      */
     public UserDashBean() {
 
+    }
+
+    public void test() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.
+                getCurrentInstance().getExternalContext().getRequest();
+        if (request.getUserPrincipal() != null) {
+            System.out.println("FNCIONA" + request.getUserPrincipal().getName());
+        }
     }
 
 }

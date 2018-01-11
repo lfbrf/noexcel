@@ -9,9 +9,11 @@ import br.edu.utfpr.model.Product;
 import br.edu.utfpr.model.Transaction;
 import br.edu.utfpr.model.TransactionProduct;
 import br.edu.utfpr.model.User;
+import br.edu.utfpr.model.UserRole;
 import br.edu.utfpr.model.service.ProductService;
 import br.edu.utfpr.model.service.TransactionProductService;
 import br.edu.utfpr.model.service.TransactionService;
+import br.edu.utfpr.model.service.UserRoleService;
 import br.edu.utfpr.model.service.UserService;
 import br.edu.utfpr.util.MessageUtil;
 import java.io.Serializable;
@@ -19,9 +21,11 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -147,6 +151,7 @@ public class TransactionBean implements Serializable {
         transactionProductService = new TransactionProductService();
         produtos = new ArrayList<String>();
         transactionList = new ArrayList<>();
+        userRoleService = new UserRoleService();
         producList = new ArrayList<>();
         List<Product> products = productService.findAll();
         for (Product temp : products) {
@@ -325,13 +330,33 @@ public class TransactionBean implements Serializable {
         product = new Product();
         return true;
     }
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+
+    public long getNewtime() {
+        return newtime;
+    }
+
+    public void setNewtime(long newtime) {
+        this.newtime = newtime;
+    }
+    long newtime = cal.getTimeInMillis();
+
+    public UserRoleService getUserRoleService() {
+        return userRoleService;
+    }
+
+    public void setUserRoleService(UserRoleService userRoleService) {
+        this.userRoleService = userRoleService;
+    }
+    private UserRoleService userRoleService;
 
     public boolean insertCredit() { // ate aqui esta certo !!!!!!!!!!!!!!!!!!!!!!!! !! !!! !!!! !!! !! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         String balance = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("balance");
         String ra = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("ra");
-
+        System.out.println("VEIO AQUI" + balance);
         if (ra == "" || balance == "") {
             MessageUtil.showMessage("Falha na inserao de credito , informe um RA valido ", "", FacesMessage.SEVERITY_ERROR);
             return false;
@@ -341,7 +366,7 @@ public class TransactionBean implements Serializable {
             return false;
         }
         balance = balance.substring(3);
-        balance = balance.substring(0, balance.length() - 3);
+        // balance = balance.substring(0, balance.length() - 3);
         BigDecimal bal = new BigDecimal(balance);
         user = userService.getByProperty("login", ra);
         transaction.setLogin(ra);
@@ -350,7 +375,16 @@ public class TransactionBean implements Serializable {
 
         bal = bal.add(credit);
         user.setBalance(bal);
-
+        if (getNewtime() - user.getTime() < 604800000) {
+            System.out.println("BELEZINHA" + ra);
+            UserRole ur = userRoleService.getByProperty("login", ra);
+            System.out.println("BH" + ur.getRole());
+            if (ur.getRole().equals(ur.USER_PENDING)) {
+                System.out.println("BELEZINHA2");
+                ur.setRole(ur.USER);
+                userRoleService.update(ur);
+            }
+        }
         if ((userService.update(user)) && (transactionsService.save(transaction))) {
             MessageUtil.showMessage("Inserido com sucesso", "", FacesMessage.SEVERITY_INFO);
         } else {

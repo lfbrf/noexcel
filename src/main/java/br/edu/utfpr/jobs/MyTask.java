@@ -10,6 +10,7 @@ import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.UserRole;
 import br.edu.utfpr.model.service.UserRoleService;
 import br.edu.utfpr.model.service.UserService;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -25,7 +26,7 @@ import javax.faces.bean.ManagedProperty;
 class MyTask extends TimerTask {
 
     private UserService userService = new UserService();
-
+    private UserRoleService userRoleService = new UserRoleService();
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     long newtime = cal.getTimeInMillis();
 
@@ -47,33 +48,35 @@ class MyTask extends TimerTask {
         System.out.println("MUNDAO");
         List<User> usuarios = null;
         List<User> users = null;
-
+        List<UserRole> userroles = null;
         users = userService.findAll();
+        userroles = userRoleService.findAll();
         UserRoleService userRoleService = new UserRoleService();
-        for (User user : users) {
+        for (UserRole urs : userroles) {
+            if (urs.getRole().equals(UserRole.USER_PENDING)) {
+                User us = userService.getByProperty("login", urs.getLogin());
+                System.out.println(us.getTime() + "VALORES" + getNewtime());
+                if (us.getBalance().compareTo(BigDecimal.ZERO) == 1) {
+                    urs.setRole(UserRole.USER);
+                    userRoleService.update(urs);
+                } else if (getNewtime() - us.getTime() > 1000 * 60) {
+                    System.out.println("CON");
 
-            if (user.isUserInRole(UserRole.USER) || user.isUserInRole(UserRole.ADMIN)) {
-                continue;
-            }
-
-            System.out.println("TIMEolDATE: ");
-            UserRole userRole = userRoleService.getByProperty("login", user.getLogin());
-            if (user.getBalance() != null && user.isUserInRole(UserRole.USER_PENDING)) {
-                // setar role de usuario
-
-                //UserRole userRole = new UserRole(user.getLogin(), UserRole.USER
-                System.out.println("Ta vindo aqui");
-
-                userRole.setRole(UserRole.USER);
-                userRoleService.update(userRole);
-                //1000 * 60 * 60 * 24 * 7
-            } else if (getNewtime() - user.getTime() > 1000 * 60 && user.isUserInRole(UserRole.USER_PENDING)) {
-                System.out.println("APAGAR");
-                userService.delete(user);
+                    try {
+                        synchronized (this) {
+                            userRoleService.delete(urs);
+                        }
+                        synchronized (this) {
+                            userService.delete(us);
+                        }
+                        // ...
+                    } catch (Exception e) {
+                        System.out.println("Thread  interrupted.");
+                    }
+                }
             }
         }
 
-        System.out.println("Hi see you after 10 seconds");
     }
 
 }

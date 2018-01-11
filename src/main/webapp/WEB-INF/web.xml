@@ -6,11 +6,11 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-    <listener>
+    <!--listener>
         <description>ServletContextListener</description>
         <listener-class>br.edu.utfpr.jobs.QuartzListener</listener-class>
-    </listener>
-    <servlet>
+    </listener -->
+    <servlet >
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>

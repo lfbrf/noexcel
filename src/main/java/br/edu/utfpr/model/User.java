@@ -158,20 +158,6 @@ public class User implements Serializable {
         this.roles = roles;
     }
 
-    public boolean isUserInRole(String role) {
-        Set<UserRole> roles = getRoles();
-        if (roles == null) {
-            return false;
-        }
-
-        for (UserRole r : roles) {
-            if (r.equals(role)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public Long getId() {
         return id;
     }

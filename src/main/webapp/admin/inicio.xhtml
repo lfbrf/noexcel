@@ -5,7 +5,8 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
 
     <ui:define name="content">
@@ -82,8 +83,9 @@
 
         </h:form>
 
-        <div class="row" id="credito" style="display:none;">
-            <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito Fora da div renderiada esta ok!</h4></div>
+
+        <div class="row card light-green lighten-3" id="credito" style="display:none;"  >
+            <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito </h4></div>
             <div class="col s12" style="padding: 3em 1em 1em 1em">
 
 
@@ -92,8 +94,8 @@
                     <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
                     <div class="input-field col s6">
                         <i class="material-icons prefix">attach_money</i>
-
-                        <p:inputMask value="#{transactionBean.credit}"     mask="999.99"></p:inputMask>
+                        <pe:inputNumber symbol="R$ " decimalSeparator="," thousandSeparator="."
+                                        value="#{transactionBean.credit}"  />
                     </div>
 
                     <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit()}">
@@ -103,10 +105,10 @@
 
             </div>
         </div>
-        <div class="row" id="extrato" style="display:none;">
+        <div class="row card light-green lighten-3" id="extrato" style="display:none;" >
             <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
             <div class="col s12" style="padding: 3em 1em 1em 1em">
-                Dados do extrato
+                Dados do extrato de : #{searchView.userDTO.name}
 
                 <h:form id="tabela" prependId="false"  >
 
@@ -156,8 +158,8 @@
             </div>
         </div>
 
-        <div  class="row" id="refeicao" style="display:none;">
-            <div class="col s12" style="margin-top: 1em"><h4>Realização de Refeição</h4></div>
+        <div  class="row card light-green lighten-3" id="refeicao" style="display:none;" >
+            <div class="col s12" style="margin-top: 1em"><h4>Lançar Refeição</h4></div>
             <div class="col s12" style="padding: 3em 1em 1em 1em">
 
 
@@ -165,8 +167,10 @@
                     <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
                     <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
 
-                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
-                        <f:selectItems value="#{transactionBean.produtos}" var="city" itemLabel="#{city}" itemValue="#{city}" />
+
+
+                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="grid" columns="3">
+                        <f:selectItems  value="#{transactionBean.produtos}" var="city" class="filled-in" itemLabel="#{city}" itemValue="#{city}" />
                     </p:selectManyCheckbox>
                     <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
                         <i class="material-icons">send</i>
