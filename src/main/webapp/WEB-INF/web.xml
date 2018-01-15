@@ -10,9 +10,19 @@
         <description>ServletContextListener</description>
         <listener-class>br.edu.utfpr.jobs.QuartzListener</listener-class>
     </listener -->
-    <servlet >
+
+    <listener>
+        <description>Seeder</description>
+        <listener-class>br.edu.utfpr.Seeder</listener-class>
+    </listener >
+    <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Seeder</servlet-name>
+        <servlet-class>br.edu.utfpr.Seeder</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
@@ -44,7 +54,7 @@
     <security-role>
         <role-name>PENDING-USER</role-name>
     </security-role>
-    <!--security-constraint>
+    <security-constraint>
         <display-name>Segurança para o diretório de usuarios</display-name>
         <web-resource-collection>
             <web-resource-name>Somente Usuarios</web-resource-name>
@@ -53,8 +63,8 @@
         <auth-constraint>
             <role-name>PENDING-USER</role-name>
         </auth-constraint>
-    </security-constraint-->
-    <!--security-constraint>
+    </security-constraint>
+    <security-constraint>
         <display-name>Segurança para o diretório de usuarios</display-name>
         <web-resource-collection>
             <web-resource-name>Somente Usuarios</web-resource-name>
@@ -63,8 +73,8 @@
         <auth-constraint>
             <role-name>USER</role-name>
         </auth-constraint>
-    </security-constraint-->
-    <!--security-constraint>
+    </security-constraint>
+    <security-constraint>
         <display-name>Segurança para o diretório de usuarios</display-name>
         <web-resource-collection>
             <web-resource-name>Somente Administrador</web-resource-name>
@@ -73,8 +83,8 @@
         <auth-constraint>
             <role-name>ADMIN</role-name>
         </auth-constraint>
-    </security-constraint-->
-    <!--security-constraint>
+    </security-constraint>
+    <security-constraint>
         <display-name>Segurança para diretórios</display-name>
         <web-resource-collection>
             <web-resource-name>Todos os usuários autenticados</web-resource-name>
@@ -85,7 +95,7 @@
             <role-name>ADM</role-name>
             <role-name>USER</role-name>
         </auth-constraint>
-    </security-constraint-->
+    </security-constraint>
     <listener>
         <listener-class>
             org.quartz.ee.servlet.QuartzInitializerListener

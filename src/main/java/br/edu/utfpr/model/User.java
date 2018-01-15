@@ -11,14 +11,15 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
-import javax.faces.component.UIComponent;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
@@ -37,16 +38,21 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
 
-    @Pattern(regexp = "^((([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2}))|(\\d{8,8}))$", message = "Login incorreto informe somente numeros")
     private String login;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Set<UserRole> roles;
+    @ManyToOne
+    private Type type;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<Transaction> transactions;
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
 
     public String getComment() {
         return comment;
@@ -104,11 +110,10 @@ public class User implements Serializable {
 
     public User() {
         super();
-        this.roles = new HashSet<>();
-        this.transactions = new HashSet<>();
+
     }
 
-    public User(String name, String email, String login, String password, BigDecimal balance, boolean checkuser, long time) {
+    public User(String name, String email, String login, String password, BigDecimal balance, boolean checkuser, long time, Type type) {
         this();
         this.name = name;
         this.email = email;
@@ -116,6 +121,7 @@ public class User implements Serializable {
         this.password = password;
         this.balance = balance;
         this.time = time;
+        this.type = type;
     }
 
     public String getName() {
@@ -150,28 +156,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Set<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(Set<Transaction> transactions) {
-        this.transactions = transactions;
     }
 
 }

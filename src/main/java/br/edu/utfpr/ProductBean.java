@@ -54,6 +54,15 @@ public class ProductBean {
     private List<Product> productList;
     private ProductService productService;
 
+    public long getProductID() {
+        return productID;
+    }
+
+    public void setProductID(long productID) {
+        this.productID = productID;
+    }
+    private long productID;
+
     public ProductBean() {
     }
 
@@ -62,6 +71,7 @@ public class ProductBean {
         product = new Product();
         productList = new ArrayList<>();
         productService = new ProductService();
+        productList = productService.findAll();
     }
 
     public void edit(Product product) {
@@ -99,7 +109,11 @@ public class ProductBean {
     }
 
     public List<Product> findAll() {
-        return productList = productService.findAll();
+        System.out.println("AQUIII");
+        productList = productService.findAll();
+        List<Product> products = productService.findAll();
+
+        return productList;
     }
 
     public Product findByid(Long id) {

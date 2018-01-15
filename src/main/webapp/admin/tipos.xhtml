@@ -18,59 +18,45 @@
             <div class="row">
                 <h:form>
 
-                    <h:selectOneMenu id="occurrence-category" value="#{productBean.productID}" >
-                        <f:selectItem itemValue="" itemLabel="Selecione uma categoria"></f:selectItem>
-                        <f:selectItems var="product" value="#{productBean.findAll()}" itemValue="#{product.id}" itemLabel="#{product.name}"/>
-                    </h:selectOneMenu>
-                </h:form>
-                <h:form>
-
 
 
                     <h2 style="text-align: center">Área administrativa!</h2>
-                    <p style="text-align: center">Cadastro de produtos</p>
+                    <p style="text-align: center">Cadastro de tipos de usuario</p>
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <h:inputText id="nam" value="#{productBean.product.name}"></h:inputText>
-                            <h:outputLabel for="name">Nome do Produto</h:outputLabel>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <h:inputText id="valor"  value="#{productBean.product.value}"></h:inputText>
-                            <h:outputLabel for="valor">Preco</h:outputLabel>
+                            <h:inputText id="nam" value="#{typeBean.type.description}"></h:inputText>
+                            <h:outputLabel for="name">Tipo do Usuario</h:outputLabel>
                         </div>
                     </div>
 
+
                     <div class="row">
-                        <h:commandButton action="#{productBean.persist()}" class="waves-effect waves-light btn" value="Cadastrar Produto"></h:commandButton>
+                        <h:commandButton action="#{typeBean.persist()}" class="waves-effect waves-light btn" value="Cadastrar Tipo"></h:commandButton>
                     </div>
 
                     <div class="row">
                         <div class="col s12">
-                            <p:dataTable var="product" value="#{productBean.findAll()}" paginator="true" rows="5">
+                            <p:dataTable var="type" value="#{typeBean.findAll()}" paginator="true" rows="5">
 
                                 <p:column headerText="Id">
-                                    <h:outputText value="#{product.id}" />
+                                    <h:outputText value="#{type.id}" />
                                 </p:column>
 
                                 <p:column headerText="Nome">
-                                    <h:outputText value="#{product.name}" />
+                                    <h:outputText value="#{type.description}" />
                                 </p:column>
-                                <p:column headerText="Valor">
-                                    <h:outputText value="#{product.value}" />
-                                </p:column>
+
 
                                 <p:column headerText="">
                                     <div class="row center">
                                         <div class="col s12 ">
-                                            <h:commandLink action="#{productBean.edit(product)}" class="waves-effect waves-light btn blue darken-3 white-text">
+                                            <h:commandLink action="#{typeBean.edit(type)}" class="waves-effect waves-light btn blue darken-3 white-text">
                                                 <i class="material-icons">mode_edit</i>
                                             </h:commandLink>
                                         </div>
                                         <div class="col s12">
-                                            <h:commandLink action="#{productBean.delete(product)}" class="waves-effect waves-light btn red darken-3 white-text">
+                                            <h:commandLink action="#{typeBean.delete(type)}" class="waves-effect waves-light btn red darken-3 white-text">
                                                 <i class="material-icons">delete_forever</i>
                                             </h:commandLink>
                                         </div>

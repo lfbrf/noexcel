@@ -5,9 +5,11 @@
  */
 package br.edu.utfpr;
 
+import br.edu.utfpr.model.Type;
 import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.UserRole;
 import br.edu.utfpr.model.dao.UserDAO;
+import br.edu.utfpr.model.service.TypeService;
 import br.edu.utfpr.model.service.UserRoleService;
 import java.util.Calendar;
 import br.edu.utfpr.model.service.UserService;
@@ -45,6 +47,15 @@ public class UserBean {
     private User user;
     private List<User> userList;
     private UserService userService;
+
+    public TypeService getTypeService() {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService) {
+        this.typeService = typeService;
+    }
+    private TypeService typeService;
     private UserRoleService userRoleService;
     private Long cityId;
 
@@ -59,18 +70,7 @@ public class UserBean {
         userList = new ArrayList<>();
         userService = new UserService();
         userRoleService = new UserRoleService();
-    }
-
-    public List<User> createUsers(int size) {
-        List<User> list = new ArrayList<User>();
-        List<User> us = null;
-        us = userService.findAll();
-
-        for (User xx : us) {
-            list.add(new User(xx.name, xx.getEmail(), xx.getLogin(), xx.getPassword(), BigDecimal.ONE, true, 0));
-        }
-
-        return list;
+        typeService = new TypeService();
     }
 
     public List<String> autocompleteUsuarios(String consulta) {
@@ -152,30 +152,92 @@ public class UserBean {
         return us;
     }
 
-    public String persist() {
-
+    public String persistManager() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        System.out.println("TIMEEEE");
         user.setBalance(BigDecimal.ZERO);
-        if (user.getBalance().compareTo(BigDecimal.ZERO) == 0) {
-            System.out.println("O VALOR E ZERO MESMO");
-        }
-        System.out.println("BALANCEEEEE" + user.getBalance());
-        System.out.println("PASSOUAQUI");
+        String aux = user.getLogin().replace(".", "");
+        aux = aux.replace("-", "");
+        user.setLogin(aux);
         long time = cal.getTimeInMillis();
-
+        String descricao;
         List<String> us = null;
         us = userService.listByNames();
+        Type type = typeService.getByProperty("description", "MANAGER");
+        if (type == null) {
+            Type t = new Type();
+            t.setDescription("MANAGER");
+            typeService.save(t);
+        }
+        user.setType(type);
+        if (userService.getByProperty("email", user.getEmail()) != null) {
+            MessageUtil.showMessage("Erro ao cadastrar, email ja informado", "", FacesMessage.SEVERITY_ERROR);
+        } else if (userService.getByProperty("login", user.getLogin()) != null) {
+            MessageUtil.showMessage("Erro ao cadastrar, login ja informado", "", FacesMessage.SEVERITY_ERROR);
+        } else if (user.getId() == null) {
 
-        System.out.println("PASSOU");
+            String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
+            user.setPassword(sha256hex);
+            UserRole userRole = new UserRole(user.getLogin(), UserRole.MANAGER);
+            //user.getRoles().add(userRole);
+            user.setTime(time);
+
+            //TODO Cadastrar o user e role em apenas uma transaçao - criar um novo método save em algum service
+            if (userService.save(user) && userRoleService.save(userRole)) {
+                System.out.println("Ate aqui chegou");
+                MessageUtil.showMessage("Cadastrado com sucesso", "", FacesMessage.SEVERITY_INFO);
+                return "admin/gerentes?faces-redirect=true";
+            } else {
+                MessageUtil.showMessage("Falha ao cadastrar", "", FacesMessage.SEVERITY_ERROR);
+            }
+        } else {
+            if (userService.update(user)) {
+                MessageUtil.showMessage("Alterado com sucesso", "", FacesMessage.SEVERITY_INFO);
+            } else {
+                MessageUtil.showMessage("Falha na alteração", "", FacesMessage.SEVERITY_ERROR);
+            }
+
+        }
+        //tirei o this abaixo
+        user = new User();
+        return "";
+    }
+
+    public String persist() {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        user.setBalance(BigDecimal.ZERO);
+        String aux = user.getLogin().replace(".", "");
+        aux = aux.replace("-", "");
+        user.setLogin(aux);
+        long time = cal.getTimeInMillis();
+        String descricao;
+        List<String> us = null;
+        us = userService.listByNames();
+        int length = user.getLogin().length();
+
+        if (length == 8) {
+            descricao = "Estudante";
+        } else {
+            descricao = "Visitante";
+        }
+        Type t = typeService.getByProperty("description", descricao);
+        if (t == null) {
+            Type ty = new Type();
+            ty.setDescription(descricao);
+            typeService.save(ty);
+            user.setType(ty);
+
+        } else {
+            user.setType(t);
+        }
 
         if (userService.getByProperty("email", user.getEmail()) != null) {
             MessageUtil.showMessage("Erro ao cadastrar, email ja informado", "", FacesMessage.SEVERITY_ERROR);
         } else if (userService.getByProperty("login", user.getLogin()) != null) {
-            MessageUtil.showMessage("Erro ao cadastrar, cpf ja informado", "", FacesMessage.SEVERITY_ERROR);
+            MessageUtil.showMessage("Erro ao cadastrar, login ja informado", "", FacesMessage.SEVERITY_ERROR);
         } else if (user.getId() == null) {
-            String passwordMd5 = gerarHashMD5(user.getPassword());
-            user.setPassword(passwordMd5);
+
+            String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
+            user.setPassword(sha256hex);
             UserRole userRole = new UserRole(user.getLogin(), UserRole.USER_PENDING);
             //user.getRoles().add(userRole);
             user.setTime(time);
@@ -205,19 +267,6 @@ public class UserBean {
 
         return userList = userService.findAll();
 
-    }
-
-    public String gerarHashMD5(String passwordRaw) {
-        byte[] b;
-        try {
-            MessageDigest md = MessageDigest.getInstance("md5");
-            md.reset();
-            b = md.digest(passwordRaw.getBytes());
-
-            return new BigInteger(1, b).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            return "";
-        }
     }
 
 }

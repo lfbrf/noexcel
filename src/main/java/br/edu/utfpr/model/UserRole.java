@@ -28,6 +28,7 @@ public class UserRole implements Serializable {
     public static String USER = "USER";
     public static String USER_PENDING = "PENDING-USER";
     public static String ADMIN = "ADMIN";
+    public static String MANAGER = "MANAGER";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

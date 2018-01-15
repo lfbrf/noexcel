@@ -19,7 +19,7 @@ public class TransactionProductDAO extends AbstractDAO<Long, TransactionProduct>
 
     public List<TransactionProduct> listbyId(Long x) {
         this.entityManager = JPAUtil.getEntityManager();
-        String queryString = "SELECT o FROM TransactionProduct o where o.transaction_id" + " = :param";
+        String queryString = "SELECT o FROM TransactionProduct o where o.transaction.id" + " = :param";
 
         Query query = entityManager.createQuery(queryString);
 

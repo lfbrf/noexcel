@@ -3,7 +3,7 @@
     <Realm className="org.apache.catalina.realm.JDBCRealm"
            connectionName="root" connectionPassword="123mudar"
            connectionURL="jdbc:mysql://localhost:3306/no_excel_db"
-           digest="MD5" driverName="com.mysql.jdbc.Driver"
+           digest="SHA-256" driverName="com.mysql.jdbc.Driver"
            roleNameCol="role"
            userCredCol="password"
            userNameCol="login"

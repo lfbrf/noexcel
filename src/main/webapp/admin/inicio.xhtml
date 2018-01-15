@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+                >
 
 
     <ui:define name="content">
@@ -56,7 +56,7 @@
                     </div>
                     <div class="col s8 m9 left flow-text">
 
-                        <span class="ne-user-title">RA|CPF:</span> <h:outputText value="#{searchView.userDTO.ra}"/><br/>
+                        <span class="ne-user-title">RA|CPF:</span> <h:outputText  value="#{searchView.userDTO.ra}"/><br/>
                         <span class="ne-user-title">Nome:</span> <h:outputText value="#{searchView.userDTO.name}" /><br/>
                         <span class="ne-user-title">Saldo:</span> <h:outputText value="#{searchView.userDTO.balance}" />
                     </div>
@@ -64,20 +64,40 @@
 
                 <div class="row">
                     <div class="col s12 center" style="padding: 3em 1em 1em 1em">
-                        <p:commandLink value="Inserir Credito"  onclick=" document.getElementById('credito').style.display = 'block';
-                                document.getElementById('extrato').style.display = 'none';
-                                document.getElementById('refeicao').style.display = 'none';
+                        <p:inputText id="valra"  value="#{searchView.userDTO.ra}" style="display:none;" ></p:inputText>
+                        <p:commandLink value="Inserir Credito"  onclick="
+                                if (jQuery('#valra').val() != '') {
+                                    document.getElementById('credito').style.display = 'block';
+                                    document.getElementById('extrato').style.display = 'none';
+                                    document.getElementById('refeicao').style.display = 'none';
+                                } else
+                                    document.getElementById('semra').style.display = 'block';
                                        " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
-                        <p:commandLink value="Ver etrato"  onclick=" document.getElementById('extrato').style.display = 'block';
-                                document.getElementById('credito').style.display = 'none';
-                                document.getElementById('refeicao').style.display = 'none';
+                        <p:commandLink value="Ver etrato"  onclick="
+                                if (jQuery('#valra').val() != '') {
+                                    document.getElementById('extrato').style.display = 'block';
+                                    document.getElementById('credito').style.display = 'none';
+                                    document.getElementById('refeicao').style.display = 'none';
+                                } else
+                                    document.getElementById('semra').style.display = 'block';
+
                                        " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
-                        <p:commandLink value="Refeicao"  onclick=" document.getElementById('refeicao').style.display = 'block';
-                                document.getElementById('extrato').style.display = 'none';
-                                document.getElementById('credito').style.display = 'none';
+                        <p:commandLink value="Refeicao"  onclick="
+                                if (jQuery('#valra').val() != '') {
+                                    document.getElementById('refeicao').style.display = 'block';
+                                    document.getElementById('extrato').style.display = 'none';
+                                    document.getElementById('credito').style.display = 'none';
+                                } else
+                                    document.getElementById('semra').style.display = 'block';
                                        " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
 
                     </div>
+                </div>
+            </div>
+            <div class="row card light-green lighten-3" id="semra" style="display:none;"  >
+                <div class="col s12" style="margin-top: 1em"><h4></h4></div>
+                <h3><i class="material-icons prefix medium">error</i> Por favor informe um RA valido para continuar.</h3>
+                <div class="col s12" style="padding: 3em 1em 1em 1em">
                 </div>
             </div>
 
@@ -89,17 +109,20 @@
             <div class="col s12" style="padding: 3em 1em 1em 1em">
 
 
+
                 <h:form>
                     <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
                     <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
                     <div class="input-field col s6">
-                        <i class="material-icons prefix">attach_money</i>
-                        <pe:inputNumber symbol="R$ " decimalSeparator="," thousandSeparator="."
-                                        value="#{transactionBean.credit}"  />
-                    </div>
 
+                        <p:inputNumber symbol="R$ " decimalSeparator="," thousandSeparator="."
+                                       value="#{transactionBean.credit}"  />
+
+                    </div>
+                    <input value="#{request.remoteUser}" name="ta" />
+                    <h:outputText  value="#{request.remoteUser}"/>
                     <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit()}">
-                        <i class="material-icons">send</i>
+                        <i class="material-icons prefix">attach_money</i>
                     </h:commandLink>
                 </h:form>
 
@@ -135,8 +158,8 @@
 
                                         <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}">
                                             <tr>
-                                                <td> <h:outputText value="#{productBean.findByid(group.product_id).getName()}" /></td>
-                                                <td> R$-<h:outputText  value="#{productBean.findByid(group.product_id).getValue()}" /></td>
+                                                <td> <h:outputText value="#{productBean.findByid(group.product.id).getName()}" /></td>
+                                                <td> R$-<h:outputText  value="#{productBean.findByid(group.product.id).getValue()}" /></td>
 
                                             </tr>
                                         </ui:repeat>
@@ -169,15 +192,24 @@
 
 
 
-                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="grid" columns="3">
+                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
+
                         <f:selectItems  value="#{transactionBean.produtos}" var="city" class="filled-in" itemLabel="#{city}" itemValue="#{city}" />
                     </p:selectManyCheckbox>
+
+
+                    <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cities" scrollHeight="150"
+                                          filter="true" filterMatchMode="startsWith" panelStyle="width:250px" >
+                        <f:selectItems value="#{transactionBean.produtos}" />
+                        <p:ajax event="change" update="selectedItemText"/>
+                    </p:selectCheckboxMenu>
+                    <h:outputText id="selectedItemText" value=" #{transactionBean.selectedProducts}"/>
+
                     <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
                         <i class="material-icons">send</i>
                     </h:commandLink>
 
                 </h:form>
-
 
             </div>
         </div>

@@ -1,16 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>Usuario Pendente</div>
-    </body>
-</html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template-user.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns = "http://www.w3.org/1999/xhtml"
+                xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
+    <ui:define name="content">
+
+
+        <div class="brown hide" style="height: 200px;"></div>
+        <ul class="side-nav fixed transparent z-depth-0" style="width: 230px; margin-top: 5% !important; ">
+            <li class="active"><a href="#"><i class="material-icons blue-text text-darken-1">dashboard</i>Dashboard</a></li>
+            <li><a href="#"><i class="material-icons">store</i>Stores</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href="#"><i class="material-icons">settings</i>Settings</a></li>
+            <li><a href="#"><i class="material-icons">help</i>Help E Feedback</a></li>
+        </ul>
+
+        <div class="main" style="background-image: url('../resources/images/atencao.jpg');background-repeat: no-repeat;
+             background-size: 100% 100%;
+             background-size: cover; ">
+            <div class="container-fluid" >
+
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div >
+                            <div class="center-align" style="margin-top: 28%; margin-bottom: 30%; color: #fff9f9;" >
+                                <h1>Seja bem vindo</h1>
+                                <h5>Por segurnaca sua conta sera efetivada somente quando fizer uma recarga.</h5>
+                                <h5>Voce possui 7 dias para ativar sua conta. A equipe NOEXCEL agradece sua colaboracao!</h5>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

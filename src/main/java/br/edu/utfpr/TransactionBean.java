@@ -5,11 +5,13 @@
  */
 package br.edu.utfpr;
 
+import br.edu.utfpr.model.Discount;
 import br.edu.utfpr.model.Product;
 import br.edu.utfpr.model.Transaction;
 import br.edu.utfpr.model.TransactionProduct;
 import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.UserRole;
+import br.edu.utfpr.model.service.DiscountService;
 import br.edu.utfpr.model.service.ProductService;
 import br.edu.utfpr.model.service.TransactionProductService;
 import br.edu.utfpr.model.service.TransactionService;
@@ -42,14 +44,27 @@ public class TransactionBean implements Serializable {
 
     private BigDecimal credit;
 
-    public String[] getSelectedProducts() {
+    public List<String> getValues() {
+        return values;
+    }
+
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
+    private List<String> values;
+
+    public List<String> getSelectedProducts() {
         return selectedProducts;
     }
 
-    public void setSelectedProducts(String[] selectedProducts) {
+    public void extend() {
+        selectedProducts.add("");
+    }
+
+    public void setSelectedProducts(List<String> selectedProducts) {
         this.selectedProducts = selectedProducts;
     }
-    private String[] selectedProducts;
+    private List<String> selectedProducts;
 
     public TransactionProductService getTransactionProductService() {
         return transactionProductService;
@@ -113,6 +128,15 @@ public class TransactionBean implements Serializable {
         this.userService = userService;
     }
     private UserService userService;
+
+    public DiscountService getDiscountService() {
+        return discountService;
+    }
+
+    public void setDiscountService(DiscountService discountService) {
+        this.discountService = discountService;
+    }
+    private DiscountService discountService;
     private ProductService productService;
 
     public ProductService getProductService() {
@@ -143,11 +167,14 @@ public class TransactionBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        values = new ArrayList();
+        values.add("");
         user = new User();
         transaction = new Transaction();
         transactionsService = new TransactionService();
         productService = new ProductService();
         userService = new UserService();
+        discountService = new DiscountService();
         transactionProductService = new TransactionProductService();
         produtos = new ArrayList<String>();
         transactionList = new ArrayList<>();
@@ -190,9 +217,7 @@ public class TransactionBean implements Serializable {
         List<TransactionProduct> tp = null;
         long z = 11;
         tp = transactionProductService.listbyId(x);
-        for (TransactionProduct trs : tp) {
-            System.out.println(trs.getData());
-        }
+
         // System.out.println("INVOA" + transaction.getId());
         //List<TransactionProduct> productList = transactionProductService.listbyId(x);
         //List<TransactionProduct> pl = transactionProductService.findAll();
@@ -281,9 +306,18 @@ public class TransactionBean implements Serializable {
         user = userService.getByProperty("login", ra);
         for (String temp : selectedProducts) {
             pd = productService.getByProperty("name", temp);
+            if (discountService.isrepeatFilds(user.getType().getId(), pd.getId())) {
+                List<Discount> di = discountService.listrepeatFilds(user.getType().getId(), pd.getId());
+                for (Discount d : di) {
+                    pd.setValue(d.getAtualValue());
+                }
+
+            }
             refeicao = refeicao.add(pd.getValue());
         }
+
         total = user.getBalance().subtract(refeicao);
+        System.out.println("ME ACHE" + user.getType().getId());
         if (total.compareTo(BigDecimal.ZERO) < 0) {
             MessageUtil.showMessage("Cliente sem saldo suficiente ", "", FacesMessage.SEVERITY_ERROR);
             return false;
@@ -293,11 +327,7 @@ public class TransactionBean implements Serializable {
             pd = productService.getByProperty("name", temp);
 
             //refeicao = refeicao + pd.getValue();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
-            String x = dateFormat.format(date);
-
-            TransactionProduct transactionProduct = new TransactionProduct(user.getId(), pd.getId(), x, transaction.getId());
+            TransactionProduct transactionProduct = new TransactionProduct(user, pd, transaction);
             if ((!transactionProductService.save(transactionProduct))) {
                 return false;
             }
@@ -307,13 +337,16 @@ public class TransactionBean implements Serializable {
             return false;
         }
         BigDecimal balance;
-        // balance = user.getBalance().longValue();
-
-        //total = user.getBalance() - refeicao;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        String x = dateFormat.format(date);
+        System.out.println("XXXX AQUI" + x);
         transaction.setLogin(ra);
         transaction.setUser(user);
+        transaction.setData(x);
         refeicao = refeicao.negate();
         transaction.setValue(refeicao);
+
         //BigDecimal track = new BigDecimal(total);
         user.setBalance(total);
         if ((userService.update(user)) && (transactionsService.update(transaction))) {
@@ -369,6 +402,10 @@ public class TransactionBean implements Serializable {
         // balance = balance.substring(0, balance.length() - 3);
         BigDecimal bal = new BigDecimal(balance);
         user = userService.getByProperty("login", ra);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        String x = dateFormat.format(date);
+        transaction.setData(x);
         transaction.setLogin(ra);
         transaction.setUser(user);
         transaction.setValue(credit);

@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -24,14 +26,38 @@ public class TransactionProduct implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Long getProduct_id() {
-        return product_id;
+    @ManyToOne
+    private Product product;
+
+    @ManyToOne
+    private User user;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+    public void setUser(User user) {
+        this.user = user;
     }
-    private Long product_id;
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    @ManyToOne
+    private Transaction transaction;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Long getId() {
         return id;
@@ -41,43 +67,13 @@ public class TransactionProduct implements Serializable {
         this.id = id;
     }
 
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
-
     public TransactionProduct() {
     }
 
-    public TransactionProduct(Long user_id, Long product_id, String data, Long transaction_id) {
-        this.user_id = user_id;
-        this.product_id = product_id;
-        this.data = data;
-        this.transaction_id = transaction_id;
+    public TransactionProduct(User user, Product product, Transaction transaction) {
+        this.user = user;
+        this.product = product;
+        this.transaction = transaction;
     }
-
-    private Long user_id;
-
-    public Long getTransaction_id() {
-        return transaction_id;
-    }
-
-    public void setTransaction_id(Long transaction_id) {
-        this.transaction_id = transaction_id;
-    }
-    private Long transaction_id;
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    private String data;
 
 }

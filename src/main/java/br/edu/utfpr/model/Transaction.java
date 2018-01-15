@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -32,28 +33,6 @@ public class Transaction implements Serializable {
 
     @ManyToOne
     private User user;
-
-    @OneToMany(cascade = CascadeType.REMOVE)
-    private Set<Product> products;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Set<TransactionProduct> transaction_product;
-
-    public Set<TransactionProduct> getTransaction_product() {
-        return transaction_product;
-    }
-
-    public void setTransaction_product(Set<TransactionProduct> transaction_product) {
-        this.transaction_product = transaction_product;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
 
     private BigDecimal value;
 
@@ -85,6 +64,16 @@ public class Transaction implements Serializable {
     public BigDecimal getValue() {
         return value;
     }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    private String data;
 
     public void setValue(BigDecimal value) {
         this.value = value;

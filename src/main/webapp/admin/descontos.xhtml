@@ -1,0 +1,41 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <ui:define name="content">
+        <h:form>
+            <div class="main">
+                <div class="row center-align">
+                    <h3>Criar um novo desconto para um determinado grupo de usuarios</h3>
+                </div>
+                <div class="row center-align">
+                    <h5>Selecione o produto</h5>
+                    <p:selectOneMenu
+                        value="#{productBean.productID}" id="prod">
+                        <f:selectItems   value="#{productBean.productList}" var="t" itemLabel="#{t.name}" itemValue="#{t.id}"/>
+                    </p:selectOneMenu>
+                </div>
+                <div class="row center-align">
+                    <h5>Selecione o tipo de usuario</h5>
+                    <p:selectOneMenu
+                        value="#{typeBean.typeID}" >
+                        <f:selectItems   value="#{typeBean.typeList}" var="t" itemLabel="#{t.description}" itemValue="#{t.id}"/>
+                    </p:selectOneMenu>
+                </div>
+                <div class="row center-align">
+
+                    <h5>Informe o novo valor  desse produto</h5>
+                    <p:inputNumber  id="numero" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{discountBean.newValue}" />
+                    <p:commandButton action="#{discountBean.persistDiscount(productBean.productID, typeBean.typeID)}"   value="Cadastrar" type="submit" class="btn green"  ></p:commandButton>
+
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
