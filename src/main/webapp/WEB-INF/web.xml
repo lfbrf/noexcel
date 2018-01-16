@@ -75,6 +75,16 @@
         </auth-constraint>
     </security-constraint>
     <security-constraint>
+        <display-name>Segurança para o diretório de gerentes</display-name>
+        <web-resource-collection>
+            <web-resource-name>Somente Usuarios</web-resource-name>
+            <url-pattern>/gerentes/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>MANAGER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
         <display-name>Segurança para o diretório de usuarios</display-name>
         <web-resource-collection>
             <web-resource-name>Somente Administrador</web-resource-name>

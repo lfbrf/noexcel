@@ -1,3 +1,4 @@
+
 <ui:composition template="/WEB-INF/template.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -35,8 +36,10 @@
                 <h:form >
                     <div class="row">
                         <div class="col s9 m10">
-                            <input type="text" jsf:value="#{searchView.text1}" required="true" />
+                            <input type="text" jsf:value="#{searchView.text1}" required="true"  />
+
                         </div>
+
                         <div class="col s3 m2">
                             <h:commandLink class="waves-effect waves-light btn btn-large" action="#{searchView.searchUser()}">
                                 <i class="material-icons">search</i>
@@ -119,9 +122,8 @@
                                        value="#{transactionBean.credit}"  />
 
                     </div>
-                    <input value="#{request.remoteUser}" name="ta" />
-                    <h:outputText  value="#{request.remoteUser}"/>
-                    <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit()}">
+
+                    <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit(request.remoteUser)}">
                         <i class="material-icons prefix">attach_money</i>
                     </h:commandLink>
                 </h:form>
@@ -141,19 +143,16 @@
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="5,10,15" rows="4"  >
 
-                                <p:column headerText="Id" class="center-align" >
-                                    <h:outputText value="#{ transaction.id}"  />
-
+                                <p:column headerText="Data" class="center-align" sortBy="#{transaction.data}" filterBy="#{transaction.data}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{transaction.data}"  />
+                                </p:column>
+                                <p:column headerText="Operador" class="center-align" sortBy="#{transactionBean.getbyManager(transaction)}" filterBy="#{transactionBean.getbyManager(transaction)}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{transactionBean.getbyManager(transaction)}"  />
                                 </p:column>
 
-                                <p:column headerText="Cliente" class="center-align">
-                                    <h:outputText value="#{transactionBean.getbyName(transaction)}" />
-                                </p:column>
-                                <p:column headerText="Valor Total" class="center-align">
-                                    <h:outputText value="#{transaction.value}" />
-                                    <input type="hidden" name="valor" value="#{transaction.value}" />
-                                </p:column>
-                                <p:column headerText="Produtos Consumidos">
+
+
+                                <p:column headerText="Produtos Consumidos" >
                                     <table>
 
                                         <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}">
@@ -172,6 +171,10 @@
                                         </ui:repeat>
 
                                     </table>
+                                </p:column>
+                                <p:column headerText="Valor Total" class="center-align"  sortBy="#{transaction.value}" filterBy="#{transaction.value}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{transaction.value}" />
+                                    <input type="hidden" name="valor" value="#{transaction.value}" />
                                 </p:column>
 
                             </p:dataTable>
@@ -192,20 +195,16 @@
 
 
 
-                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
-
-                        <f:selectItems  value="#{transactionBean.produtos}" var="city" class="filled-in" itemLabel="#{city}" itemValue="#{city}" />
-                    </p:selectManyCheckbox>
 
 
-                    <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cities" scrollHeight="150"
+
+                    <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cardapio" scrollHeight="150"
                                           filter="true" filterMatchMode="startsWith" panelStyle="width:250px" >
                         <f:selectItems value="#{transactionBean.produtos}" />
-                        <p:ajax event="change" update="selectedItemText"/>
-                    </p:selectCheckboxMenu>
-                    <h:outputText id="selectedItemText" value=" #{transactionBean.selectedProducts}"/>
 
-                    <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
+                    </p:selectCheckboxMenu>
+
+                    <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit(request.remoteUser)}">
                         <i class="material-icons">send</i>
                     </h:commandLink>
 
@@ -216,7 +215,24 @@
 
 
 
-
+        <script>
+            jQuery("#code").mask("999?9")
+                    .keydown(function () {
+                        var $elem = $(this);
+                        var a = this.value.replace(/\D/g, "").length;
+                        setTimeout(function () {
+                            var n = $elem.val().replace(/\D/g, "").length;
+                            //<![CDATA[
+                            if (n !== a && (n === 5 || n === 4)) {
+                                var mask = (n === 4 ? "99-99?9" : "999-99");
+                                $elem.mask(mask);
+                            }
+                            //]]>
+                        }, 1);
+                    });
+        </script>
 
     </ui:define>
+
 </ui:composition>
+

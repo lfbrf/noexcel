@@ -34,6 +34,16 @@ public class Transaction implements Serializable {
     @ManyToOne
     private User user;
 
+    public String getManager_id() {
+        return manager_id;
+    }
+
+    public void setManager_id(String manager_id) {
+        this.manager_id = manager_id;
+    }
+
+    private String manager_id;
+
     private BigDecimal value;
 
     public String getLogin() {

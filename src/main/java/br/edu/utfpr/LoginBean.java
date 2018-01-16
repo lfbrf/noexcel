@@ -81,6 +81,9 @@ public class LoginBean implements Serializable {
             } else if (request.isUserInRole("ADMIN")) {
                 session.setAttribute("loggedIn", true);
                 return "admin/inicio?faces-redirect=true";
+            } else if (request.isUserInRole("MANAGER")) {
+                session.setAttribute("loggedIn", true);
+                return "gerentes/inicio?faces-redirect=true";
             }
             return "user/conta?faces-redirect=true";
         } catch (ServletException e) {

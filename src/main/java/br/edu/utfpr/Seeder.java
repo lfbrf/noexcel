@@ -91,15 +91,17 @@ public class Seeder implements ServletContextListener {
         String password = org.apache.commons.codec.digest.DigestUtils.sha256Hex("administrador");
         admin.setPassword(password);
         admin.setType(type);
-
-        typeService.save(manager);
-        typeService.save(estudante);
-        typeService.save(bolsista);
-        typeService.save(visitante);
-        userRoleService.save(userRole);
-        typeService.save(type);
-        userService.save(admin);
-        UserRole ur = new UserRole();
+        User us = userService.getByProperty("login", "administrador");
+        if (us == null) {
+            typeService.save(manager);
+            typeService.save(estudante);
+            typeService.save(bolsista);
+            typeService.save(visitante);
+            userRoleService.save(userRole);
+            typeService.save(type);
+            userService.save(admin);
+            UserRole ur = new UserRole();
+        }
 
     }
 

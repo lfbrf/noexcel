@@ -249,8 +249,13 @@ public class TransactionBean implements Serializable {
     }
 
     public String getbyName(Transaction transaction) {
-        System.out.println(">>>>" + transaction.getLogin());
         user = userService.getByProperty("login", transaction.getLogin());
+        return user.getName();
+    }
+
+    public String getbyManager(Transaction transaction) {
+        String manager = transaction.getManager_id();
+        user = userService.getByProperty("login", manager);
         return user.getName();
     }
 
@@ -294,7 +299,7 @@ public class TransactionBean implements Serializable {
         transaction = new Transaction();
         product = new Product();
     } */
-    public boolean removeCredit() { // editar voltar um poco mais
+    public boolean removeCredit(String loggedin) { // editar voltar um poco mais
         BigDecimal refeicao = BigDecimal.ZERO, total;
         Product pd;
         String ra = FacesContext.getCurrentInstance().
@@ -303,6 +308,7 @@ public class TransactionBean implements Serializable {
             MessageUtil.showMessage("Falha no cadastro de refeicao, informe um RA valido ", "", FacesMessage.SEVERITY_ERROR);
             return false;
         }
+
         user = userService.getByProperty("login", ra);
         for (String temp : selectedProducts) {
             pd = productService.getByProperty("name", temp);
@@ -337,10 +343,11 @@ public class TransactionBean implements Serializable {
             return false;
         }
         BigDecimal balance;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         String x = dateFormat.format(date);
         System.out.println("XXXX AQUI" + x);
+        transaction.setManager_id(loggedin);
         transaction.setLogin(ra);
         transaction.setUser(user);
         transaction.setData(x);
@@ -383,13 +390,14 @@ public class TransactionBean implements Serializable {
     }
     private UserRoleService userRoleService;
 
-    public boolean insertCredit() { // ate aqui esta certo !!!!!!!!!!!!!!!!!!!!!!!! !! !!! !!!! !!! !! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public boolean insertCredit(String loggedin) { // ate aqui esta certo !!!!!!!!!!!!!!!!!!!!!!!! !! !!! !!!! !!! !! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         String balance = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("balance");
         String ra = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("ra");
         System.out.println("VEIO AQUI" + balance);
+        UserRole rol = userRoleService.getByProperty("login", loggedin);
         if (ra == "" || balance == "") {
             MessageUtil.showMessage("Falha na inserao de credito , informe um RA valido ", "", FacesMessage.SEVERITY_ERROR);
             return false;
@@ -398,13 +406,21 @@ public class TransactionBean implements Serializable {
             MessageUtil.showMessage("Falha na inserao de credito , informe uma quantia valida ", "", FacesMessage.SEVERITY_ERROR);
             return false;
         }
+
+        if (rol.getRole().equals("MANAGER")) {
+            MessageUtil.showMessage("Falha na inserao de credito, solicite ao administrador essa transacao ", "", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
         balance = balance.substring(3);
         // balance = balance.substring(0, balance.length() - 3);
         BigDecimal bal = new BigDecimal(balance);
         user = userService.getByProperty("login", ra);
+        UserRole ur = userRoleService.getByProperty("login", ra);
+
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         String x = dateFormat.format(date);
+        transaction.setManager_id(loggedin);
         transaction.setData(x);
         transaction.setLogin(ra);
         transaction.setUser(user);
@@ -414,7 +430,7 @@ public class TransactionBean implements Serializable {
         user.setBalance(bal);
         if (getNewtime() - user.getTime() < 604800000) {
             System.out.println("BELEZINHA" + ra);
-            UserRole ur = userRoleService.getByProperty("login", ra);
+
             System.out.println("BH" + ur.getRole());
             if (ur.getRole().equals(ur.USER_PENDING)) {
                 System.out.println("BELEZINHA2");

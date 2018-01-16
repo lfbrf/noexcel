@@ -36,10 +36,10 @@ public class EmailUtil {
      * @param subject
      * @param body
      */
-    public static void sendEmail(Session session, String toEmail, String subject, String body) {
+    public static void sendEmail(Session session, String toEmail, String subject, String body, String token) {
         try {
             MimeMessage msg = new MimeMessage(session);
-            String text = "<h1>Hello My html formeted message</h1> <br> <button>Clique<button>";
+            String text = "<h1>Hello My html formeted message</h1> <br> <button >Clique<button>" + token;
             //set message headers
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
 

@@ -1,0 +1,224 @@
+<ui:composition template="/WEB-INF/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                >
+
+
+    <ui:define name="content">
+
+        <style>
+            .ne-user-title{
+                font-weight: bold;
+                margin-right: 1em;
+            }
+
+
+        </style>
+
+
+
+        <p:messages/>
+
+        <div class="row" jsf:rendered="#{searchView.isShowImage}">
+            <div class="col s12 center">
+                <img id="img-no-excel" src="http://lorempixel.com/200/200/"/>
+            </div>
+        </div>
+
+        <div class="row ne-search">
+            <div class="col s12 img-responsive">
+                <h:form >
+                    <div class="row">
+                        <div class="col s9 m10">
+                            <input type="text" jsf:value="#{searchView.text1}" required="true" />
+                        </div>
+                        <div class="col s3 m2">
+                            <h:commandLink class="waves-effect waves-light btn btn-large" action="#{searchView.searchUser()}">
+                                <i class="material-icons">search</i>
+                            </h:commandLink>
+                        </div>
+
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+        <h:form prependId="false">
+            <div class="row card light-green lighten-3" id="div-panel" style="margin-top: 4em; padding: 1.8em 0.5em">
+                <div class="col s12">
+                    <div class="col s4 m3 center">
+                        <img src="http://lorempixel.com/100/100/" class="img-responsive"/>
+                    </div>
+                    <div class="col s8 m9 left flow-text">
+
+                        <span class="ne-user-title">RA|CPF:</span> <h:outputText  value="#{searchView.userDTO.ra}"/><br/>
+                        <span class="ne-user-title">Nome:</span> <h:outputText value="#{searchView.userDTO.name}" /><br/>
+                        <span class="ne-user-title">Saldo:</span> <h:outputText value="#{searchView.userDTO.balance}" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 center" style="padding: 3em 1em 1em 1em">
+                        <p:inputText id="valra"  value="#{searchView.userDTO.ra}" style="display:none;" ></p:inputText>
+                        <p:commandLink value="Inserir Credito"  onclick="
+                                if (jQuery('#valra').val() != '') {
+                                    document.getElementById('credito').style.display = 'block';
+                                    document.getElementById('extrato').style.display = 'none';
+                                    document.getElementById('refeicao').style.display = 'none';
+                                } else
+                                    document.getElementById('semra').style.display = 'block';
+                                       " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
+                        <p:commandLink value="Ver etrato"  onclick="
+                                if (jQuery('#valra').val() != '') {
+                                    document.getElementById('extrato').style.display = 'block';
+                                    document.getElementById('credito').style.display = 'none';
+                                    document.getElementById('refeicao').style.display = 'none';
+                                } else
+                                    document.getElementById('semra').style.display = 'block';
+
+                                       " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
+                        <p:commandLink value="Refeicao"  onclick="
+                                if (jQuery('#valra').val() != '') {
+                                    document.getElementById('refeicao').style.display = 'block';
+                                    document.getElementById('extrato').style.display = 'none';
+                                    document.getElementById('credito').style.display = 'none';
+                                } else
+                                    document.getElementById('semra').style.display = 'block';
+                                       " class="waves-effect waves-light btn btn-large green" style="margin-right: 2em" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="row card light-green lighten-3" id="semra" style="display:none;"  >
+                <div class="col s12" style="margin-top: 1em"><h4></h4></div>
+                <h3><i class="material-icons prefix medium">error</i> Por favor informe um RA valido para continuar.</h3>
+                <div class="col s12" style="padding: 3em 1em 1em 1em">
+                </div>
+            </div>
+
+        </h:form>
+
+
+        <div class="row card light-green lighten-3" id="credito" style="display:none;"  >
+            <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito </h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+
+
+
+                <h:form>
+                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
+                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
+                    <div class="input-field col s6">
+
+                        <p:inputNumber symbol="R$ " decimalSeparator="," thousandSeparator="."
+                                       value="#{transactionBean.credit}"  />
+
+                    </div>
+
+                    <h:outputText  value="#{request.remoteUser}"/>
+                    <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit(request.remoteUser)}">
+                        <i class="material-icons prefix">attach_money</i>
+                    </h:commandLink>
+                </h:form>
+
+            </div>
+        </div>
+        <div class="row card light-green lighten-3" id="extrato" style="display:none;" >
+            <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+                Dados do extrato de : #{searchView.userDTO.name}
+
+                <h:form id="tabela" prependId="false"  >
+
+                    <div class="row">
+                        <div class="col s12">
+                            <p:dataTable var="transaction" value="#{transactionBean.findAll(searchView.userDTO.ra)}"   paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15" rows="4"  >
+                                <p:column headerText="Idd"  class="center-align" >
+                                    <h:outputText value="#{transaction.id}"  />
+                                </p:column>
+
+                                <p:column headerText="Gerente"  class="center-align" >
+                                    <h:outputText value="#{transactionBean.getbyManager(tarnsaction.manager_id)}"  />
+                                </p:column>
+
+                                <p:column headerText="Cliente" class="center-align">
+                                    <h:outputText value="#{transactionBean.getbyName(transaction.manager_id)}" />
+                                </p:column>
+                                <p:column headerText="Valor Total" class="center-align">
+                                    <h:outputText value="#{transaction.value}" />
+                                    <input type="hidden" name="valor" value="#{transaction.value}" />
+                                </p:column>
+                                <p:column headerText="Produtos Consumidos">
+                                    <table>
+
+                                        <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}">
+                                            <tr>
+                                                <td> <h:outputText value="#{productBean.findByid(group.product.id).getName()}" /></td>
+                                                <td> R$-<h:outputText  value="#{productBean.findByid(group.product.id).getValue()}" /></td>
+
+                                            </tr>
+                                        </ui:repeat>
+                                        <ui:repeat var="group" rendered="#{transaction.value>0}"  value="#{transactionBean.findProducts(transaction.id) == null}">
+                                            <tr>
+                                                <td> <h:outputText value="Adiçao" /></td>
+                                                <td> R$+<h:outputText  value="#{transaction.value}" /></td>
+
+                                            </tr>
+                                        </ui:repeat>
+
+                                    </table>
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+
+        <div  class="row card light-green lighten-3" id="refeicao" style="display:none;" >
+            <div class="col s12" style="margin-top: 1em"><h4>Lançar Refeição</h4></div>
+            <div class="col s12" style="padding: 3em 1em 1em 1em">
+
+
+                <h:form>
+                    <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
+                    <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
+
+
+
+                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
+
+                        <f:selectItems  value="#{transactionBean.produtos}" var="city" class="filled-in" itemLabel="#{city}" itemValue="#{city}" />
+                    </p:selectManyCheckbox>
+
+
+                    <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cities" scrollHeight="150"
+                                          filter="true" filterMatchMode="startsWith" panelStyle="width:250px" >
+                        <f:selectItems value="#{transactionBean.produtos}" />
+                        <p:ajax event="change" update="selectedItemText"/>
+                    </p:selectCheckboxMenu>
+                    <h:outputText id="selectedItemText" value=" #{transactionBean.selectedProducts}"/>
+
+                    <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
+                        <i class="material-icons">send</i>
+                    </h:commandLink>
+
+                </h:form>
+
+            </div>
+        </div>
+
+
+
+
+
+    </ui:define>
+</ui:composition>
