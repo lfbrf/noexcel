@@ -6,6 +6,11 @@
 package br.edu.utfpr.model.dao;
 
 import br.edu.utfpr.model.RecoveryPass;
+import br.edu.utfpr.model.TransactionProduct;
+import br.edu.utfpr.util.JPAUtil;
+import java.util.List;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -13,4 +18,16 @@ import br.edu.utfpr.model.RecoveryPass;
  */
 public class RecoveryPassDAO extends AbstractDAO<Long, RecoveryPass> {
 
+    public void deletebyEmail(String email) {
+
+        this.entityManager = JPAUtil.getEntityManager();
+        String queryString = "DELETE  FROM  RecoveryPass    where email= :param";
+
+        Query query = entityManager.createQuery(queryString);
+
+        query.setParameter("param", email);
+
+        System.out.println(">>>>" + query.executeUpdate());
+
+    }
 }

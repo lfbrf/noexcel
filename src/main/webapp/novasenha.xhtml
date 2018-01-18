@@ -1,0 +1,46 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+
+        <f:event listener="#{recoveryPassBean.istoShow(event)}" type="preRenderView" />
+        <div class="row" style="margin-top: 4em">
+            <div class="col s6 offset-s3 card" >
+                <div class="card-content center">
+                    <img class="responsive-img" style="max-width: 94px;" src="resources/images/no-excel.png" />
+                    <div class="left-align" >
+                        <h:form prependId="false">
+                            <div class="input-field col s12">
+                                <label for="client-email" class="active" style="font-size: 20px; color:black; font-family:Arial, Helvetica, sans-serif; padding-top: 5%; font-weight: bold;">Alterar a Senha</label>
+                            </div>
+                            <div class="col s11 input-field">
+                                <p:password id="pass" required="true" match="repass"  class="default-input" title="Informe sua senha, deve conter ao menos um numero e uma letra"    placeholder="Senha" value="#{recoveryPassBean.pass}"  requiredMessage="Campo  senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Senha');"  />
+                                <p:tooltip id="tool5" for="pass" showEvent="focus" hideEvent="blur"  />
+                                <span class="tip-message">A senha deve conter pelo menos um número e 6 caracteres.</span>
+                            </div>
+                            <div class="col s11 input-field">
+                                <p:password  id="repass" required="true" class="default-input" title="Informe a Senha"  placeholder="Repita a Senha" value="#{recoveryPassBean.repass}"  requiredMessage="Campo repitir senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Repita a Senha');"  />
+                                <p:tooltip id="tool6" for="repass" showEvent="focus" hideEvent="blur"  />
+
+                            </div>
+
+                            <div class="col s11 center">
+                                <h:commandButton id="btEntrar2" value="Mudar Senha"
+                                                 action="#{recoveryPassBean.generateNewPass()}"
+                                                 class="waves-effect waves-light btn green"/>
+
+
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -6,6 +6,8 @@
 package br.edu.utfpr.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.TimeZone;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +21,7 @@ import javax.persistence.Id;
 public class RecoveryPass implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     public Long getId() {
@@ -50,4 +52,23 @@ public class RecoveryPass implements Serializable {
 
     private String token;
 
+    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+
+    long time = cal.getTimeInMillis();
+
+    public Calendar getCal() {
+        return cal;
+    }
+
+    public void setCal(Calendar cal) {
+        this.cal = cal;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
 }

@@ -18,4 +18,11 @@ public class RecoveryPassService extends AbstractService<Long, RecoveryPass> {
         dao = new RecoveryPassDAO();
 
     }
+
+    public void deletebyEmail(String email) {
+        //tratar transaçoes
+
+        ((RecoveryPassDAO) dao).deletebyEmail(email);
+
+    }
 }

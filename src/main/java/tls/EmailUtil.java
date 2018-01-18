@@ -36,19 +36,24 @@ public class EmailUtil {
      * @param subject
      * @param body
      */
-    public static void sendEmail(Session session, String toEmail, String subject, String body, String token) {
+    public static void sendEmail(Session session, String toEmail, String subject, String body, String token, String email) {
         try {
             MimeMessage msg = new MimeMessage(session);
-            String text = "<h1>Hello My html formeted message</h1> <br> <button >Clique<button>" + token;
+            String text = "<h1>Equipe No Excel</h1>"
+                    + "<h3>Voce solicitou mudanca de senha, para confirmar clique no link abaixo</h3>"
+                    + "<a href=\"http://localhost:8080/new-no-excel/recoveryform.jsf?repetir=" + token + "&email=" + email + "\">Resetar senha</a>"
+                    + "<p>Caso nao reconheca essa solicitacao entre em contato conosco; e desconsidere esse email. </p>"
+                    + "<img src=\"https://image.freepik.com/fotos-gratis/textura-verde_1160-721.jpg\" alt=\"Verde\" style=\"width:800px;height:100px;\">";
+
             //set message headers
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
 
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress("no_reply@journaldev.com", "NoReply-JD"));
+            msg.setFrom(new InternetAddress("ru@utfpr.com", "RU-UTFPR Mudanca de Senha "));
 
-            msg.setReplyTo(InternetAddress.parse("no_reply@journaldev.com", false));
+            msg.setReplyTo(InternetAddress.parse("ru@utfpr.com", false));
 
             msg.setSubject(subject, "UTF-8");
 
