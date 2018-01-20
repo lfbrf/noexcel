@@ -70,10 +70,20 @@ public class TransactionProduct implements Serializable {
     public TransactionProduct() {
     }
 
-    public TransactionProduct(User user, Product product, Transaction transaction) {
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    private int quantity;
+
+    public TransactionProduct(User user, Product product, Transaction transaction, int quantity) {
         this.user = user;
         this.product = product;
         this.transaction = transaction;
+        this.quantity = quantity;
     }
 
 }

@@ -203,6 +203,7 @@ public class UserBean {
     }
 
     public String persist() {
+
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         user.setBalance(BigDecimal.ZERO);
         String aux = user.getLogin().replace(".", "");
@@ -213,8 +214,10 @@ public class UserBean {
         List<String> us = null;
         us = userService.listByNames();
         int length = user.getLogin().length();
-
-        if (length == 8) {
+        if (user.getComment().equals("sim")) {
+            user.setCheckuser(true);
+            descricao = "Bolsista";
+        } else if (length == 8) {
             descricao = "Estudante";
         } else {
             descricao = "Visitante";

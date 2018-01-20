@@ -40,7 +40,7 @@
                                                 <f:selectItem itemLabel="Visitante" id="visitor"
                                                               itemValue="visitor" class="radio-option"/>
                                                 <p:ajax process="console"
-                                                        update="combo" />
+                                                        update="combo cmd" />
                                             </p:selectOneRadio>
                                         </div>
                                     </div>
@@ -68,7 +68,21 @@
                                             <p:tooltip id="tool2" for="studentid" showEvent="focus" hideEvent="blur" />
                                             <p:watermark for="studentid" value="RA " />
                                         </div>
+                                        <div class="input-field col s11" jsf:id="cmd"  >
+                                            <h6 for="radio-vinculo" jsf:rendered="#{examinationFormBean.radioVal eq 'student'}">Aluno bolsista na UTFPR:</h6>
 
+                                            <p:selectOneRadio rendered="#{examinationFormBean.radioVal eq 'student'}"
+                                                              value="#{userBean.user.comment}"
+                                                              columns="1"
+                                                              layout="responsive"
+                                                              class="radio-option">
+                                                <f:selectItem itemLabel="Sim" itemValue="sim" id="sim" class="radio-option"  />
+
+                                                <f:selectItem itemLabel="Nao" id="nao"
+                                                              itemValue="nao" class="radio-option"/>
+
+                                            </p:selectOneRadio>
+                                        </div>
                                         <div class="col s11 input-field okname" >
                                             <h:inputText id="name"  class="default-input" value="#{userBean.user.name}" title="Informe seu nome completo"  onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Nome');"  required="true"  requiredMessage="Campo nome e obrigatorio " />
                                             <p:tooltip id="tool3" for="name" showEvent="focus" hideEvent="blur"  />

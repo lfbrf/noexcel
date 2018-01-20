@@ -20,6 +20,15 @@ public class ExaminationFormBean implements Serializable {
 
     private String comment;
     private String radioVal = "student";
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+    private String valor;
     private boolean showMap;
 
     public boolean isShowMap() {

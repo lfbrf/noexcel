@@ -35,6 +35,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.Visibility;
 
@@ -57,6 +58,111 @@ public class TransactionBean implements Serializable {
         return selectedProducts;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+    private BigDecimal total;
+
+    public int valorporProduto(String p, int x) {
+        System.out.println("EIII" + p);
+        Product prod = productService.getByProperty("name", p);
+        BigDecimal z = prod.getValue();
+        int t = Integer.valueOf(z.intValue());
+        t = t * x;
+
+        return t;
+    }
+
+    public int getSoma() {
+        return soma;
+    }
+
+    public void setSoma(int soma) {
+        this.soma = soma;
+    }
+    private int soma = 0;
+
+    public void teste() {
+        System.out.println("-------------------------------------------------");
+
+    }
+    ArrayList al = new ArrayList();
+
+    public void atualizaQuantidade(String p, int val) {
+        //System.out.println("EPAA44545!" + quantity);
+        boolean aux = false;
+        for (int i = 0; i < al.size(); i = i + 1) {
+            if (al.equals(p)) {
+                al.add(i + 1, quantity);
+                aux = true;
+            }
+        }
+        if (!aux) {
+            al.add(p);
+            al.add(quantity);
+        }
+
+        quantitys.add(val, quantity);
+
+        Product prod = productService.getByProperty("name", p);
+        BigDecimal z = prod.getValue();
+        int t = Integer.valueOf(z.intValue());
+        t = t * quantity;
+        System.out.println("SOU O T" + t);
+        setSoma(t);
+
+        //soma = 0;
+        //System.out.println("VALOR DE MEU SOMA:" + soma);
+        //setTotal(BigDecimal.valueOf(soma));
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    private int quantity = 1;
+
+    public boolean atualizaTotal() {
+        String ra = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap().get("ra");
+
+        total = BigDecimal.ZERO;
+        if (quantitys != null) {
+            for (int y : quantitys) {
+                System.out.println("VALOR DE MEU R:" + y);
+            }
+        }
+        User u = userService.getByProperty("login", ra);
+
+        for (String x : selectedProducts) {
+
+            Product p = productService.getByProperty("name", x);
+
+            if (p != null) {
+                if (u != null) {
+                    if (discountService.isrepeatFilds(u.getType().getId(), p.getId())) {
+                        List<Discount> d = discountService.listrepeatFilds(u.getType().getId(), p.getId());
+                    } else {
+
+                        total = total.add(p.getValue());
+                        setTotal(total);
+                        System.out.println("VALOR DE TOTAL LOGO " + total);
+                    }
+                }
+            }
+
+            //tratar desconto
+        }
+        return false;
+    }
+
     public void extend() {
         selectedProducts.add("");
     }
@@ -65,6 +171,16 @@ public class TransactionBean implements Serializable {
         this.selectedProducts = selectedProducts;
     }
     private List<String> selectedProducts;
+
+    private List<Integer> quantitys;
+
+    public List<Integer> getQuantitys() {
+        return quantitys;
+    }
+
+    public void setQuantitys(List<Integer> quantitys) {
+        this.quantitys = quantitys;
+    }
 
     public TransactionProductService getTransactionProductService() {
         return transactionProductService;
@@ -178,8 +294,11 @@ public class TransactionBean implements Serializable {
         transactionProductService = new TransactionProductService();
         produtos = new ArrayList<String>();
         transactionList = new ArrayList<>();
+        quantitys = new ArrayList<>();
+        soma = 0;
         userRoleService = new UserRoleService();
         producList = new ArrayList<>();
+        total = BigDecimal.ZERO;
         List<Product> products = productService.findAll();
         for (Product temp : products) {
             produtos.add(temp.getName());
@@ -259,6 +378,7 @@ public class TransactionBean implements Serializable {
         return user.getName();
     }
 
+
     /* public void removeCredit() { //
         System.out.println("ABAIO DAQUI");
         Long x = null;
@@ -302,6 +422,7 @@ public class TransactionBean implements Serializable {
     public boolean removeCredit(String loggedin) { // editar voltar um poco mais
         BigDecimal refeicao = BigDecimal.ZERO, total;
         Product pd;
+
         String ra = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("ra");
         if (ra == "") {
@@ -310,16 +431,27 @@ public class TransactionBean implements Serializable {
         }
 
         user = userService.getByProperty("login", ra);
-        for (String temp : selectedProducts) {
-            pd = productService.getByProperty("name", temp);
-            if (discountService.isrepeatFilds(user.getType().getId(), pd.getId())) {
-                List<Discount> di = discountService.listrepeatFilds(user.getType().getId(), pd.getId());
-                for (Discount d : di) {
-                    pd.setValue(d.getAtualValue());
-                }
+        if (user.isCheckuser()) {
+            MessageUtil.showMessage("Falha na inserao de credito, condicao de bolsista nao confirmada ", "", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
+        for (int i = 0; i < al.size(); i = i + 2) {
+            if (i > 0) {
+                System.out.println(al.get(i));
+                System.out.println("|||||||||||||||");
+                pd = productService.getByProperty("name", al.get(i).toString());
+                if (discountService.isrepeatFilds(user.getType().getId(), pd.getId())) {
+                    List<Discount> di = discountService.listrepeatFilds(user.getType().getId(), pd.getId());
+                    for (Discount d : di) {
+                        pd.setValue(d.getAtualValue());
+                    }
 
+                }
+                BigDecimal z = null;
+                z = z.multiply(pd.getValue());
+                refeicao = refeicao.add(z);
             }
-            refeicao = refeicao.add(pd.getValue());
+
         }
 
         total = user.getBalance().subtract(refeicao);
@@ -329,11 +461,13 @@ public class TransactionBean implements Serializable {
             return false;
         }
         transactionsService.save(transaction);
+        int currentPosition = 0;
         for (String temp : selectedProducts) {
             pd = productService.getByProperty("name", temp);
-
+            int z = 0;
+            z = quantitys.get(currentPosition);
             //refeicao = refeicao + pd.getValue();
-            TransactionProduct transactionProduct = new TransactionProduct(user, pd, transaction);
+            TransactionProduct transactionProduct = new TransactionProduct(user, pd, transaction, z);
             if ((!transactionProductService.save(transactionProduct))) {
                 return false;
             }
@@ -368,6 +502,7 @@ public class TransactionBean implements Serializable {
         user = new User();
         transaction = new Transaction();
         product = new Product();
+        currentPosition++;
         return true;
     }
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -399,7 +534,7 @@ public class TransactionBean implements Serializable {
         System.out.println("VEIO AQUI" + balance);
         UserRole rol = userRoleService.getByProperty("login", loggedin);
         if (ra == "" || balance == "") {
-            MessageUtil.showMessage("Falha na inserao de credito , informe um RA valido ", "", FacesMessage.SEVERITY_ERROR);
+            MessageUtil.showMessage("Falha na inserao de credito , informe um RA|CPF valido ", "", FacesMessage.SEVERITY_ERROR);
             return false;
         }
         if (credit == null || credit.compareTo(BigDecimal.ZERO) == 0) {
@@ -415,6 +550,10 @@ public class TransactionBean implements Serializable {
         // balance = balance.substring(0, balance.length() - 3);
         BigDecimal bal = new BigDecimal(balance);
         user = userService.getByProperty("login", ra);
+        if (user.isCheckuser()) {
+            MessageUtil.showMessage("Falha na inserao de credito, condicao de bolsista nao confirmada ", "", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
         UserRole ur = userRoleService.getByProperty("login", ra);
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
