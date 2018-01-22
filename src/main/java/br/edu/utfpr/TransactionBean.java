@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -35,7 +36,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.Visibility;
 
@@ -77,14 +77,14 @@ public class TransactionBean implements Serializable {
         return t;
     }
 
-    public int getSoma() {
+    public BigDecimal getSoma() {
         return soma;
     }
 
-    public void setSoma(int soma) {
+    public void setSoma(BigDecimal soma) {
         this.soma = soma;
     }
-    private int soma = 0;
+    private BigDecimal soma = BigDecimal.ZERO;
 
     public void teste() {
         System.out.println("-------------------------------------------------");
@@ -92,42 +92,84 @@ public class TransactionBean implements Serializable {
     }
     ArrayList al = new ArrayList();
 
+    public List<BigDecimal> getProdsQtd() {
+        return prodsQtd;
+    }
+
+    public void setProdsQtd(List<BigDecimal> prodsQtd) {
+        this.prodsQtd = prodsQtd;
+    }
+    private List<BigDecimal> prodsQtd;
+    List<String> prodsNome = new ArrayList<String>();
+    List lista = new ArrayList();
+
+    public void att() {
+        soma = BigDecimal.ZERO;
+        for (int i = 0; i < selectedProducts.size(); i = i + 1) {
+            Product j = productService.getByProperty("name", selectedProducts.get(i));
+            System.out.println("BARREIRa");
+            //System.out.println(al.get(i));
+            BigDecimal k = prodsQtd.get(i);
+            BigDecimal w = j.getValue();
+            System.out.println("KKKK" + k + "WWWWWWW" + w);
+            k = k.multiply(w);
+            soma = soma.add(k);
+
+        }
+    }
+
     public void atualizaQuantidade(String p, int val) {
-        //System.out.println("EPAA44545!" + quantity);
+
         boolean aux = false;
-        for (int i = 0; i < al.size(); i = i + 1) {
-            if (al.equals(p)) {
-                al.add(i + 1, quantity);
-                aux = true;
+        //al.set(val + 1, quantity);
+        //al.set(val, p);
+
+        for (int i = 0; i < produtos.size(); i = i + 1) {
+            System.out.println("AAAAAA" + produtos.get(i));
+        }
+        int y = 0;
+        //al.set(val, quantity);
+        prodsQtd.set(val, quantity);
+        for (int i = 0; i < selectedProducts.size(); i = i + 1) {
+            Product j = productService.getByProperty("name", selectedProducts.get(i));
+
+            if (p.equals(j.getName())) {
+
             }
         }
-        if (!aux) {
-            al.add(p);
-            al.add(quantity);
+        for (int i = 0; i < selectedProducts.size(); i = i + 1) {
+            System.out.println("BARREIRa");
+            //System.out.println(al.get(i));
+
         }
 
-        quantitys.add(val, quantity);
-
+        //quantitys.add(val, quantity);
+        //System.out.println("PPPPPPPPPPPPPPPP" + p);
         Product prod = productService.getByProperty("name", p);
+        Integer xc = (int) (long) prod.getId();
+        //lista.add(xc, prod.getName());
+
         BigDecimal z = prod.getValue();
         int t = Integer.valueOf(z.intValue());
-        t = t * quantity;
+        //t = t * quantity;
         System.out.println("SOU O T" + t);
-        setSoma(t);
-
+        // setSoma(t);
+        for (int i = 0; i < prodsNome.size(); i++) {
+            System.out.print("--------------------------" + prodsNome.get(i));
+        }
         //soma = 0;
         //System.out.println("VALOR DE MEU SOMA:" + soma);
         //setTotal(BigDecimal.valueOf(soma));
     }
 
-    public int getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
-    private int quantity = 1;
+    private BigDecimal quantity = BigDecimal.ONE;
 
     public boolean atualizaTotal() {
         String ra = FacesContext.getCurrentInstance().
@@ -140,7 +182,11 @@ public class TransactionBean implements Serializable {
             }
         }
         User u = userService.getByProperty("login", ra);
-
+        int w = 0;
+        for (int i = 0; i < selectedProducts.size(); i++) {
+            //al.add(1);
+            prodsQtd.add(BigDecimal.ONE);
+        }
         for (String x : selectedProducts) {
 
             Product p = productService.getByProperty("name", x);
@@ -150,7 +196,7 @@ public class TransactionBean implements Serializable {
                     if (discountService.isrepeatFilds(u.getType().getId(), p.getId())) {
                         List<Discount> d = discountService.listrepeatFilds(u.getType().getId(), p.getId());
                     } else {
-
+                        //al.set(w, x);
                         total = total.add(p.getValue());
                         setTotal(total);
                         System.out.println("VALOR DE TOTAL LOGO " + total);
@@ -293,9 +339,10 @@ public class TransactionBean implements Serializable {
         discountService = new DiscountService();
         transactionProductService = new TransactionProductService();
         produtos = new ArrayList<String>();
+        prodsQtd = new ArrayList<>();
         transactionList = new ArrayList<>();
         quantitys = new ArrayList<>();
-        soma = 0;
+        soma = BigDecimal.ZERO;
         userRoleService = new UserRoleService();
         producList = new ArrayList<>();
         total = BigDecimal.ZERO;
@@ -420,7 +467,7 @@ public class TransactionBean implements Serializable {
         product = new Product();
     } */
     public boolean removeCredit(String loggedin) { // editar voltar um poco mais
-        BigDecimal refeicao = BigDecimal.ZERO, total;
+        //BigDecimal refeicao = BigDecimal.ZERO, total;
         Product pd;
 
         String ra = FacesContext.getCurrentInstance().
@@ -449,12 +496,12 @@ public class TransactionBean implements Serializable {
                 }
                 BigDecimal z = null;
                 z = z.multiply(pd.getValue());
-                refeicao = refeicao.add(z);
+                //refeicao = refeicao.add(z);
             }
 
         }
 
-        total = user.getBalance().subtract(refeicao);
+        // total = user.getBalance().subtract(refeicao);
         System.out.println("ME ACHE" + user.getType().getId());
         if (total.compareTo(BigDecimal.ZERO) < 0) {
             MessageUtil.showMessage("Cliente sem saldo suficiente ", "", FacesMessage.SEVERITY_ERROR);
@@ -462,17 +509,16 @@ public class TransactionBean implements Serializable {
         }
         transactionsService.save(transaction);
         int currentPosition = 0;
-        for (String temp : selectedProducts) {
-            pd = productService.getByProperty("name", temp);
-            int z = 0;
-            z = quantitys.get(currentPosition);
+        for (int i = 0; i < selectedProducts.size(); i++) {
+            pd = productService.getByProperty("name", selectedProducts.get(i));
+
             //refeicao = refeicao + pd.getValue();
-            TransactionProduct transactionProduct = new TransactionProduct(user, pd, transaction, z);
+            TransactionProduct transactionProduct = new TransactionProduct(user, pd, transaction, prodsQtd.get(i).intValue());
             if ((!transactionProductService.save(transactionProduct))) {
                 return false;
             }
         }
-        if (refeicao.compareTo(BigDecimal.ZERO) == 0) {
+        if (soma.compareTo(BigDecimal.ZERO) == 0) {
             MessageUtil.showMessage("Falha no cadastro de refeicao, selecione os produtos consumidos ", "", FacesMessage.SEVERITY_ERROR);
             return false;
         }
@@ -485,11 +531,14 @@ public class TransactionBean implements Serializable {
         transaction.setLogin(ra);
         transaction.setUser(user);
         transaction.setData(x);
-        refeicao = refeicao.negate();
-        transaction.setValue(refeicao);
+        soma = soma.negate();
+        transaction.setValue(soma);
 
         //BigDecimal track = new BigDecimal(total);
+        total = user.getBalance();
+        total = total.subtract(soma.negate());
         user.setBalance(total);
+        soma = soma.ZERO;
         if ((userService.update(user)) && (transactionsService.update(transaction))) {
             MessageUtil.showMessage("Refeicao cadastrada com sucesso", "", FacesMessage.SEVERITY_INFO);
         } else {

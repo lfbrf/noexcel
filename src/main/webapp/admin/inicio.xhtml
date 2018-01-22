@@ -200,7 +200,7 @@
                     <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cardapio" scrollHeight="150"
                                           filter="true" filterMatchMode="startsWith" panelStyle="width:250px" >
                         <f:selectItems value="#{transactionBean.produtos}" />
-                        <p:ajax event="change"  update="selectedItemText" listener="#{transactionBean.atualizaTotal}" />
+                        <p:ajax event="change"  update="selectedItemText" listener="#{transactionBean.atualizaTotal()}" />
                         <p:ajax event="toggleSelect" update="selectedItemText" listener="#{transactionBean.atualizaTotal}" />
                     </p:selectCheckboxMenu>
                     <div jsf:id="selectedItemText">
@@ -226,23 +226,23 @@
                                 <div class=" ">
                                     <div class="row ">
                                         <div class="col s3 ">
-                                            <h:outputText   value="#{value}" style="color: #ba68c8;"   />
+                                            <h:outputText   value="#{value}" style="color: #ef5350;"   />
                                         </div>
                                         <div class="col s3 ">
-                                            <p:inputNumber   class="col s4 offset-s2" minValue="0" maxValue="100"     value="#{transactionBean.quantity}">
+                                            <p:inputNumber   class="col s4 offset-s2" minValue="0" maxValue="100" style="color: #ef5350;"    value="#{transactionBean.quantity}">
                                                 <p:ajax  event="blur" update="#{inde.index}quantidade"  listener="#{transactionBean.atualizaQuantidade(value, ind.index)}"/>
 
                                             </p:inputNumber>
                                         </div>
                                         <div class="col s1 " jsf:id="#{inde.index}quantidade" >
 
-                                            <h:outputText style="color: #ba68c8;"      value="#{transactionBean.valorporProduto(value, transactionBean.quantity)}"   >
+                                            <h:outputText style="color:#ef5350;"     value="#{transactionBean.valorporProduto(value, transactionBean.quantity)}"   >
 
                                             </h:outputText>
 
 
                                         </div>
-                                        <div class="col s1 " style="margin-top:15px; color: #ba68c8;">
+                                        <div class="col s1 " style="margin-top:15px; color: #ef5350;">
                                             <h:outputText    rendered="#{max -1 != ind.index}" value="+" />
                                         </div>
 
@@ -250,11 +250,11 @@
 
                                 </div>
 
-                                <div class="col s4" jsf:rendered="#{max -1 == ind.index}">
+                                <div class="col s3" jsf:rendered="#{max -1 == ind.index}">
                                     TOTAL
                                 </div>
-                                <div class="col s6" jsf:rendered="#{max -1 == ind.index}" jsf:id="pjh" style="color:#ef5350;">
-                                    ---------------------------------------------------
+                                <div class="col s4" jsf:rendered="#{max -1 == ind.index}" jsf:id="pjh" style="color:#ef5350;">
+                                    ---------------------------------------
 
                                 </div>
 
@@ -271,12 +271,13 @@
                         </h3>
                     </div>
 
-                    <div class="col s4 " style="margin-left:27%;">
-                        <p:commandButton  value="Calcular" id="ajax" update="tot"  actionListener="#{transactionBean.teste()}" styleClass="ui-priority-primary" />
+                    <div class="col s1 " style="margin-left:27%;">
+                        <p:commandButton  value="Calcular" id="ajax" update="tot"  actionListener="#{transactionBean.att()}" styleClass="ui-priority-primary" />
                     </div>
                     <div class="col offset-s2">
                         <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit(request.remoteUser)}">
                             <i class="material-icons">send</i>
+                            <p:ajax  event="mouseover" update="tot"  listener="#{transactionBean.att()}"/>
 
                         </h:commandLink>
                     </div>
