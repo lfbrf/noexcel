@@ -30,7 +30,7 @@
                             <div class="card-content valign-wrapper">
                                 <div class="card-text">
                                     <h6>Ver Conta</h6>
-                                    <p>Saldo e informacoes basicas.</p>
+                                    <p>I am a very simple card.</p>
                                 </div>
                                 <div class="card-icon">
 
@@ -48,7 +48,7 @@
                                 <div class="card-text">
                                     <h6>Ver Extrato</h6>
 
-                                    <p>Detalhar todas as Refeicoes </p>
+                                    <p>I am a very simple card.</p>
                                 </div>
                                 <div class="card-icon">
                                     <i class="material-icons medium valign">description</i>
@@ -74,17 +74,13 @@
                             <div class="card-content valign-wrapper">
                                 <div class="card-text">
                                     <h6>Editar Perfil</h6>
-                                    <p>Editar as informacoes.</p>
+                                    <p>I am a very simple card.</p>
                                 </div>
                                 <div class="card-icon">
                                     <i class="material-icons medium valign">build</i>
                                 </div>
                             </div>
                             <div class="card-action">
-
-
-
-
                                 <h:form>
                                     <p:remoteCommand name="myCommand" update="login-form" actionListener="#{userBean.getEmail(request.remoteUser)}"   />
 
@@ -112,38 +108,10 @@
         <div jsf:id="editar" style='display:none;'>
             <div class="row card light-green lighten-3"    >
                 <div class="col s12" style="margin-top: 1em"><h4>Editar Conta</h4></div>
+                <div class="col s12 center">
+                    <img id="img-no-excel" src="http://lorempixel.com/200/200/"/>
+                </div>
                 <div class="col s12" style="padding: 3em 1em 1em 1em" jsf:id="me"  >
-                    <h:form>
-                        <div class="col s12 center" jsf:id="data">
-                            <img id="img-no-excel" src="/images/#{userBean.avatar(request.remoteUser)}" style="max-height: 200px; max-width: 200px;"/>
-                        </div>
-
-
-                        <input  type="hidden" name="login" value="#{request.remoteUser}"  />
-
-
-                        <p:outputLabel value="Imagem de perfil" for="fileUpload" />
-                        <p:fileUpload id="fileUpload"
-                                      fileUploadListener="#{uploadAvancadoBean.upload}"
-                                      update="data" label="Escolher" uploadLabel="Enviar"
-                                      cancelLabel="Cancelar" allowTypes="/(\.|\/)(gif|jpg|png)$/"
-                                      invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
-                                      sizeLimit="10240000"
-                                      invalidSizeMessage="O tamanho máximo permitido é de 1KB."
-                                      fileLimit="5"
-                                      fileLimitMessage="Adicione apenas uma imagem"
-                                      multiple="false" auto="false"
-                                      onstart="console.log('Iniciando envio de arquivo')"
-                                      onerror="console.log('Erro na requisição de envio')"
-                                      oncomplete="console.log('Envio concluído')" />
-
-
-                    </h:form>
-
-
-
-
-
                     <h:form id="login-form" prependId="false" >
 
                         <div class="row">

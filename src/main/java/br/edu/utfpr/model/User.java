@@ -43,6 +43,16 @@ public class User implements Serializable {
 
     private String login;
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    private String avatar;
+
     @ManyToOne
     private Type type;
 

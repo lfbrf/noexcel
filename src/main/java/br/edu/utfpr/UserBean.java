@@ -8,32 +8,20 @@ package br.edu.utfpr;
 import br.edu.utfpr.model.Type;
 import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.UserRole;
-import br.edu.utfpr.model.dao.UserDAO;
 import br.edu.utfpr.model.service.TypeService;
 import br.edu.utfpr.model.service.UserRoleService;
 import java.util.Calendar;
 import br.edu.utfpr.model.service.UserService;
-import static br.edu.utfpr.util.JPAUtil.getEntityManager;
 import br.edu.utfpr.util.MessageUtil;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.TypedQuery;
 
 /**
  *
@@ -47,6 +35,25 @@ public class UserBean {
     private User user;
     private List<User> userList;
     private UserService userService;
+
+    public String getNpass() {
+        return npass;
+    }
+
+    public void setNpass(String npass) {
+        this.npass = npass;
+    }
+
+    private String npass;
+
+    public String getNrpass() {
+        return nrpass;
+    }
+
+    public void setNrpass(String nrpass) {
+        this.nrpass = nrpass;
+    }
+    private String nrpass;
 
     public TypeService getTypeService() {
         return typeService;
@@ -64,6 +71,22 @@ public class UserBean {
     public UserBean() {
     }
 
+    public void mostraExtrato() {
+        System.out.println("OKKOKOKO");
+        setExtrato(true);
+    }
+
+    public void mostraEditar() {
+        System.out.println("OKKOKOKO");
+        setEditar(true);
+    }
+
+    public void val(Long id) {
+        user = new User();
+
+        System.out.println("OBRIGADO POR ME CHAMAR" + user.getId());
+    }
+
     @PostConstruct
     public void init() {
         user = new User();
@@ -71,6 +94,9 @@ public class UserBean {
         userService = new UserService();
         userRoleService = new UserRoleService();
         typeService = new TypeService();
+
+        extrato = false;
+        editar = false;
     }
 
     public List<String> autocompleteUsuarios(String consulta) {
@@ -101,6 +127,21 @@ public class UserBean {
 
     public User getUser() {
         return user;
+    }
+
+    public String getByra(String ra) {
+        User us = userService.getByProperty("login", ra);
+        return us.getName();
+    }
+
+    public void getEmail(String ra) {
+        User us = userService.getByProperty("login", ra);
+        System.out.println("-----" + user.getEmail());
+        user.setName(us.getName());
+        user.setEmail(us.getEmail());
+        setUser(user);
+        System.out.println("||||" + user.getEmail());
+        // us.getEmail();
     }
 
     public void setUser(User user) {
@@ -134,6 +175,62 @@ public class UserBean {
     public void edit(User user) {
         this.user = user;
     }
+
+    public boolean editProfile(String login) {
+        User u = userService.getByProperty("login", login);
+        if (u != null) {
+            if (!u.getLogin().equals(login)) {
+                MessageUtil.showMessage("Erro ao editar, email ja informado", "", FacesMessage.SEVERITY_ERROR);
+                return false;
+            }
+            String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
+            String pass = org.apache.commons.codec.digest.DigestUtils.sha256Hex(npass);
+
+            if (!sha256hex.equals(u.getPassword())) {
+                MessageUtil.showMessage("Erro ao editar, senha incorreta", "", FacesMessage.SEVERITY_ERROR);
+                return false;
+            }
+
+            if (!npass.equals(nrpass) && npass != null && nrpass != null) {
+                MessageUtil.showMessage("Erro ao editar, senhas nao conferem", "", FacesMessage.SEVERITY_ERROR);
+
+                return false;
+            } else {
+                u.setName(user.getName());
+                u.setEmail(user.getEmail());
+                if (npass.equals(nrpass)) {
+                    u.setPassword(pass);
+                }
+                if (!user.getPassword().equals("")) {
+
+                }
+                userService.update(u);
+                MessageUtil.showMessage("Perfil editado com sucesso", "", FacesMessage.SEVERITY_INFO);
+
+            }
+
+        }
+
+        return true;
+    }
+
+    public boolean isExtrato() {
+        return extrato;
+    }
+
+    public void setExtrato(boolean extrato) {
+        this.extrato = extrato;
+    }
+    private boolean extrato;
+
+    public boolean isEditar() {
+        return editar;
+    }
+
+    public void setEditar(boolean editar) {
+        this.editar = editar;
+    }
+    private boolean editar;
 
     public void delete(User user) {
         boolean isSuccess = userService.delete(user);
