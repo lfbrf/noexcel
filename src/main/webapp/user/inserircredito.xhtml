@@ -1,0 +1,161 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template-user.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns = "http://www.w3.org/1999/xhtml"
+                xmlns:pretty="http://ocpsoft.com/prettyfaces">
+
+    <ui:define name="content">
+        <div class="col s10 row" jsf:id="inserir"  >
+            <h3 class="center-align">Inserir Credito</h3>
+            <h5>Escolha uma das quantias abaixo e continue o pagamento atraves do pagseguro.</h5>
+            <p>Assim que confirmarmos seu pagamento, o credito sera inserido em sua conta. Quaisquer duvidas entre em contato conosco.</p>
+            <div class="col s8 offset-s1">
+                <table style="color:green; border: 5px solid red; ">
+                    <tr>
+                        <td>
+                            Valor
+                        </td>
+                        <td>
+                            Pagamento
+                        </td>
+                        <td >
+                            Estado
+                        </td>
+                        <td>
+                            Cancelar
+                        </td>
+                    </tr>
+
+                    <tr jsf:rendered="#{pagSeguroBean.isEmergency(request.remoteUser, 10)}">
+                        <td>
+                            R$ 10,00
+                        </td>
+                        <td>
+                            Por favor, Aguarde
+                        </td>
+                        <td>
+                            Verificando Transacao
+                        </td>
+                        <td>
+                            <h:form>
+                                <p:growl id="message" showDetail="true" />
+                                <p:commandButton value="X" actionListener="#{pagSeguroBean.destroyInsertion(request.remoteUser, 10)}" update="message">
+                                    <p:confirm header="Confirmation" message="Voce tem Certeza? Essa acao nao pode ser desfeita." icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton style="float:right" value="Nao" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </h:form>
+                        </td>
+                    </tr>
+                    <tr jsf:rendered="#{!pagSeguroBean.isEmergency(request.remoteUser, 10)}">
+                        <td>
+                            R$ 10,00
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == true}">
+                            <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+                            <h:form>
+                                <p:remoteCommand name="myCommand" actionListener="#{pagSeguroBean.transaction(request.remoteUser, 10)}"  />
+                            </h:form>
+
+                            <form action="https://pagseguro.uol.com.br/checkout/v2/payment.html" method="post" onclick="myCommand();" >
+                                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                                <input type="hidden" name="code" value="BF4B8C324949F75BB453EFBD9494DBCD" />
+                                <input type="hidden" name="iot" value="button" />
+                                <input name="reference" type="hidden" value="#{pagSeguroBean.generateRandom(10)}"/>
+                                <input type="image" src="https://stc.pagseguro.uol.com.br/public/img/botoes/pagamentos/209x48-comprar-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
+                            </form>
+                            <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == false}">
+                            <h:form>
+                                <p:remoteCommand name="confirm" update="@all" actionListener="#{pagSeguroBean.confirm(request.remoteUser, 10)}"  />
+                            </h:form>
+                            <a onclick="confirm();" >Confirmar Pagamento</a>
+                        </td>
+
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == false}">
+                            Pendente
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == true}">
+                            Disponivel
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == false}">
+                            <h:form>
+                                <p:growl id="message" showDetail="true" />
+                                <p:commandButton value="X" actionListener="#{pagSeguroBean.destroyInsertion(request.remoteUser, 10)}" update="message">
+                                    <p:confirm header="Confirmation" message="Voce tem Certeza? Essa acao nao pode ser desfeita." icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton style="float:right" value="Nao" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </h:form>
+                        </td>
+                        <td jsf:rendered= "#{pagSeguroBean.showPayments(request.remoteUser, 10) == true}">
+
+                        </td>
+                    </tr>
+                    <tr jsf:rendered="#{!pagSeguroBean.isEmergency(request.remoteUser, 20)}">
+                        <td>
+                            R$ 20,00
+                        </td>
+
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 20) == true}" >
+                            <h:form>
+                                <p:remoteCommand name="insertTwenty" actionListener="#{pagSeguroBean.transaction(request.remoteUser, 20)}"  />
+                            </h:form>
+                            <!-- INICIO FORMULARIO BOTAO PAGSEGURO -->
+                            <form action="https://pagseguro.uol.com.br/checkout/v2/payment.html" method="post" onclick="insertTwenty();">
+                                <!-- NÃO EDITE OS COMANDOS DAS LINHAS ABAIXO -->
+                                <input type="hidden" name="code" value="80C6CC2B4545B4BFF4D14FA7727DD789" />
+                                <input type="hidden" name="iot" value="button" />
+                                <input name="reference" type="hidden" value="#{pagSeguroBean.generateRandom(20)}"/>
+                                <input type="image" src="https://stc.pagseguro.uol.com.br/public/img/botoes/pagamentos/209x48-comprar-assina.gif" name="submit" alt="Pague com PagSeguro - é rápido, grátis e seguro!" />
+                            </form>
+                            <!-- FINAL FORMULARIO BOTAO PAGSEGURO -->
+                        </td>
+
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 20) == false}">
+                            <h:form>
+                                <p:remoteCommand name="confirm" update="@all" actionListener="#{pagSeguroBean.confirm(request.remoteUser, 20)}"  />
+                            </h:form>
+                            <a onclick="confirm();" >Confirmar Pagamento</a>
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 20) == false}">
+                            Pendente
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 20) == true}">
+                            Disponivel
+                        </td>
+                        <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 20) == false}">
+                            <h:form>
+                                <p:growl id="message" showDetail="true" />
+                                <p:commandButton value="X" actionListener="#{pagSeguroBean.destroyInsertion(request.remoteUser, 20)}" update="message">
+                                    <p:confirm header="Confirmation" message="Voce tem Certeza? Essa acao nao pode ser desfeita." icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton style="float:right" value="Nao" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </h:form>
+                        </td>
+                        <td jsf:rendered= "#{pagSeguroBean.showPayments(request.remoteUser, 20) == true}">
+
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+    </ui:define>
+</ui:composition>

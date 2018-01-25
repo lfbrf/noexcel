@@ -36,8 +36,30 @@ public class UserBean {
     private List<User> userList;
     private UserService userService;
 
+    public boolean isInserir() {
+        return inserir;
+    }
+
+    public void setInserir(boolean inserir) {
+        this.inserir = inserir;
+    }
+    private boolean inserir;
+
     public String getNpass() {
         return npass;
+    }
+
+    public void method() {
+        System.out.println("AQUIIII");
+    }
+
+    public void changeInsert() {
+        System.out.println("MUDE" + inserir);
+        inserir = true;
+    }
+
+    public void changeRemove() {
+        inserir = false;
     }
 
     public void setNpass(String npass) {
@@ -81,10 +103,9 @@ public class UserBean {
         setEditar(true);
     }
 
-    public void val(Long id) {
-        user = new User();
-
-        System.out.println("OBRIGADO POR ME CHAMAR" + user.getId());
+    public String avatar(String login) {
+        User us = userService.getByProperty("login", login);
+        return us.getAvatar();
     }
 
     @PostConstruct
@@ -132,6 +153,22 @@ public class UserBean {
     public String getByra(String ra) {
         User us = userService.getByProperty("login", ra);
         return us.getName();
+    }
+
+    public String getEmailByra(String ra) {
+        User us = userService.getByProperty("login", ra);
+        return us.getEmail();
+    }
+
+    public BigDecimal getBalanceByra(String ra) {
+        User us = userService.getByProperty("login", ra);
+        return us.getBalance();
+    }
+
+    public String getTypeByra(String ra) {
+        User us = userService.getByProperty("login", ra);
+        Type t = us.getType();
+        return t.getDescription();
     }
 
     public void getEmail(String ra) {

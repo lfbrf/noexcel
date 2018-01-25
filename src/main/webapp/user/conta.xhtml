@@ -11,16 +11,48 @@
 
     <ui:define name="content">
 
+        <h:form>
+            <div class="brown hide" style="height: 200px;"></div>
+            <ul class="side-nav fixed transparent z-depth-0" style="width: 218px; margin-top: 5% !important; ">
+                <li id="ct" ><p:commandLink style="font-weight: bold; font-size: 15px !important;" onclick="
+                        document.getElementById('et').classList.remove('active');
+                        document.getElementById('ct').classList.add('active');
+                        document.getElementById('ed').classList.remove('active');
+                        document.getElementById('editar').style.display = 'none';
+                        document.getElementById('conta').style.display = 'block';
+                        document.getElementById('extrato').style.display = 'none';
 
-        <div class="brown hide" style="height: 200px;"></div>
-        <ul class="side-nav fixed transparent z-depth-0" style="width: 230px; margin-top: 5% !important; ">
-            <li class="active"><a href="#"><i class="material-icons blue-text text-darken-1">dashboard</i>Dashboard</a></li>
-            <li><a href="#"><i class="material-icons">store</i>Stores</a></li>
-            <li><div class="divider"></div></li>
-            <li><a href="#"><i class="material-icons">settings</i>Settings</a></li>
-            <li><a href="#"><i class="material-icons">help</i>Help E Feedback</a></li>
-        </ul>
+                                            "     >
 
+                        <i class="material-icons blue-text text-darken-1">dashboard</i>Conta</p:commandLink></li>
+                <li id="et"><p:commandLink style="font-weight: bold; font-size: 15px !important;" onclick="
+                        document.getElementById('et').classList.add('active');
+                        document.getElementById('ct').classList.remove('active');
+                        document.getElementById('ed').classList.remove('active');
+                        document.getElementById('editar').style.display = 'none';
+                        document.getElementById('conta').style.display = 'none';
+                        document.getElementById('extrato').style.display = 'block';
+
+                                           "     ><i class="material-icons">description</i>Extrato </p:commandLink></li>
+                <li><div class="divider"></div></li>
+                <li id="ed"><p:commandLink style="font-weight: bold; font-size: 15px !important;" onclick="
+                        document.getElementById('et').classList.remove('active');
+                        document.getElementById('ct').classList.remove('active');
+                        document.getElementById('ed').classList.add('active');
+                        document.getElementById('editar').style.display = 'block';
+                        document.getElementById('conta').style.display = 'none';
+                        document.getElementById('extrato').style.display = 'none';
+
+                                           "     >
+                        <i class="material-icons">settings</i>Perfil</p:commandLink></li>
+
+            </ul>
+        </h:form>
+
+
+
+
+        <h3>Ola, seja bem vindo #{userBean.getByra(request.remoteUser)}</h3>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -38,7 +70,20 @@
                                 </div>
                             </div>
                             <div class="card-action">
-                                <a href="#">CLique aqui</a>
+                                <h:form>
+                                    <p:commandLink onclick="
+                                            document.getElementById('et').classList.remove('active');
+                                            document.getElementById('ct').classList.add('active');
+                                            document.getElementById('ed').classList.remove('active');
+                                            document.getElementById('editar').style.display = 'none';
+                                            document.getElementById('extrato').style.display = 'none';
+                                            document.getElementById('conta').style.display = 'block';
+
+                                                   "     >
+                                        <h:outputText value="Clique aqui" />
+
+                                    </p:commandLink>
+                                </h:form>
                             </div>
                         </div>
                     </div>
@@ -57,8 +102,11 @@
                             <div class="card-action">
                                 <h:form>
                                     <p:commandLink onclick="
-
+                                            document.getElementById('et').classList.add('active');
+                                            document.getElementById('ct').classList.remove('active');
+                                            document.getElementById('ed').classList.remove('active');
                                             document.getElementById('editar').style.display = 'none';
+                                            document.getElementById('conta').style.display = 'none';
                                             document.getElementById('extrato').style.display = 'block';
 
                                                    "     >
@@ -77,7 +125,7 @@
                                     <p>Editar as informacoes.</p>
                                 </div>
                                 <div class="card-icon">
-                                    <i class="material-icons medium valign">build</i>
+                                    <i class="material-icons medium valign">settings</i>
                                 </div>
                             </div>
                             <div class="card-action">
@@ -92,7 +140,11 @@
 
                                         onclick="
                                                 myCommand();
+                                                document.getElementById('et').classList.remove('active');
+                                                document.getElementById('ct').classList.remove('active');
+                                                document.getElementById('ed').classList.add('active');
                                                 document.getElementById('editar').style.display = 'block';
+                                                document.getElementById('conta').style.display = 'none';
                                                 document.getElementById('extrato').style.display = 'none';
 
                                         " >
@@ -107,11 +159,11 @@
 
             </div>
         </div>
-        <h3>Ola, seja bem vindo #{userBean.getByra(request.remoteUser)}</h3>
+
 
         <div jsf:id="editar" style='display:none;'>
-            <div class="row card light-green lighten-3"    >
-                <div class="col s12" style="margin-top: 1em"><h4>Editar Conta</h4></div>
+            <div class="row card deep-purple lighten-3"    >
+                <div class="col s12 offset-s5" style="margin-top: 1em"><h4>Editar Conta</h4></div>
                 <div class="col s12" style="padding: 3em 1em 1em 1em" jsf:id="me"  >
                     <h:form>
                         <div class="col s12 center" jsf:id="data">
@@ -122,7 +174,7 @@
                         <input  type="hidden" name="login" value="#{request.remoteUser}"  />
 
 
-                        <p:outputLabel value="Imagem de perfil" for="fileUpload" />
+                        <p:outputLabel value="Imagem de perfil" for="fileUpload" style="color:black"/>
                         <p:fileUpload id="fileUpload"
                                       fileUploadListener="#{uploadAvancadoBean.upload}"
                                       update="data" label="Escolher" uploadLabel="Enviar"
@@ -197,11 +249,36 @@
                 </div>
             </div>
         </div>
+        <div jsf:id="conta" style='display:none;'>
+            <div class="row card light-green lighten-3"   >
+                <div class="col s12 offset-s4" style="margin-top: 1em"><h4>Resumo da Conta</h4></div>
+                <div class="col s12" style="padding: 3em 1em 1em 1em"  >
+                    <div class="col s12 center" jsf:id="data">
+                        <img id="img-no-excel" src="/images/#{userBean.avatar(request.remoteUser)}" style="max-height: 200px; max-width: 200px;"/>
+                    </div>
+                    <div class="col s8 m9 left flow-text">
+
+                        <span class="ne-user-title">RA|CPF:</span> <h:outputText style="margin-left: 220px;"  value="#{request.remoteUser}"/><br/>
+                        <span class="ne-user-title">Nome:</span> <h:outputText style="margin-left: 240px;" value="#{userBean.getByra(request.remoteUser)}" /><br/>
+                        <span class="ne-user-title">Email</span> <h:outputText style="margin-left: 250px;" value="#{userBean.getEmailByra(request.remoteUser)}" /><br/>
+                        <span class="ne-user-title">Saldo:</span> <h:outputText style="margin-left: 243px;" value="#{userBean.getBalanceByra(request.remoteUser)}" /><br/>
+                        <span class="ne-user-title">Tipo de Conta</span> <h:outputText style="margin-left: 158px;" value="#{userBean.getTypeByra(request.remoteUser).toLowerCase()}" /><br/>
+                        <span class="ne-user-title">Estado da conta</span> <h:outputText style="margin-left: 158px;" value="#" /><br/>
+                        <span class="ne-user-title" style="margin-left: 10em; font-size: 1.35em;">Inserir Credito</span> 
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+
 
 
         <div jsf:id="extrato" style='display:none;'>
-            <div class="row card light-green lighten-3"   >
-                <div class="col s12" style="margin-top: 1em"><h4>Extrato</h4></div>
+            <div class="row card blue lighten-3"   >
+                <div class="col s12 offset-s5" style="margin-top: 1em"><h4>Extrato</h4></div>
                 <div class="col s12" style="padding: 3em 1em 1em 1em"  >
 
 

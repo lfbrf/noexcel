@@ -1,3 +1,4 @@
+
 <ui:composition template="/WEB-INF/template.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -16,8 +17,6 @@
                 font-weight: bold;
                 margin-right: 1em;
             }
-
-
         </style>
 
 
@@ -35,8 +34,10 @@
                 <h:form >
                     <div class="row">
                         <div class="col s9 m10">
-                            <input type="text" jsf:value="#{searchView.text1}" required="true" />
+                            <input type="text" jsf:value="#{searchView.text1}" required="true"  />
+
                         </div>
+
                         <div class="col s3 m2">
                             <h:commandLink class="waves-effect waves-light btn btn-large" action="#{searchView.searchUser()}">
                                 <i class="material-icons">search</i>
@@ -51,9 +52,12 @@
         <h:form prependId="false">
             <div class="row card light-green lighten-3" id="div-panel" style="margin-top: 4em; padding: 1.8em 0.5em">
                 <div class="col s12">
-                    <div class="col s4 m3 center">
-                        <img src="http://lorempixel.com/100/100/" class="img-responsive"/>
+                    <div class="col s4 m3 center" >
+                        <img id="img-no-excel" jsf:rendered="#{searchView.userDTO.ra!=null}" src="/images/#{userBean.avatar(searchView.userDTO.ra)}" style="max-height: 150px; max-width: 150px;"/>
+                        <img id="img-no-excel" jsf:rendered="#{searchView.userDTO.ra ==null}" src="/images/user.png" style="max-height: 150px; max-width: 150px;"/>
+
                     </div>
+
                     <div class="col s8 m9 left flow-text">
 
                         <span class="ne-user-title">RA|CPF:</span> <h:outputText  value="#{searchView.userDTO.ra}"/><br/>
@@ -120,7 +124,6 @@
 
                     </div>
 
-                    <h:outputText  value="#{request.remoteUser}"/>
                     <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit(request.remoteUser)}">
                         <i class="material-icons prefix">attach_money</i>
                     </h:commandLink>
@@ -140,22 +143,15 @@
                             <p:dataTable var="transaction" value="#{transactionBean.findAll(searchView.userDTO.ra)}"   paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          rowsPerPageTemplate="5,10,15" rows="4"  >
-                                <p:column headerText="Idd"  class="center-align" >
-                                    <h:outputText value="#{transaction.id}"  />
+
+                                <p:column headerText="Data" class="center-align" sortBy="#{transaction.data}" filterBy="#{transaction.data}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{transaction.data}"  />
+                                </p:column>
+                                <p:column headerText="Operador" class="center-align" sortBy="#{transactionBean.getbyManager(transaction)}" filterBy="#{transactionBean.getbyManager(transaction)}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{transactionBean.getbyManager(transaction)}"  />
                                 </p:column>
 
-                                <p:column headerText="Gerente"  class="center-align" >
-                                    <h:outputText value="#{transactionBean.getbyManager(tarnsaction.manager_id)}"  />
-                                </p:column>
-
-                                <p:column headerText="Cliente" class="center-align">
-                                    <h:outputText value="#{transactionBean.getbyName(transaction.manager_id)}" />
-                                </p:column>
-                                <p:column headerText="Valor Total" class="center-align">
-                                    <h:outputText value="#{transaction.value}" />
-                                    <input type="hidden" name="valor" value="#{transaction.value}" />
-                                </p:column>
-                                <p:column headerText="Produtos Consumidos">
+                                <p:column headerText="Produtos Consumidos" >
                                     <table>
 
                                         <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}">
@@ -174,6 +170,10 @@
                                         </ui:repeat>
 
                                     </table>
+                                </p:column>
+                                <p:column headerText="Valor Total" class="center-align"  sortBy="#{transaction.value}" filterBy="#{transaction.value}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{transaction.value}" />
+                                    <input type="hidden" name="valor" value="#{transaction.value}" />
                                 </p:column>
 
                             </p:dataTable>
@@ -194,31 +194,120 @@
 
 
 
-                    <p:selectManyCheckbox  value="#{transactionBean.selectedProducts}" layout="responsive" columns="3">
-
-                        <f:selectItems  value="#{transactionBean.produtos}" var="city" class="filled-in" itemLabel="#{city}" itemValue="#{city}" />
-                    </p:selectManyCheckbox>
 
 
-                    <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cities" scrollHeight="150"
+
+                    <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cardapio" scrollHeight="150"
                                           filter="true" filterMatchMode="startsWith" panelStyle="width:250px" >
                         <f:selectItems value="#{transactionBean.produtos}" />
-                        <p:ajax event="change" update="selectedItemText"/>
+                        <p:ajax event="change"  update="selectedItemText" listener="#{transactionBean.atualizaTotal()}" />
+                        <p:ajax event="toggleSelect" update="selectedItemText" listener="#{transactionBean.atualizaTotal}" />
                     </p:selectCheckboxMenu>
-                    <h:outputText id="selectedItemText" value=" #{transactionBean.selectedProducts}"/>
+                    <div jsf:id="selectedItemText">
 
-                    <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit()}">
-                        <i class="material-icons">send</i>
-                    </h:commandLink>
+                        <ui:param name="max" value="#{transactionBean.selectedProducts.size()}"/>
+
+
+                        <div style="margin-left:27%; " >
+                            <div class="row ">
+                                <div class="col s3  red lighten-1">
+                                    <h5><h:outputText  value="Itens" style="color: #e8eaf6;"   /></h5>
+
+                                </div>
+                                <div class="col s3  red lighten-1">
+                                    <h5><h:outputText   value="Quantidade" style="color: #e8eaf6;"   /></h5>
+                                </div>
+
+                                <div class="col s3  red lighten-1">
+                                    <h5><h:outputText   value="Valor" style="color: #e8eaf6;"   /></h5>
+                                </div>
+                            </div>
+                            <ui:repeat value="#{transactionBean.selectedProducts}" var="value" varStatus="ind"  >
+                                <div class=" ">
+                                    <div class="row ">
+                                        <div class="col s3 ">
+                                            <h:outputText   value="#{value}" style="color: #ef5350;"   />
+                                        </div>
+                                        <div class="col s3 ">
+                                            <p:inputNumber   class="col s4 offset-s2" minValue="0" maxValue="100" style="color: #ef5350;"    value="#{transactionBean.quantity}">
+                                                <p:ajax  event="blur" update="#{inde.index}quantidade"  listener="#{transactionBean.atualizaQuantidade(value, ind.index)}"/>
+
+                                            </p:inputNumber>
+                                        </div>
+                                        <div class="col s1 " jsf:id="#{inde.index}quantidade" >
+
+                                            <h:outputText style="color:#ef5350;"     value="#{transactionBean.valorporProduto(value, transactionBean.quantity)}"   >
+
+                                            </h:outputText>
+
+
+                                        </div>
+                                        <div class="col s1 " style="margin-top:15px; color: #ef5350;">
+                                            <h:outputText    rendered="#{max -1 != ind.index}" value="+" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col s3" jsf:rendered="#{max -1 == ind.index}">
+                                    TOTAL
+                                </div>
+                                <div class="col s4" jsf:rendered="#{max -1 == ind.index}" jsf:id="pjh" style="color:#ef5350;">
+                                    ---------------------------------------
+
+                                </div>
+
+                            </ui:repeat>
+
+                        </div>
+                    </div>
+
+
+                    <div jsf:id="tot">
+
+                        <h3 >
+                            <h:outputText style="color:#ef5350;" value="=   #{transactionBean.soma}"/>
+                        </h3>
+                    </div>
+
+                    <div class="col s1 " style="margin-left:27%;">
+                        <p:commandButton  value="Calcular" id="ajax" update="tot"  actionListener="#{transactionBean.att()}" styleClass="ui-priority-primary" />
+                    </div>
+                    <div class="col offset-s2">
+                        <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit(request.remoteUser)}">
+                            <i class="material-icons">send</i>
+                            <p:ajax  event="mouseover" update="tot"  listener="#{transactionBean.att()}"/>
+
+                        </h:commandLink>
+                    </div>
 
                 </h:form>
+
 
             </div>
         </div>
 
 
 
-
+        <script>
+            jQuery("#code").mask("999?9")
+                    .keydown(function () {
+                        var $elem = $(this);
+                        var a = this.value.replace(/\D/g, "").length;
+                        setTimeout(function () {
+                            var n = $elem.val().replace(/\D/g, "").length;
+                            //<![CDATA[
+                            if (n !== a && (n === 5 || n === 4)) {
+                                var mask = (n === 4 ? "99-99?9" : "999-99");
+                                $elem.mask(mask);
+                            }
+                            //]]>
+                        }, 1);
+                    });
+        </script>
 
     </ui:define>
+
 </ui:composition>
+

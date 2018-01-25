@@ -575,12 +575,10 @@ public class TransactionBean implements Serializable {
     private UserRoleService userRoleService;
 
     public boolean insertCredit(String loggedin) { // ate aqui esta certo !!!!!!!!!!!!!!!!!!!!!!!! !! !!! !!!! !!! !! ! !!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         String balance = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("balance");
         String ra = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("ra");
-        System.out.println("VEIO AQUI" + balance);
         UserRole rol = userRoleService.getByProperty("login", loggedin);
         if (ra == "" || balance == "") {
             MessageUtil.showMessage("Falha na inserao de credito , informe um RA|CPF valido ", "", FacesMessage.SEVERITY_ERROR);
@@ -590,13 +588,7 @@ public class TransactionBean implements Serializable {
             MessageUtil.showMessage("Falha na inserao de credito , informe uma quantia valida ", "", FacesMessage.SEVERITY_ERROR);
             return false;
         }
-
-        if (rol.getRole().equals("MANAGER")) {
-            MessageUtil.showMessage("Falha na inserao de credito, solicite ao administrador essa transacao ", "", FacesMessage.SEVERITY_ERROR);
-            return false;
-        }
         balance = balance.substring(3);
-        // balance = balance.substring(0, balance.length() - 3);
         BigDecimal bal = new BigDecimal(balance);
         user = userService.getByProperty("login", ra);
         if (user.isCheckuser()) {
@@ -604,7 +596,10 @@ public class TransactionBean implements Serializable {
             return false;
         }
         UserRole ur = userRoleService.getByProperty("login", ra);
-
+        if (rol.getRole().equals("MANAGER") && rol.getRole().equals(ur.getRole())) {
+            MessageUtil.showMessage("Falha na inserao de credito, solicite ao administrador essa transacao ", "", FacesMessage.SEVERITY_ERROR);
+            return false;
+        }
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         String x = dateFormat.format(date);
@@ -613,15 +608,11 @@ public class TransactionBean implements Serializable {
         transaction.setLogin(ra);
         transaction.setUser(user);
         transaction.setValue(credit);
-
         bal = bal.add(credit);
         user.setBalance(bal);
         if (getNewtime() - user.getTime() < 604800000) {
-            System.out.println("BELEZINHA" + ra);
-
             System.out.println("BH" + ur.getRole());
             if (ur.getRole().equals(ur.USER_PENDING)) {
-                System.out.println("BELEZINHA2");
                 ur.setRole(ur.USER);
                 userRoleService.update(ur);
             }
