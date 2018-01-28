@@ -18,16 +18,17 @@
             }
         </style>
 
+        <f:metadata>
+            <f:viewParam name="referenciaPS" value="#{pagSeguroBean.referenciaPS}"></f:viewParam>
+        </f:metadata>
 
-
-        <p:messages/>
         <h2>Confirmar Insercao de Credito</h2>
         <div class="row ne-search">
             <div class="col s12 img-responsive">
                 <h:form prependId="false">
                     <div class="row">
                         <div class="col s9 m10" >
-                            <input type="text" jsf:id="referenciaPS" placeholder="Codigo de referencia"  jsf:value="#{pagSeguroBean.referenciaPS}"  required="true"  >
+                            <input type="text" jsf:id="referenciaPS" placeholder="Codigo de referencia"  jsf:value="#{pagSeguroBean.referenciaPS}"  >
                                 <p:ajax event="blur"   process="referenciaPS" update="@form"/>
                             </input>
 
@@ -36,7 +37,7 @@
                         <div class="col s3 m2">
 
 
-                            <h:commandLink value="Inserir Crédito" action="#{pagSeguroBean.transaction()}"
+                            <h:commandLink value="Buscar" action="#{pagSeguroBean.transaction()}"
                                            class="waves-effect waves-light btn btn-large green" style="margin-right: 2em">
                                 <f:ajax event="action" render=":ne-div-content "   ></f:ajax>
                             </h:commandLink>
@@ -47,10 +48,14 @@
 
 
                     </div>
+                    <p:messages rendered="#{pagSeguroBean.showCredits == false}" id="messages" autoUpdate="true" showDetail="true" closable="true"/>
+
                     <div jsf:id="ne-div-content">
                         <div class="row" jsf:rendered = "#{pagSeguroBean.showCredits}">
                             <div class="row card light-green lighten-3" id="div-panel" style="margin-top: 4em; padding: 1.8em 0.5em">
                                 <div class="col s8 offset-s1">
+                                    <p:messages  autoUpdate="true" showDetail="true" closable="true"/>
+
                                     <h3><span>Cliente:   </span><h:outputText value="#{pagSeguroBean.pagSeguro.user.name}" /></h3>
                                 </div>
                                 <div class="col s8 offset-s1">
@@ -65,10 +70,10 @@
                                 </div>
 
                                 <div class="col s8 offset-s1">
-                                    <h:form>
-                                        <p:remoteCommand name="confirm" update="@all" actionListener="#{pagSeguroBean.insert(pagSeguro)}"  />
-                                    </h:form>
-                                    <h5 ><a onclick="credit();" ><span style="color:#1976d2">Confirmar</span></a><span style="margin-left:32%; color: #d32f2f;" >Recusar</span></h5>
+
+                                    <p:remoteCommand name="credit"  actionListener="#{pagSeguroBean.insertCredit(pagSeguroBean.pagSeguro)}" update="@all" />
+                                    <p:remoteCommand name="refuse"  actionListener="#{pagSeguroBean.refuse(pagSeguroBean.pagSeguro)}" update="@all" />
+                                    <h5 ><a onload=""  onclick="credit();"   onmouseover="" style="cursor: pointer;" ><span style="color:#1976d2">Confirmar</span></a><a onclick="refuse();"   onmouseover="" style="cursor: pointer;"><span style="margin-left:32%; color: #d32f2f;" >Recusar</span></a></h5>
 
 
                                 </div>

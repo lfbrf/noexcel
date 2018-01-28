@@ -69,7 +69,7 @@ public class EmailUtil {
         try {
             MimeMessage msg = new MimeMessage(session);
             String text = "<h1>Equipe No Excel</h1>"
-                    + "<h3>Usuario confirmou inserao de credito, verifique e confirme na sua conta do pagseguro.</h3>"
+                    + "<h3>Usuario confirmou insercao de credito, verifique e confirme na sua conta do pagseguro.</h3>"
                     + "<p>Confira atentamente se o codigo de referencia informado abaixo esta debitado em sua conta no PagSeguro. </p>"
                     + "<p>Caso nao reconheca essa solicitacao aguarde o pagamento e informe o usuario. </p>"
                     + "<h3>Informacoes do usuario: </h3>"
@@ -77,7 +77,7 @@ public class EmailUtil {
                     + "<p>Login: " + u.getLogin() + "</p>"
                     + "<p>Email: " + u.getEmail() + "</p>"
                     + "<h3>Informacoes da transacao: </h3>"
-                    + "<a href=\"http://localhost:8080/new-no-excel/admin/creditos.jsf?referencia=" + reference + "&email=" + email + "\">Autorizar Credito</a>"
+                    + "<a href=\"http://localhost:8080/new-no-excel/admin/creditos.jsf?referenciaPS=" + reference + "\">Autorizar Credito no NOEXCEL</a>"
                     + "<p>Valor Solicitado: R$" + p.getValue() + "</p>"
                     + "<p>Codigo de Referencia: " + p.getReferenciaPS() + "</p>"
                     + "<p>Estado: " + p.getStatus() + "</p>"

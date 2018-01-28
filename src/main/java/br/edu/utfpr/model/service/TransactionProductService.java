@@ -39,4 +39,7 @@ public class TransactionProductService extends AbstractService<Long, Transaction
 
     }
 
+    public TransactionProduct getbyPT(long transaction_id, long product_id) {
+        return ((TransactionProductDAO) dao).getbyPT(transaction_id, product_id);
+    }
 }

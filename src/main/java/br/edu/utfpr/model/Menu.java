@@ -18,23 +18,23 @@ import javax.persistence.ManyToOne;
  * @author Luiz
  */
 @Entity
-public class Discount implements Serializable {
+public class Menu implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private BigDecimal atualValue;
+    private BigDecimal value;
 
-    public BigDecimal getAtualValue() {
-        return atualValue;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setAtualValue(BigDecimal atualValue) {
-        this.atualValue = atualValue;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
-    public Discount() {
+    public Menu() {
     }
 
     public Long getId() {
@@ -67,7 +67,7 @@ public class Discount implements Serializable {
     @ManyToOne
     private Type type;
 
-    public Discount(Type type, Product product) {
+    public Menu(Type type, Product product) {
         this.type = type;
         this.product = product;
     }

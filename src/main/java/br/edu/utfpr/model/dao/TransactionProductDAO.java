@@ -29,4 +29,22 @@ public class TransactionProductDAO extends AbstractDAO<Long, TransactionProduct>
 
         return queryResult;
     }
+
+    public TransactionProduct getbyPT(Long x, Long y) {
+        this.entityManager = JPAUtil.getEntityManager();
+        String queryString = "SELECT o FROM TransactionProduct o where o.transaction.id" + " = :param" + " and product.id" + "= :pa";
+
+        Query query = entityManager.createQuery(queryString);
+
+        query.setParameter("param", x);
+        query.setParameter("pa", y);
+        List<TransactionProduct> queryResult = query.getResultList();
+
+        TransactionProduct returnObject = null;
+
+        if (!queryResult.isEmpty()) {
+            returnObject = queryResult.get(0);
+        }
+        return returnObject;
+    }
 }

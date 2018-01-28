@@ -105,6 +105,9 @@ public class UserBean {
 
     public String avatar(String login) {
         User us = userService.getByProperty("login", login);
+        if (us.getAvatar() == null) {
+            return null;
+        }
         return us.getAvatar();
     }
 
@@ -348,7 +351,7 @@ public class UserBean {
         List<String> us = null;
         us = userService.listByNames();
         int length = user.getLogin().length();
-        if (user.getComment().equals("sim")) {
+        if (length == 8 && user.getComment().equals("sim")) {
             user.setCheckuser(true);
             descricao = "Bolsista";
         } else if (length == 8) {

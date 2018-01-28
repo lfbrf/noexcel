@@ -5,16 +5,18 @@
  */
 package br.edu.utfpr;
 
-import br.edu.utfpr.model.Discount;
+import br.edu.utfpr.model.Menu;
 import br.edu.utfpr.model.Product;
 import br.edu.utfpr.model.Transaction;
 import br.edu.utfpr.model.TransactionProduct;
+import br.edu.utfpr.model.Type;
 import br.edu.utfpr.model.User;
 import br.edu.utfpr.model.UserRole;
-import br.edu.utfpr.model.service.DiscountService;
+import br.edu.utfpr.model.service.MenuService;
 import br.edu.utfpr.model.service.ProductService;
 import br.edu.utfpr.model.service.TransactionProductService;
 import br.edu.utfpr.model.service.TransactionService;
+import br.edu.utfpr.model.service.TypeService;
 import br.edu.utfpr.model.service.UserRoleService;
 import br.edu.utfpr.model.service.UserService;
 import br.edu.utfpr.util.MessageUtil;
@@ -67,14 +69,25 @@ public class TransactionBean implements Serializable {
     }
     private BigDecimal total;
 
-    public int valorporProduto(String p, int x) {
-        System.out.println("EIII" + p);
+    public BigDecimal valorporProduto(String p, int x) {
+        String ra = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap().get("ra");
+        User us = userService.getByProperty("login", ra);
+        Type t = typeService.getById(us.getType().getId());
         Product prod = productService.getByProperty("name", p);
+        Menu m = discountService.listrepeatFilds(t.getId(), prod.getId());
         BigDecimal z = prod.getValue();
-        int t = Integer.valueOf(z.intValue());
-        t = t * x;
+        BigDecimal sub;
+        sub = BigDecimal.valueOf(x);
+        sub = m.getValue().multiply(sub);
 
-        return t;
+        return sub;
+    }
+
+    public int getQts(Long t, Long p) {
+        System.out.println("VALOR T" + t + "VALO P" + p);
+        TransactionProduct tp = transactionProductService.getbyPT(t, p);
+        return tp.getQuantity();
     }
 
     public BigDecimal getSoma() {
@@ -103,7 +116,19 @@ public class TransactionBean implements Serializable {
     List<String> prodsNome = new ArrayList<String>();
     List lista = new ArrayList();
 
+    public TypeService getTypeService() {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService) {
+        this.typeService = typeService;
+    }
+
+    private TypeService typeService;
+
     public void att() {
+        String login = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap().get("ra");
         soma = BigDecimal.ZERO;
         for (int i = 0; i < selectedProducts.size(); i = i + 1) {
             Product j = productService.getByProperty("name", selectedProducts.get(i));
@@ -111,8 +136,18 @@ public class TransactionBean implements Serializable {
             //System.out.println(al.get(i));
             BigDecimal k = prodsQtd.get(i);
             BigDecimal w = j.getValue();
-            System.out.println("KKKK" + k + "WWWWWWW" + w);
-            k = k.multiply(w);
+
+            //k = k.multiply(w);
+            //soma = soma.add(k);
+            User us = userService.getByProperty("login", login);
+            Type t = typeService.getById(us.getType().getId());
+            System.out.println("+++++" + t.getId() + j.getId());
+            Menu d = discountService.listrepeatFilds(t.getId(), j.getId());
+            if (d == null) {
+                System.out.println("TA NULO" + d.getValue());
+            }
+            System.out.println("N TA NULO" + t.getId() + "----" + j.getId());
+            k = k.multiply(d.getValue());
             soma = soma.add(k);
 
         }
@@ -176,6 +211,7 @@ public class TransactionBean implements Serializable {
                 getExternalContext().getRequestParameterMap().get("ra");
 
         total = BigDecimal.ZERO;
+        prodsQtd = new ArrayList<>();
         if (quantitys != null) {
             for (int y : quantitys) {
                 System.out.println("VALOR DE MEU R:" + y);
@@ -186,26 +222,12 @@ public class TransactionBean implements Serializable {
         for (int i = 0; i < selectedProducts.size(); i++) {
             //al.add(1);
             prodsQtd.add(BigDecimal.ONE);
+
         }
-        for (String x : selectedProducts) {
 
-            Product p = productService.getByProperty("name", x);
+        quantity = BigDecimal.ONE;
+        att();
 
-            if (p != null) {
-                if (u != null) {
-                    if (discountService.isrepeatFilds(u.getType().getId(), p.getId())) {
-                        List<Discount> d = discountService.listrepeatFilds(u.getType().getId(), p.getId());
-                    } else {
-                        //al.set(w, x);
-                        total = total.add(p.getValue());
-                        setTotal(total);
-                        System.out.println("VALOR DE TOTAL LOGO " + total);
-                    }
-                }
-            }
-
-            //tratar desconto
-        }
         return false;
     }
 
@@ -291,14 +313,14 @@ public class TransactionBean implements Serializable {
     }
     private UserService userService;
 
-    public DiscountService getDiscountService() {
+    public MenuService getDiscountService() {
         return discountService;
     }
 
-    public void setDiscountService(DiscountService discountService) {
+    public void setDiscountService(MenuService discountService) {
         this.discountService = discountService;
     }
-    private DiscountService discountService;
+    private MenuService discountService;
     private ProductService productService;
 
     public ProductService getProductService() {
@@ -336,12 +358,13 @@ public class TransactionBean implements Serializable {
         transactionsService = new TransactionService();
         productService = new ProductService();
         userService = new UserService();
-        discountService = new DiscountService();
+        discountService = new MenuService();
         transactionProductService = new TransactionProductService();
         produtos = new ArrayList<String>();
         prodsQtd = new ArrayList<>();
         transactionList = new ArrayList<>();
         quantitys = new ArrayList<>();
+        typeService = new TypeService();
         soma = BigDecimal.ZERO;
         userRoleService = new UserRoleService();
         producList = new ArrayList<>();
@@ -422,6 +445,9 @@ public class TransactionBean implements Serializable {
     public String getbyManager(Transaction transaction) {
         String manager = transaction.getManager_id();
         user = userService.getByProperty("login", manager);
+        if (user == null) {
+            return manager;
+        }
         return user.getName();
     }
 
@@ -488,10 +514,7 @@ public class TransactionBean implements Serializable {
                 System.out.println("|||||||||||||||");
                 pd = productService.getByProperty("name", al.get(i).toString());
                 if (discountService.isrepeatFilds(user.getType().getId(), pd.getId())) {
-                    List<Discount> di = discountService.listrepeatFilds(user.getType().getId(), pd.getId());
-                    for (Discount d : di) {
-                        pd.setValue(d.getAtualValue());
-                    }
+                    //List<Menu> di = discountService.listrepeatFilds(user.getType().getId(), pd.getId());
 
                 }
                 BigDecimal z = null;

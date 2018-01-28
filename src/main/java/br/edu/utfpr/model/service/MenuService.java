@@ -5,32 +5,32 @@
  */
 package br.edu.utfpr.model.service;
 
-import br.edu.utfpr.model.Discount;
-import br.edu.utfpr.model.dao.DiscountDAO;
+import br.edu.utfpr.model.Menu;
+import br.edu.utfpr.model.dao.MenuDAO;
 import java.util.List;
 
 /**
  *
  * @author Luiz
  */
-public class DiscountService extends AbstractService<Long, Discount> {
+public class MenuService extends AbstractService<Long, Menu> {
 
-    public DiscountService() {
-        dao = new DiscountDAO();
+    public MenuService() {
+        dao = new MenuDAO();
 
     }
 
     public Boolean isrepeatFilds(long type_id, long product_id) {
         //tratar transaçoes
         System.out.println("PEGOUUU");
-        return ((DiscountDAO) dao).isrepeatFilds(type_id, product_id);
+        return ((MenuDAO) dao).isrepeatFilds(type_id, product_id);
 
     }
 
-    public List<Discount> listrepeatFilds(long type_id, long product_id) {
+    public Menu listrepeatFilds(long type_id, long product_id) {
         //tratar transaçoes
         System.out.println("PEGOUUU");
-        return ((DiscountDAO) dao).listrepeatFilds(type_id, product_id);
+        return ((MenuDAO) dao).listrepeatFilds(type_id, product_id);
 
     }
 }

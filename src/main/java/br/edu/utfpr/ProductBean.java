@@ -5,8 +5,12 @@
  */
 package br.edu.utfpr;
 
+import br.edu.utfpr.model.Menu;
 import br.edu.utfpr.model.Product;
+import br.edu.utfpr.model.Type;
+import br.edu.utfpr.model.service.MenuService;
 import br.edu.utfpr.model.service.ProductService;
+import br.edu.utfpr.model.service.TypeService;
 import br.edu.utfpr.util.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +58,24 @@ public class ProductBean {
     private List<Product> productList;
     private ProductService productService;
 
+    public MenuService getMenuService() {
+        return menuService;
+    }
+
+    public void setMenuService(MenuService menuService) {
+        this.menuService = menuService;
+    }
+    private MenuService menuService;
+
+    public TypeService getTypeService() {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService) {
+        this.typeService = typeService;
+    }
+    private TypeService typeService;
+
     public long getProductID() {
         return productID;
     }
@@ -71,6 +93,8 @@ public class ProductBean {
         product = new Product();
         productList = new ArrayList<>();
         productService = new ProductService();
+        typeService = new TypeService();
+        menuService = new MenuService();
         productList = productService.findAll();
     }
 
@@ -89,9 +113,24 @@ public class ProductBean {
         this.product = new Product();
     }
 
+    public void persistMenus() {
+        List<Type> types = null;
+        types = typeService.findAll();
+        for (Type t : types) {
+            System.out.println("PASSOU POR AQUI");
+            Menu m = new Menu();
+            m.setProduct(product);
+            m.setType(t);
+            m.setValue(product.getValue());
+            menuService.save(m);
+        }
+    }
+
     public void persist() {
+
         if (product.getId() == null) {
             if (productService.save(product)) {
+                persistMenus();
                 this.productList.add(product);
                 MessageUtil.showMessage("Persistido com sucesso", "", FacesMessage.SEVERITY_INFO);
             } else {

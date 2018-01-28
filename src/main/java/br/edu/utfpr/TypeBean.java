@@ -33,6 +33,10 @@ public class TypeBean {
         this.type = type;
     }
 
+    public void teste() {
+        System.out.println("FUNCIONOU");
+    }
+
     public List<Type> getTypeList() {
         return typeList;
     }

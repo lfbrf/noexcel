@@ -15,23 +15,30 @@
                 </div>
                 <div class="row center-align">
                     <h5>Selecione o produto</h5>
+
+
+
                     <p:selectOneMenu
-                        value="#{productBean.productID}" id="prod">
+                        value="#{productBean.productID}" id="prod"  filter="true" filterMatchMode="startsWith">
                         <f:selectItems   value="#{productBean.productList}" var="t" itemLabel="#{t.name}" itemValue="#{t.id}"/>
                     </p:selectOneMenu>
                 </div>
                 <div class="row center-align">
                     <h5>Selecione o tipo de usuario</h5>
                     <p:selectOneMenu
-                        value="#{typeBean.typeID}" >
-                        <f:selectItems   value="#{typeBean.typeList}" var="t" itemLabel="#{t.description}" itemValue="#{t.id}"/>
+                        value="#{typeBean.typeID}"  filter="true" filterMatchMode="startsWith" >
+                        <f:selectItems   value="#{typeBean.typeList}" var="t"  itemLabel="#{t.description}" itemValue="#{t.id}"/>
                     </p:selectOneMenu>
+                    <h:outputText id="cpp" />
+                </div>
+                <div class="row" >
+                    <p:commandButton action="#{menuBean.changeMenu(productBean.productID, typeBean.typeID)}" />
                 </div>
                 <div class="row center-align">
 
                     <h5>Informe o novo valor  desse produto</h5>
-                    <p:inputNumber  id="numero" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{discountBean.newValue}" />
-                    <p:commandButton action="#{discountBean.persistDiscount(productBean.productID, typeBean.typeID)}"   value="Cadastrar" type="submit" class="btn green"  ></p:commandButton>
+                    <p:inputNumber  id="numero" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{menuBean.newValue}" />
+                    <p:commandButton action="#{menuBean.persistDiscount(productBean.productID, typeBean.typeID)}"   value="Cadastrar" type="submit" class="btn green"  ></p:commandButton>
 
                 </div>
             </div>

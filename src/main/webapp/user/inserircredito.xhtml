@@ -31,7 +31,10 @@
                             Cancelar
                         </td>
                     </tr>
+                    <tr>
+                        <p:messages id="messages" autoUpdate="true" showDetail="true" closable="true"/>
 
+                    </tr>
                     <tr jsf:rendered="#{pagSeguroBean.isEmergency(request.remoteUser, 10)}">
                         <td>
                             R$ 10,00
@@ -43,19 +46,10 @@
                             Verificando Transacao
                         </td>
                         <td>
-                            <h:form>
-                                <p:growl id="message" showDetail="true" />
-                                <p:commandButton value="X" actionListener="#{pagSeguroBean.destroyInsertion(request.remoteUser, 10)}" update="message">
-                                    <p:confirm header="Confirmation" message="Voce tem Certeza? Essa acao nao pode ser desfeita." icon="ui-icon-alert" />
-                                </p:commandButton>
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                                    <p:commandButton style="float:right" value="Nao" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </p:confirmDialog>
-                            </h:form>
+
                         </td>
                     </tr>
-                    <tr jsf:rendered="#{!pagSeguroBean.isEmergency(request.remoteUser, 10)}">
+                    <tr jsf:rendered="#{!pagSeguroBean.isEmergency(request.remoteUser, 10)}" jsf:id="emr">
                         <td>
                             R$ 10,00
                         </td>
@@ -76,9 +70,10 @@
                         </td>
                         <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == false}">
                             <h:form>
+
                                 <p:remoteCommand name="confirm" update="@all" actionListener="#{pagSeguroBean.confirm(request.remoteUser, 10)}"  />
                             </h:form>
-                            <a onclick="confirm();" >Confirmar Pagamento</a>
+                            <a onclick="document.getElementById('emr').style.display = 'none';confirm();" >Confirmar Pagamento</a>
                         </td>
 
                         <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == false}">
@@ -90,7 +85,7 @@
                         <td jsf:rendered="#{pagSeguroBean.showPayments(request.remoteUser, 10) == false}">
                             <h:form>
                                 <p:growl id="message" showDetail="true" />
-                                <p:commandButton value="X" actionListener="#{pagSeguroBean.destroyInsertion(request.remoteUser, 10)}" update="message">
+                                <p:commandButton value="X" actionListener="#{pagSeguroBean.destroyInsertion(request.remoteUser, 10)}" update="@all">
                                     <p:confirm header="Confirmation" message="Voce tem Certeza? Essa acao nao pode ser desfeita." icon="ui-icon-alert" />
                                 </p:commandButton>
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -103,6 +98,22 @@
 
                         </td>
                     </tr>
+
+                    <tr jsf:rendered="#{pagSeguroBean.isEmergency(request.remoteUser, 20) || emer == true}">
+                        <td>
+                            R$ 20,00
+                        </td>
+                        <td>
+                            Por favor, Aguarde
+                        </td>
+                        <td>
+                            Verificando Transacao
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+
                     <tr jsf:rendered="#{!pagSeguroBean.isEmergency(request.remoteUser, 20)}">
                         <td>
                             R$ 20,00
