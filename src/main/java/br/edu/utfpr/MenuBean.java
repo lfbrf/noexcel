@@ -6,17 +6,15 @@
 package br.edu.utfpr;
 
 import br.edu.utfpr.model.Menu;
-import br.edu.utfpr.model.Product;
-import br.edu.utfpr.model.Type;
 import br.edu.utfpr.model.service.MenuService;
 import br.edu.utfpr.model.service.ProductService;
 import br.edu.utfpr.model.service.TypeService;
+import br.edu.utfpr.util.MessageUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
@@ -38,6 +36,7 @@ public class MenuBean {
     public void init() {
         discount = new Menu();
         discountList = new ArrayList<>();
+        menuList = new ArrayList<>();
         menuService = new MenuService();
         productService = new ProductService();
         typeService = new TypeService();
@@ -66,9 +65,57 @@ public class MenuBean {
         menuService.update(m);
     }
 
-    public void changeMenu(long produto, long tipo) {
+    public BigDecimal getTotal() {
+        return total;
+    }
 
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    private BigDecimal total;
+
+    public boolean isTot() {
+        return tot;
+    }
+
+    public void setTot(boolean tot) {
+        this.tot = tot;
+    }
+
+    private List<Menu> menuList;
+
+    public List<Menu> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
+    }
+
+    public List<Menu> findAll() {
+        return menuList = menuService.findAll();
+    }
+
+    public void delete(Menu menu) {
+        boolean isSuccess = menuService.delete(menu);
+        if (isSuccess) {
+            this.menuList.remove(menu);
+            MessageUtil.showMessage("Removido com sucesso", "", FacesMessage.SEVERITY_INFO);
+        } else {
+            MessageUtil.showMessage("Falha na remoção", "", FacesMessage.SEVERITY_ERROR);
+        }
+
+    }
+
+    private boolean tot;
+
+    public void changeMenu(long produto, long tipo) {
         System.out.println("OKK" + produto + tipo);
+        Menu m = menuService.listrepeatFilds(tipo, produto);
+
+        total = m.getValue();
+        System.out.println("MEU TOTAL AQUI >" + total);
 
     }
 

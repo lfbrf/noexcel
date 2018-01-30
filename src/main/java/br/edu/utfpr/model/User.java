@@ -38,7 +38,6 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     private String login;
@@ -54,7 +53,7 @@ public class User implements Serializable {
     private String avatar;
 
     @ManyToOne
-    private Type type;
+    public Type type;
 
     public Type getType() {
         return type;
@@ -64,21 +63,6 @@ public class User implements Serializable {
         this.type = type;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getRadioVal() {
-        return radioVal;
-    }
-
-    public void setRadioVal(String radioVal) {
-        this.radioVal = radioVal;
-    }
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
     long time = cal.getTimeInMillis();
@@ -90,8 +74,8 @@ public class User implements Serializable {
     public void setTime(long time) {
         this.time = time;
     }
-    private String comment;
-    private String radioVal;
+    // private String comment;
+    // private String radioVal;
     public String name;
     @Email(message = "Email precisa ser valido")
     private String email;

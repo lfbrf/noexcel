@@ -77,14 +77,14 @@
                                             <h6 for="radio-vinculo" jsf:rendered="#{examinationFormBean.radioVal eq 'student'}">Aluno bolsista na UTFPR:</h6>
 
                                             <p:selectOneRadio rendered="#{examinationFormBean.radioVal eq 'student'}"
-                                                              value="#{userBean.user.comment}"
+                                                              value="#{userBean.user.checkuser}"
                                                               columns="1"
                                                               layout="responsive"
                                                               class="radio-option">
-                                                <f:selectItem itemLabel="Sim" itemValue="sim" id="sim" class="radio-option"  />
+                                                <f:selectItem itemLabel="Sim" itemValue="true" id="sim" class="radio-option"  />
 
                                                 <f:selectItem itemLabel="Nao" id="nao"
-                                                              itemValue="nao" class="radio-option"/>
+                                                              itemValue="false" class="radio-option"/>
 
                                             </p:selectOneRadio>
                                         </div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="/WEB-INF/template.xhtml"
+<ui:composition template="/WEB-INF/template-admin.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -12,23 +12,19 @@
                 >
 
     <ui:define name="content">
+
         <p:messages/>
 
         <div class="container">
             <div class="row">
-                <h:form>
-
-                    <h:selectOneMenu id="occurrence-category" value="#{productBean.productID}" >
-                        <f:selectItem itemValue="" itemLabel="Selecione uma categoria"></f:selectItem>
-                        <f:selectItems var="product" value="#{productBean.findAll()}" itemValue="#{product.id}" itemLabel="#{product.name}"/>
-                    </h:selectOneMenu>
-                </h:form>
+                <h3>Cadastro de Produtos</h3>
+                <div class="stripes">
+                    <span class="line"></span>
+                </div>
                 <h:form>
 
 
-
-                    <h2 style="text-align: center">Área administrativa!</h2>
-                    <p style="text-align: center">Cadastro de produtos</p>
+                    <h:inputText id="idd" style="display: none;" value="#{productBean.product.id}"></h:inputText>
 
                     <div class="row">
                         <div class="input-field col s12">
@@ -44,7 +40,7 @@
                     </div>
 
                     <div class="row">
-                        <h:commandButton action="#{productBean.persist()}" class="waves-effect waves-light btn" value="Cadastrar Produto"></h:commandButton>
+                        <h:commandButton action="#{productBean.persist()}" class="waves-effect waves-light btn center-align" value="Enviar"></h:commandButton>
                     </div>
 
                     <div class="row">

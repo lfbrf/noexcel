@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="/WEB-INF/template.xhtml"
+<ui:composition template="/WEB-INF/template-admin.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -11,42 +11,57 @@
     <ui:define name="content">
         <p:messages/>
 
+        <h3>Editar Usuarios</h3>
+        <div class="stripes">
+            <span class="line"></span>
+        </div>
         <div class="container" >
             <div class="row">
-                <h:form>
-                    <h2 style="text-align: center">Área administrativa!</h2>
-                    <p style="text-align: center">Cadastro de usuarios</p>
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <h:inputText id="category" value="#{userBean.user.name}"></h:inputText>
-                            <h:outputLabel for="category">Informe o nome</h:outputLabel>
-                        </div>
+                <h:form >
+                    <h5>Listagem</h5>
+                    <div class="stripes">
+                        <span class="line"></span>
                     </div>
-
-                    <div class="row">
-                        <h:commandButton action="#{userBean.autocompleteUsuarios}" class="waves-effect waves-light btn" value="Registrar novo"></h:commandButton>
-                    </div>
-
                     <div class="row">
                         <div class="col s12">
 
-                            <p:dataTable var="user" id="dtb"  value="#{userBean.findAll()}"  paginator="true" rows="5">
+                            <p:dataTable var="user" id="dtb"  value="#{userBean.findAll()}"  paginator="true"
 
-                                <p:column headerText="Id">
-                                    <h:outputText value="#{user.id}" />
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rows="4"
+                                         >
+
+                                <p:column headerText="Login" sortBy="#{user.login}" filterBy="#{user.login}" filterMatchMode="contains" >
+                                    <h:outputText value="#{user.login}" />
                                 </p:column>
 
-                                <p:column headerText="Nome" filterBy="#{userBean.listapornomes}"
-                                          sortBy="#{user.name}">
-                                    <h:outputText value="#{user.name}"  />
+                                <p:column headerText="Nome"
+                                          sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains"  >
+                                    <h:outputText value="#{user.name}"/>
+                                </p:column>
+
+
+
+                                <p:column headerText="Tipo"
+                                          sortBy="#{user.type.description}" filterBy="#{user.type.description}" filterMatchMode="contains"      >
+                                    <h:outputText value="#{user.type.description}"  />
+                                </p:column>
+                                <p:column headerText="Bolsista"
+                                          sortBy="#{(userBean.isBolsista(user.login)) and (userBean.isPending(user.login))}" >
+
+                                    <h:outputText rendered="#{!userBean.isBolsista(user.login)}" value="Nao"  />
+                                    <h:outputText rendered="#{(userBean.isBolsista(user.login)) and (!userBean.isPending(user.login))}" value="Confirmado"  />
+                                    <h:outputText rendered="#{(userBean.isBolsista(user.login)) and (userBean.isPending(user.login))}" value="Pendente"  />
                                 </p:column>
 
                                 <p:column headerText="">
-                                    <div class="row center">
+                                    <div class="row center"   >
                                         <div class="col s12 ">
-                                            <h:commandLink action="#{userBean.edit(user)}" class="waves-effect waves-light btn blue darken-3 white-text">
+
+                                            <h:commandLink action="#{userBean.edit(user)}"     class="waves-effect waves-light btn blue darken-3 white-text">
+
                                                 <i class="material-icons">mode_edit</i>
+
                                             </h:commandLink>
                                         </div>
                                         <div class="col s12">
@@ -59,18 +74,79 @@
                             </p:dataTable>
                         </div>
                     </div>
-                    <p:outputLabel id="grid" value="País" for="pais" />
-                    <p:autoComplete id="pais" value="#{userBean.user.name}"
-                                    completeMethod="#{userBean.autocompleteUsuarios}"
-                                    forceSelection="true" minQueryLength="1" dropdown="true" >
-                        <p:ajax event="itemSelect" onstart="#{userBean.user.name}" update="dtb"/>
-                    </p:autoComplete>
-
-
-
                 </h:form>
+                <div  >
+                    <div  >
+                        <h:form prependId="false">
+
+
+                            <h:inputText id="idd" style="display: none;" value="#{userBean.user.id}"></h:inputText>
+
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h:inputText id="category" value="#{userBean.user.name}"></h:inputText>
+                                    <h:outputLabel for="category">Nome</h:outputLabel>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <h:inputText id="email" value="#{userBean.user.email}"></h:inputText>
+                                    <h:outputLabel for="email">Email</h:outputLabel>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-field col s12">
+
+                                    <span >Tipo de Usuario Atual:  #{userBean.user.type.description}   </span>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12 offset-s2">
+
+                                    <p:selectOneMenu
+                                        value="#{typeBean.typeID}"  filter="true" filterMatchMode="startsWith" >
+                                        <f:selectItem itemLabel="Mudar Usuario" />
+                                        <f:selectItems    value="#{typeBean.typeList}" var="t"  itemLabel="#{t.description}"  itemValue="#{t.id}" />
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+
+                            <div class="row" jsf:rendered="#{(userBean.isBolsista(userBean.user.login))}">
+                                <h6 for="radio-vinculo" >Confirmar Condicao de Bolsista</h6>
+                                <p:selectOneRadio
+                                    value="#{userBean.user.checkuser}"
+                                    columns="1"
+                                    layout="responsive"
+                                    class="radio-option">
+                                    <f:selectItem itemLabel="Sim" itemValue="false" id="sim" class="radio-option"    />
+
+                                    <f:selectItem itemLabel="Nao" id="nao"
+                                                  itemValue="true" class="radio-option"/>
+
+                                </p:selectOneRadio>
+                            </div>
+
+                            <div class="row ">
+
+
+                                <h:commandLink  actionListener="#{userBean.updateUs(typeBean.typeID)}"   class="waves-effect waves-light btn " value="Atualizar">
+                                    <p:ajax transient="true" />
+                                </h:commandLink>
+                            </div>
+
+
+
+
+
+                        </h:form>
+
+                    </div>
+                </div>
             </div>
         </div>
+
 
     </ui:define>
 

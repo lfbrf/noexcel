@@ -1,5 +1,5 @@
 
-<ui:composition template="/WEB-INF/template.xhtml"
+<ui:composition template="/WEB-INF/template-admin.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -11,34 +11,7 @@
 
 
     <ui:define name="content">
-        <h:form>
-            <div class="brown hide" style="height: 200px;"></div>
-            <ul class="side-nav fixed transparent z-depth-0 navbar-list" style="width: 238px; margin-top: 5% !important; ">
-                <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="admin/inicio.jsf"  >  <i class="material-icons blue-text text-darken-1">dashboard</i>Refeicoes</a>
-                </li>
-                <li id="contrle" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="admin/controleusuarios.jsf"  >  <i class="material-icons blue-text text-darken-1">dashboard</i>Clientes</a>
-                </li>
-                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="admin/creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Pag Seguro</a>
-                </li>
-                <li id="desc" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="admin/descontos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Cardapio</a>
 
-                </li>
-                <li id="ger" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="admin/gerentes.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Gerentes</a>
-
-                </li>
-                <li id="prod" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="admin/produtos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Produtos</a>
-                    <ul class="dropdown">
-                        <li><a href="">Risk</a></li>
-                    </ul>
-                    <ul class="dropdown">
-                        <li><a href="">Risk</a></li>
-                    </ul>
-                    <ul class="dropdown">
-                        <li><a href="">Risk</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </h:form>
         <p:messages/>
 
         <div class="row" jsf:rendered="#{searchView.isShowImage}">
@@ -168,7 +141,9 @@
                                     <h:outputText value="#{transaction.data}"  />
                                 </p:column>
                                 <p:column headerText="Operador" class="center-align" sortBy="#{transactionBean.getbyManager(transaction)}" filterBy="#{transactionBean.getbyManager(transaction)}" filterMatchMode="contains"  >
-                                    <h:outputText value="#{transactionBean.getbyManager(transaction)}"  />
+                                    <h:outputText rendered="#{transactionBean.getbyManager(transaction) != 'EU'}" value="#{transactionBean.getbyManager(transaction)}"  />
+                                    <h:outputText rendered="#{transactionBean.getbyManager(transaction) == 'EU'}" value="Cliente"  />
+
                                 </p:column>
 
                                 <p:column headerText="Produtos Consumidos" >

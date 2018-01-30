@@ -30,7 +30,7 @@ public class TransactionProductDAO extends AbstractDAO<Long, TransactionProduct>
         return queryResult;
     }
 
-    public TransactionProduct getbyPT(Long x, Long y) {
+    public TransactionProduct getbyPT(long x, long y) {
         this.entityManager = JPAUtil.getEntityManager();
         String queryString = "SELECT o FROM TransactionProduct o where o.transaction.id" + " = :param" + " and product.id" + "= :pa";
 

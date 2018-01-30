@@ -5,6 +5,8 @@
  */
 package br.edu.utfpr;
 
+import br.edu.utfpr.model.User;
+import br.edu.utfpr.model.service.UserService;
 import br.edu.utfpr.util.MessageUtil;
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,10 +16,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,11 @@ public class LoginBean implements Serializable {
     public LoginBean() {
     }
 
+    @PostConstruct
+    public void init() {
+        userService = new UserService();
+    }
+
     public String gerarHashMD5(String conteudo) {
         byte[] b;
         try {
@@ -53,11 +59,28 @@ public class LoginBean implements Serializable {
         }
     }
 
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    private UserService userService;
+
     public String onClickLogar() throws IOException {
         FacesContext fc = FacesContext.getCurrentInstance();
         System.out.println("*****************************");
         System.out.println("Login: " + this.usuario + " Senha: " + this.senha);
         boolean isloggedin = false;
+        User u = userService.getByProperty("login", this.usuario);
+        if (u.isCheckuser()) {
+            MessageUtil.showMessage("Por Favor Aguarde!!!", "Voce deve confirmar sua condicao de bolsista no restaurante.", FacesMessage.SEVERITY_ERROR);
+
+            return "";
+        }
+
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext.
                     getCurrentInstance().getExternalContext().getRequest();
@@ -99,7 +122,7 @@ public class LoginBean implements Serializable {
         return "";
     }
 
-    public void logoutB() {
+    public String logoutB() {
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) FacesContext.
                 getCurrentInstance().getExternalContext().getRequest();
@@ -112,6 +135,7 @@ public class LoginBean implements Serializable {
         if (session != null) {
             session.invalidate();
         }
+        return "/login?faces-redirect=true";
     }
 
     public String getUsuario() {

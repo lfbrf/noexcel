@@ -84,7 +84,7 @@ public class TransactionBean implements Serializable {
         return sub;
     }
 
-    public int getQts(Long t, Long p) {
+    public int getQts(long t, long p) {
         System.out.println("VALOR T" + t + "VALO P" + p);
         TransactionProduct tp = transactionProductService.getbyPT(t, p);
         return tp.getQuantity();

@@ -29,32 +29,47 @@
                 <nav >
                     <div class="nav-wrapper green">
                         <div class="container">
-                            <a class="brand-logo" href="index.jsf">
-                                <img class="utf-logo" src="./../resources/images/img-noexcel.png"></img>
+                            <a class="brand-logo" href="index.jsf" >
+                                <h:graphicImage library="images" name="utfpr.png" class="utf-logo"></h:graphicImage>
                             </a>
                             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                             <ul class="right hide-on-med-and-down">
-                                <li><a href="artista.jsf" >Inicio</a></li>
-                                <li><a href="compositor.jsf">Cadastro de Funcionario</a></li>
-                                <li><a href="comprar-musica.jsf" >Gerenciamento de Refeição</a></li>
-                                <li>
-                                    <h:form>
-                                        <h:commandLink action="#{loginBean.logoutB()}" value="Logout"></h:commandLink>
-                                    </h:form>
-                                 </li>
+                                <li><a href="inicio.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Refeicoes"><i class="material-icons">restaurant</i></a></li>
+                                <li><a href="controleusuarios.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Usuarios"><i class="material-icons">people</i></a></li>
+                                <li><a href="creditos.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Pag Seguro"><i class="material-icons">attach_money</i></a></li>
+                                <li><a href="descontos.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Cardapio"><i class="material-icons">restaurant_menu</i></a></li>
+                                <li><a href="gerentes.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Novo Gerente"><i class="material-icons">person_add</i></a></li>
+                                <li><a href="produtos.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Produtos"><i class="material-icons">note_add</i></a></li>
+                                <h:panelGroup rendered="#{sessionScope.loggedIn}">
+                                    <li ><h:form>
+                                            <h:commandLink action="#{loginBean.logoutB()}"  value=""><i class="material-icons">exit_to_app</i></h:commandLink>
+                                        </h:form></li>
+                                </h:panelGroup>
                             </ul>
                             <ul class="side-nav white" id="mobile-demo">
                                 <div class="row">
                                     <div class="col s8 offset-s2">
                                         <div class="center">
-                                            <img class="responsive-img utf-logo-nav" src="./../resources/images/img-noexcel.png"/>
+                                            <h:graphicImage library="images" name="utfpr.png" class="utf-logo"></h:graphicImage>
                                         </div>
                                     </div>
                                 </div>
 
-                                <li><a href="artista.jsf" >Inicio</a></li>
-                                <li><a href="compositor.jsf">Cadastro de Funcionario</a></li>
-                                <li><a href="comprar-musica.jsf" >Gerenciamento de Refeição</a></li>
+                                <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="inicio.jsf"  >  <i class="material-icons blue-text text-darken-1">restaurant</i>Refeicoes</a>
+                                </li>
+                                <li id="contrle" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="controleusuarios.jsf"  >  <i class="material-icons blue-text text-darken-1">people</i>Usuarios</a>
+                                </li>
+                                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Pag Seguro</a>
+                                </li>
+                                <li id="desc" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="descontos.jsf"  >  <i class="material-icons blue-text text-darken-1">restaurant_menu</i>Cardapio</a>
+
+                                </li>
+                                <li id="ger" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="gerentes.jsf"  >  <i class="material-icons blue-text text-darken-1">person_add</i>Novo Gerente</a>
+
+                                </li>
+                                <li id="prod" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="produtos.jsf"  >  <i class="material-icons blue-text text-darken-1">note_add</i>Produtos</a>
+
+                                </li>
                                 <li><a href="#{logout.logout()}">Logout</a></li>
                             </ul>
                         </div>
@@ -63,9 +78,30 @@
             </div>
         </header>
 
+        <h:form>
+            <div class="brown hide" style="height: 200px;"></div>
+            <ul class="side-nav fixed transparent z-depth-0 navbar-list" style="width: 238px; margin-top: 5% !important; ">
+                <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="inicio.jsf"  >  <i class="material-icons blue-text text-darken-1">restaurant</i>Refeicoes</a>
+                </li>
+                <li id="contrle" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="controleusuarios.jsf"  >  <i class="material-icons blue-text text-darken-1">people</i>Usuarios</a>
+                </li>
+                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Pag Seguro</a>
+                </li>
+                <li id="desc" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="descontos.jsf"  >  <i class="material-icons blue-text text-darken-1">restaurant_menu</i>Cardapio</a>
+
+                </li>
+                <li id="ger" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="gerentes.jsf"  >  <i class="material-icons blue-text text-darken-1">person_add</i>Novo Gerente</a>
+
+                </li>
+                <li id="prod" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="produtos.jsf"  >  <i class="material-icons blue-text text-darken-1">note_add</i>Produtos</a>
+
+                </li>
+            </ul>
+        </h:form>
 
         <main id="content" class="container">
             <ui:insert name="content">
+
             </ui:insert>
         </main>
 

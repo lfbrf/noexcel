@@ -1,4 +1,4 @@
-<ui:composition template="/WEB-INF/template.xhtml"
+<ui:composition template="/WEB-INF/template-admin.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -18,11 +18,16 @@
             }
         </style>
 
+
+
         <f:metadata>
             <f:viewParam name="referenciaPS" value="#{pagSeguroBean.referenciaPS}"></f:viewParam>
         </f:metadata>
 
-        <h2>Confirmar Insercao de Credito</h2>
+        <h3>Confirmar Inserao de Credito dos Usuarios</h3>
+        <div class="stripes">
+            <span class="line"></span>
+        </div>
         <div class="row ne-search">
             <div class="col s12 img-responsive">
                 <h:form prependId="false">
@@ -84,7 +89,58 @@
                 </h:form>
             </div>
         </div>
+        <h5>Listagem</h5>
+        <div class="stripes">
+            <span class="line"></span>
+        </div>
+        <h:form>
+            <div class="row">
+                <div class="col s12">
 
+                    <p:dataTable var="pag" id="dtb"  value="#{pagSeguroBean.findAll()}"  paginator="true"
+
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" rows="4"
+                                 >
+
+
+                        <p:column headerText="Cliente" sortBy="#{pag.user.name}" filterBy="#{pag.user.name}" filterMatchMode="contains" >
+                            <h:outputText value="#{pag.user.name}" />
+                        </p:column>
+                        <p:column headerText="Login" sortBy="#{pag.user.login}" filterBy="#{pag.user.login}" filterMatchMode="contains" >
+                            <h:outputText value="#{pag.user.login}" />
+                        </p:column>
+                        <p:column headerText="Referencia" sortBy="#{pag.referenciaPS}" filterBy="#{pag.referenciaPS}" filterMatchMode="contains" >
+                            <h:outputText value="#{pag.referenciaPS}" />
+                        </p:column>
+
+                        <p:column headerText="Estado" sortBy="#{pag.status}" filterBy="#{pag.status}" filterMatchMode="contains" >
+                            <h:outputText value="#{pag.status}" />
+                        </p:column>
+                        <p:column headerText="Valor" sortBy="#{pag.value}" filterBy="#{pag.value}" filterMatchMode="contains" >
+                            <h:outputText value="#{pag.value}" />
+                        </p:column>
+
+
+                        <p:column headerText="">
+                            <div class="row center">
+                                <div class="col s12 ">
+
+                                    <h:commandLink action="#{pagSeguroBean.insertCredit(pag)}"   class="waves-effect waves-light btn green darken-3 white-text">
+                                        <i class="material-icons">check_circle</i>
+                                    </h:commandLink>
+                                </div>
+                                <div class="col s12">
+                                    <h:commandLink action="#{pagSeguroBean.delete(pag)}" class="waves-effect waves-light btn red darken-3 white-text">
+                                        <i class="material-icons">delete_forever</i>
+                                    </h:commandLink>
+                                </div>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
 
     </ui:define>
 </ui:composition>

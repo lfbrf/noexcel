@@ -29,12 +29,20 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @RequestScoped
-
 public class UserBean {
 
     private User user;
     private List<User> userList;
     private UserService userService;
+    private boolean content = false;
+
+    public boolean isContent() {
+        return content;
+    }
+
+    public void setContent(boolean content) {
+        this.content = content;
+    }
 
     public boolean isInserir() {
         return inserir;
@@ -121,6 +129,56 @@ public class UserBean {
 
         extrato = false;
         editar = false;
+    }
+
+    public boolean isBolsista(String login) {
+        User u = userService.getByProperty("login", login);
+        if (u != null) {
+            Type t = typeService.getById(u.getType().getId());
+            if (t != null && t.getDescription().equals("BOLSISTA")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isPending(String login) {
+        User u = userService.getByProperty("login", login);
+        if (u.isCheckuser() == true) {
+            return true;
+        }
+        return false;
+    }
+
+    public String updateUs(Long type_id) {
+        System.out.println("ID DO TIPO " + type_id);
+        String nome = this.user.getName();
+        String email = this.user.getEmail();
+
+        System.out.println("ID DO USUARIO " + this.user.getId());
+        System.out.println("NOME DO USUARIO " + this.user.getName());
+        user = userService.getById(this.user.getId());
+        if (isBolsista(user.getLogin())) {
+            user.setCheckuser(!this.user.isCheckuser());
+        }
+        user.setName(nome);
+        User up = userService.getByProperty("email", email);
+        if (up != null && up.getId() != this.user.getId()) {
+            MessageUtil.showMessage("Email ja esta em uso", "", FacesMessage.SEVERITY_INFO);
+            return "";
+
+        }
+        user.setEmail(email);
+        if (type_id != null && type_id > 0) {
+            user.setType(typeService.getById(type_id));
+        }
+        if (userService.update(user)) {
+            MessageUtil.showMessage("Alterado com sucesso", "", FacesMessage.SEVERITY_INFO);
+        } else {
+            MessageUtil.showMessage("Falha na alteração", "", FacesMessage.SEVERITY_ERROR);
+        }
+        return "admin/controleusuarios?faces-redirect=true";
     }
 
     public List<String> autocompleteUsuarios(String consulta) {
@@ -213,6 +271,8 @@ public class UserBean {
     }
 
     public void edit(User user) {
+        System.out.println("INVOQUEI");
+        setContent(true);
         this.user = user;
     }
 
@@ -340,7 +400,6 @@ public class UserBean {
     }
 
     public String persist() {
-
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         user.setBalance(BigDecimal.ZERO);
         String aux = user.getLogin().replace(".", "");
@@ -351,7 +410,7 @@ public class UserBean {
         List<String> us = null;
         us = userService.listByNames();
         int length = user.getLogin().length();
-        if (length == 8 && user.getComment().equals("sim")) {
+        if (length == 8 && user.isCheckuser()) {
             user.setCheckuser(true);
             descricao = "Bolsista";
         } else if (length == 8) {

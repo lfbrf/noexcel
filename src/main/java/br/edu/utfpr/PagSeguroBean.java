@@ -17,8 +17,10 @@ import br.edu.utfpr.util.MessageUtil;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -59,6 +61,7 @@ public class PagSeguroBean {
     @PostConstruct
     public void init() {
         pagseguroService = new PagSeguroService();
+        pagSeguroList = new ArrayList<>();
         userService = new UserService();
         pagSeguro = new PagSeguro();
         userRoleService = new UserRoleService();
@@ -82,6 +85,21 @@ public class PagSeguroBean {
 
     public UserService getUserService() {
         return userService;
+    }
+
+    public void edit(PagSeguro pagSeguro) {
+        this.pagSeguro = pagSeguro;
+    }
+
+    public void delete(PagSeguro pagSeguro) {
+        boolean isSuccess = pagseguroService.delete(pagSeguro);
+        if (isSuccess) {
+            this.pagSeguroList.remove(pagSeguro);
+            MessageUtil.showMessage("Removido com sucesso", "", FacesMessage.SEVERITY_INFO);
+        } else {
+            MessageUtil.showMessage("Falha na remoção", "", FacesMessage.SEVERITY_ERROR);
+        }
+        this.pagSeguro = new PagSeguro();
     }
 
     public boolean isShowCredits() {
@@ -128,6 +146,23 @@ public class PagSeguroBean {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
+
+    public List<PagSeguro> findAll() {
+
+        return pagSeguroList = pagseguroService.findAll();
+
+    }
+
+    public List<PagSeguro> getPagSeguroList() {
+        return pagSeguroList;
+    }
+
+    public void setPagSeguroList(List<PagSeguro> pagSeguroList) {
+        this.pagSeguroList = pagSeguroList;
+    }
+
+    private List<PagSeguro> pagSeguroList;
+
     private UserService userService;
 
     public boolean transaction(String code, int value) {
