@@ -9,11 +9,10 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <h:outputLink rel="icon" type="image/png" value="favicon.png"></h:outputLink>
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="icon" type="image/png" href="favicon.png" />
 
         <!-- CSS -->
-        <link rel="stylesheet" href="/resources/styles/cssLayout.css"></link>
+        <link rel="stylesheet" href="./../resources/styles/cssLayout.css"></link>
         <h:outputStylesheet library="styles" name="materialize.css"></h:outputStylesheet>
         <h:outputStylesheet library="styles" name="common.css"></h:outputStylesheet>
         <h:outputStylesheet library="styles" name="template.css"></h:outputStylesheet>
@@ -30,30 +29,38 @@
                 <nav >
                     <div class="nav-wrapper green">
                         <div class="container">
-                            <a class="brand-logo" href="index.jsf">
+                            <a class="brand-logo" href="index.jsf" >
                                 <h:graphicImage library="images" name="utfpr.png" class="utf-logo"></h:graphicImage>
                             </a>
                             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                             <ul class="right hide-on-med-and-down">
-                                <li><a href="conta.jsf">Conta</a></li>
-                                <li><a href="inserircredito.jsf">Inserir Credito</a></li>
-                                <li>
-                                    <h:form>
-                                        <h:commandLink action="#{loginBean.logoutB()}" value=""><i class="material-icons">exit_to_app</i></h:commandLink>
-                                    </h:form>
-                                </li>
+                                <li><a href="inicio.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Refeicoes"><i class="material-icons">restaurant</i></a></li>
+                                <li><a href="controleusuarios.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Usuarios"><i class="material-icons">people</i></a></li>
+                                <li><a href="creditos.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Pag Seguro"><i class="material-icons">attach_money</i></a></li>
+
+                                <h:panelGroup rendered="#{sessionScope.loggedIn}">
+                                    <li ><h:form>
+                                            <h:commandLink action="#{loginBean.logoutB()}"  value=""><i class="material-icons">exit_to_app</i></h:commandLink>
+                                        </h:form></li>
+                                </h:panelGroup>
                             </ul>
                             <ul class="side-nav white" id="mobile-demo">
                                 <div class="row">
                                     <div class="col s8 offset-s2">
                                         <div class="center">
-                                            <h:graphicImage library="images" name="utfpr.png" class="responsive-img utf-logo"></h:graphicImage>
+                                            <h:graphicImage library="images" name="utfpr.png" class="utf-logo"></h:graphicImage>
                                         </div>
                                     </div>
                                 </div>
 
-                                <li><a href="consultar.jsf">Consultar Conta</a></li>
-                                <li><a href="atualizar.jsf">Atualizar Informacoes</a></li>
+                                <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="inicio.jsf"  >  <i class="material-icons blue-text text-darken-1">restaurant</i>Refeicoes</a>
+                                </li>
+                                <li id="contrle" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="controleusuarios.jsf"  >  <i class="material-icons blue-text text-darken-1">people</i>Usuarios</a>
+                                </li>
+                                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Pag Seguro</a>
+                                </li>
+
+                                <li><a href="#{logout.logout()}">Logout</a></li>
                             </ul>
                         </div>
                     </div>
@@ -61,9 +68,22 @@
             </div>
         </header>
 
+        <h:form>
+            <div class="brown hide" style="height: 200px;"></div>
+            <ul class="side-nav fixed transparent z-depth-0 navbar-list" style="width: 238px; margin-top: 5% !important; ">
+                <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="inicio.jsf"  >  <i class="material-icons blue-text text-darken-1">restaurant</i>Refeicoes</a>
+                </li>
+                <li id="contrle" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="controleusuarios.jsf"  >  <i class="material-icons blue-text text-darken-1">people</i>Usuarios</a>
+                </li>
+                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Pag Seguro</a>
+                </li>
+
+            </ul>
+        </h:form>
 
         <main id="content" class="container">
             <ui:insert name="content">
+
             </ui:insert>
         </main>
 
@@ -73,7 +93,7 @@
                 <div class="row">
                     <div class="col s12 center">
                         <a href="http://www.utfpr.edu.br/guarapuava">
-                            <h:graphicImage library="images" name="utfpr.png" id="utfpr-footer" class=" img-responsive" height="70px"></h:graphicImage>
+                            <img src="./../resources/images/utfpr.png" id="utfpr-footer" class=" img-responsive" height="70px"/>
                         </a>
                     </div>
                 </div>
@@ -90,7 +110,7 @@
         <!-- Para evitar conflito com o jQuery, é preciso referenciar a própria versão do jQuery que vem no PrimeFaces -->
         <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
-        <!--<h:outputScript library="scripts" name="common.js"></h:outputScript> -->
+        <script src="./../resources/scripts/common.js"></script>
     </h:body>
 
 </html>

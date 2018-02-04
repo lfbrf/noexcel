@@ -6,6 +6,7 @@
 package br.edu.utfpr;
 
 import br.edu.utfpr.model.Menu;
+import br.edu.utfpr.model.Type;
 import br.edu.utfpr.model.service.MenuService;
 import br.edu.utfpr.model.service.ProductService;
 import br.edu.utfpr.model.service.TypeService;
@@ -59,10 +60,21 @@ public class MenuBean {
     }
 
     public void persistDiscount(long produto, long tipo) {
+        Type t = typeService.getById(tipo);
+        String aux = "GERENTE-" + t.getDescription();
+        Type ty = typeService.getByProperty("description", aux);
+        System.out.println("............" + ty.getDescription() + ty.getId());
+        Menu g = menuService.listrepeatFilds(ty.getId(), produto);
         Menu m = menuService.listrepeatFilds(tipo, produto);
-        System.out.println("............" + m.getValue());
+
         m.setValue(newValue);
+        g.setValue(newValue);
+        menuService.update(g);
         menuService.update(m);
+    }
+
+    public Menu listrepeatFilds(long tipo, long produto) {
+        return menuService.listrepeatFilds(tipo, produto);
     }
 
     public BigDecimal getTotal() {
@@ -113,9 +125,9 @@ public class MenuBean {
     public void changeMenu(long produto, long tipo) {
         System.out.println("OKK" + produto + tipo);
         Menu m = menuService.listrepeatFilds(tipo, produto);
-
-        total = m.getValue();
-        System.out.println("MEU TOTAL AQUI >" + total);
+        if (m != null) {
+            total = m.getValue();
+        }
 
     }
 

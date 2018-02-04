@@ -7,6 +7,7 @@ package br.edu.utfpr.model.service;
 
 import br.edu.utfpr.model.Type;
 import br.edu.utfpr.model.dao.TypeDAO;
+import java.util.List;
 
 /**
  *
@@ -16,6 +17,13 @@ public class TypeService extends AbstractService<Long, Type> {
 
     public TypeService() {
         dao = new TypeDAO();
+    }
 
+    public List<Type> typesManager() {
+        return ((TypeDAO) dao).typesManager();
+    }
+
+    public List<Type> typesNotManager() {
+        return ((TypeDAO) dao).typesNotManager();
     }
 }

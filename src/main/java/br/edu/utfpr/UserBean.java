@@ -349,7 +349,7 @@ public class UserBean {
         return us;
     }
 
-    public String persistManager() {
+    public String persistManager(long type_id) {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         user.setBalance(BigDecimal.ZERO);
         String aux = user.getLogin().replace(".", "");
@@ -359,11 +359,10 @@ public class UserBean {
         String descricao;
         List<String> us = null;
         us = userService.listByNames();
-        Type type = typeService.getByProperty("description", "MANAGER");
+        Type type = typeService.getById(type_id);
         if (type == null) {
-            Type t = new Type();
-            t.setDescription("MANAGER");
-            typeService.save(t);
+            MessageUtil.showMessage("Erro ao cadastrar, informe o tipo de gerente.", "", FacesMessage.SEVERITY_ERROR);
+            return "";
         }
         user.setType(type);
         if (userService.getByProperty("email", user.getEmail()) != null) {
@@ -405,6 +404,7 @@ public class UserBean {
         String aux = user.getLogin().replace(".", "");
         aux = aux.replace("-", "");
         user.setLogin(aux);
+        user.setAvatar("user.png");
         long time = cal.getTimeInMillis();
         String descricao;
         List<String> us = null;
@@ -462,10 +462,21 @@ public class UserBean {
         return "";
     }
 
+    public long listType(String ra) {
+        System.out.println("IMPRESSAO AQUI" + ra);
+        User u = userService.getByProperty("login", ra);
+        if (u != null) {
+            return u.type.getId();
+        }
+        return 0;
+    }
+
     public List<User> findAll() {
-
         return userList = userService.findAll();
+    }
 
+    public List<User> findOnlyUsers() {
+        return userService.typesNotManager();
     }
 
 }

@@ -67,6 +67,15 @@ public class TypeBean {
 
     private Type type;
     private List<Type> typeList;
+
+    public List<Type> getTypeManagerList() {
+        return typeManagerList;
+    }
+
+    public void setTypeManagerList(List<Type> typeManagerList) {
+        this.typeManagerList = typeManagerList;
+    }
+    private List<Type> typeManagerList;
     private TypeService typeService;
 
     public TypeBean() {
@@ -76,8 +85,10 @@ public class TypeBean {
     public void init() {
         type = new Type();
         typeList = new ArrayList<>();
+        typeManagerList = new ArrayList<>();
         typeService = new TypeService();
-        typeList = typeService.findAll();
+        typeList = typeService.typesNotManager();
+        typeManagerList = typeService.typesManager();
     }
 
     public void edit(Type type) {

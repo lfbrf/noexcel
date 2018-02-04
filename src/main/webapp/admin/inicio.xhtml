@@ -152,7 +152,7 @@
                                         <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}" varStatus="tid">
                                             <tr>
                                                 <td> <h:outputText value="#{productBean.findByid(group.product.id).getName()}" /></td>
-                                                <td> R$-<h:outputText  value="#{productBean.findByid(group.product.id).getValue()}" /></td>
+                                                <td> R$-<h:outputText  value="#{menuBean.listrepeatFilds(userBean.listType(transaction.user.login), group.product.id).getValue()}" /></td>
 
                                             </tr>
                                             <tr>
@@ -172,7 +172,7 @@
                                     </table>
                                 </p:column>
                                 <p:column headerText="Valor Total" class="center-align"  sortBy="#{transaction.value}" filterBy="#{transaction.value}" filterMatchMode="contains"  >
-                                    <h:outputText value="#{transaction.value}" />
+                                    <h:outputText value="R$#{transaction.value}" />
                                     <input type="hidden" name="valor" value="#{transaction.value}" />
                                 </p:column>
 

@@ -9,82 +9,85 @@
 
     <ui:define name="content">
 
-
-        <h3>Criar um novo desconto</h3>
-        <div class="stripes">
-            <span class="line"></span>
-        </div>
-        <h:form id="formB">
-            <div class="main">
-
-                <div class="row center-align">
-                    <h5>Selecione o produto</h5>
-
-
-
-                    <p:selectOneMenu
-                        value="#{productBean.productID}" id="prod"  filter="true" filterMatchMode="startsWith">
-                        <f:selectItems   value="#{productBean.productList}" var="x" itemLabel="#{x.name}" itemValue="#{x.id}"/>
-
-                    </p:selectOneMenu>
+        <div class="container">
+            <div class="row">
+                <h3>Criar um novo desconto</h3>
+                <div class="stripes">
+                    <span class="line"></span>
                 </div>
-                <div class="row center-align">
-                    <h5>Selecione o tipo de usuario</h5>
-                    <p:selectOneMenu
-                        value="#{typeBean.typeID}"  filter="true" filterMatchMode="startsWith" >
-                        <f:selectItems   value="#{typeBean.typeList}" var="t"  itemLabel="#{t.description}" itemValue="#{t.id}"/>
+                <h:form id="formB">
+                    <div class="main">
 
-                        <p:ajax event="change"    update=":formB:tot" listener="#{menuBean.changeMenu(productBean.productID, typeBean.typeID)}" />
-                    </p:selectOneMenu>
-                    <h:outputText id="tot" />
-                </div>
-                <div class="row center-align" >
-                    <p:commandButton  value="Ver Preco Atual" update="t" action="#{menuBean.changeMenu(productBean.productID, typeBean.typeID)}"    >
-
-                    </p:commandButton>
-                </div>
-                <div jsf:id="t" class="row center-align" >
-                    <h:outputText value="#{menuBean.total}" />
-                </div>
-
-                <div class="row center-align">
-
-                    <h5>Informe o novo valor  desse produto</h5>
-                    <p:inputNumber  id="numero" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{menuBean.newValue}" />
-                    <p:commandButton action="#{menuBean.persistDiscount(productBean.productID, typeBean.typeID)}"   value="Cadastrar" type="submit" class="btn green"  ></p:commandButton>
-
-                </div>
-            </div>
-
-        </h:form>
+                        <div class="row center-align">
+                            <h5>Selecione o produto</h5>
 
 
-        <h:form>
-            <p:dataTable var="menu" id="dtb"  value="#{menuBean.findAll()}"  paginator="true"
 
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15" rows="4"
-                         >
+                            <p:selectOneMenu
+                                value="#{productBean.productID}" id="prod"  filter="true" filterMatchMode="startsWith">
+                                <f:selectItems   value="#{productBean.productList}" var="x" itemLabel="#{x.name}" itemValue="#{x.id}"/>
 
-                <p:column headerText="Produto" sortBy="#{menu.product.name}" filterBy="#{menu.product.name}" filterMatchMode="contains" >
-                    <h:outputText value="#{menu.product.name}" />
-                </p:column>
-                <p:column headerText="Usuario" sortBy="#{menu.type.description}" filterBy="#{menu.type.description}" filterMatchMode="contains" >
-                    <h:outputText value="#{menu.type.description}" />
-                </p:column>
-                <p:column headerText="Preco" sortBy="#{menu.value}" filterBy="#{menu.value}" filterMatchMode="contains" >
-                    <h:outputText value="#{menu.value}" />
-                </p:column>
-                <p:column headerText="">
-                    <div class="row center">
-                        <div class="col s12">
-                            <h:commandLink action="#{menuBean.delete(menu)}" class="waves-effect waves-light btn red darken-3 white-text">
-                                <i class="material-icons">delete_forever</i>
-                            </h:commandLink>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="row center-align">
+                            <h5>Selecione o tipo de usuario</h5>
+                            <p:selectOneMenu
+                                value="#{typeBean.typeID}"  filter="true" filterMatchMode="startsWith" >
+                                <f:selectItems   value="#{typeBean.typeList}" var="t"  itemLabel="#{t.description}" itemValue="#{t.id}"/>
+
+                                <p:ajax event="change"    update=":formB:tot" listener="#{menuBean.changeMenu(productBean.productID, typeBean.typeID)}" />
+                            </p:selectOneMenu>
+                            <h:outputText id="tot" />
+                        </div>
+                        <div class="row center-align" >
+                            <p:commandButton  value="Ver Preco Atual" update="t" action="#{menuBean.changeMenu(productBean.productID, typeBean.typeID)}"    >
+
+                            </p:commandButton>
+                        </div>
+                        <div jsf:id="t" class="row center-align" >
+                            <h:outputText value="#{menuBean.total}" />
+                        </div>
+
+                        <div class="row center-align">
+
+                            <h5>Informe o novo valor  desse produto</h5>
+                            <p:inputNumber  id="numero" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{menuBean.newValue}" />
+                            <p:commandButton action="#{menuBean.persistDiscount(productBean.productID, typeBean.typeID)}"   value="Cadastrar" type="submit" class="btn green"  ></p:commandButton>
+
                         </div>
                     </div>
-                </p:column>
-            </p:dataTable>
-        </h:form>
+
+                </h:form>
+
+
+                <h:form>
+                    <p:dataTable var="menu" id="dtb"  value="#{menuBean.findAll()}"  paginator="true"
+
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" rows="4"
+                                 >
+
+                        <p:column headerText="Produto" sortBy="#{menu.product.name}" filterBy="#{menu.product.name}" filterMatchMode="contains" >
+                            <h:outputText value="#{menu.product.name}" />
+                        </p:column>
+                        <p:column headerText="Usuario" sortBy="#{menu.type.description}" filterBy="#{menu.type.description}" filterMatchMode="contains" >
+                            <h:outputText value="#{menu.type.description}" />
+                        </p:column>
+                        <p:column headerText="Preco" sortBy="#{menu.value}" filterBy="#{menu.value}" filterMatchMode="contains" >
+                            <h:outputText value="#{menu.value}" />
+                        </p:column>
+                        <p:column headerText="">
+                            <div class="row center">
+                                <div class="col s12">
+                                    <h:commandLink action="#{menuBean.delete(menu)}" class="waves-effect waves-light btn red darken-3 white-text">
+                                        <i class="material-icons">delete_forever</i>
+                                    </h:commandLink>
+                                </div>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
     </ui:define>
 </ui:composition>

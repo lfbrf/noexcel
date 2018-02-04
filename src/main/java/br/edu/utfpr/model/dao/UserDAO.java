@@ -26,4 +26,12 @@ public class UserDAO extends AbstractDAO<Long, User> {
         return queryResult;
     }
 
+    public List<User> typesNotManager() {
+        this.entityManager = JPAUtil.getEntityManager();
+        String queryString = "SELECT  o FROM User o where o.type.description not like '%GERENTE-%' AND o.type.description not like '%ADMIN%' ";
+        Query query = entityManager.createQuery(queryString);
+        List<User> queryResult = query.getResultList();
+        return queryResult;
+    }
+
 }

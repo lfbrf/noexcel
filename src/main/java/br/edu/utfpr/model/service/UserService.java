@@ -24,4 +24,8 @@ public class UserService extends AbstractService<Long, User> {
         //tratar transaçoes
         return ((UserDAO) dao).listByNames();
     }
+
+    public List<User> typesNotManager() {
+        return ((UserDAO) dao).typesNotManager();
+    }
 }

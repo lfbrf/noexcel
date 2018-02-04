@@ -29,7 +29,7 @@ public class MenuService extends AbstractService<Long, Menu> {
 
     public Menu listrepeatFilds(long type_id, long product_id) {
         //tratar transaçoes
-        System.out.println("PEGOUUU");
+        System.out.println("PEGOUUUME" + type_id + "PROD" + product_id);
         return ((MenuDAO) dao).listrepeatFilds(type_id, product_id);
 
     }

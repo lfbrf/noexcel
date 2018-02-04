@@ -1,5 +1,5 @@
 
-<ui:composition template="/WEB-INF/template.xhtml"
+<ui:composition template="/WEB-INF/template-user.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -12,20 +12,13 @@
 
     <ui:define name="content">
 
-        <style>
-            .ne-user-title{
-                font-weight: bold;
-                margin-right: 1em;
-            }
-        </style>
-
-
-
         <p:messages/>
 
         <div class="row" jsf:rendered="#{searchView.isShowImage}">
             <div class="col s12 center">
-                <img id="img-no-excel" src="http://lorempixel.com/200/200/"/>
+
+                <h:graphicImage class="responsive-img" style="height: 10em;" name="no-excel.png" library="images"></h:graphicImage>
+
             </div>
         </div>
 
@@ -53,7 +46,7 @@
             <div class="row card light-green lighten-3" id="div-panel" style="margin-top: 4em; padding: 1.8em 0.5em">
                 <div class="col s12">
                     <div class="col s4 m3 center" >
-                        <img id="img-no-excel" jsf:rendered="#{searchView.userDTO.ra!=null}" src="/images/#{userBean.avatar(searchView.userDTO.ra)}" style="max-height: 150px; max-width: 150px;"/>
+                        <img id="img-no-excel" jsf:rendered="#{searchView.userDTO.ra!=null }" src="/images/#{userBean.avatar(searchView.userDTO.ra)}" style="max-height: 150px; max-width: 150px;"/>
                         <img id="img-no-excel" jsf:rendered="#{searchView.userDTO.ra ==null}" src="/images/user.png" style="max-height: 150px; max-width: 150px;"/>
 
                     </div>
@@ -111,24 +104,17 @@
         <div class="row card light-green lighten-3" id="credito" style="display:none;"  >
             <div class="col s12" style="margin-top: 1em"><h4>Inserção de Crédito </h4></div>
             <div class="col s12" style="padding: 3em 1em 1em 1em">
-
-
-
                 <h:form>
                     <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
                     <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
                     <div class="input-field col s6">
-
                         <p:inputNumber symbol="R$ " decimalSeparator="," thousandSeparator="."
                                        value="#{transactionBean.credit}"  />
-
                     </div>
-
                     <h:commandLink    class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.insertCredit(request.remoteUser)}">
                         <i class="material-icons prefix">attach_money</i>
                     </h:commandLink>
                 </h:form>
-
             </div>
         </div>
         <div class="row card light-green lighten-3" id="extrato" style="display:none;" >
@@ -148,16 +134,23 @@
                                     <h:outputText value="#{transaction.data}"  />
                                 </p:column>
                                 <p:column headerText="Operador" class="center-align" sortBy="#{transactionBean.getbyManager(transaction)}" filterBy="#{transactionBean.getbyManager(transaction)}" filterMatchMode="contains"  >
-                                    <h:outputText value="#{transactionBean.getbyManager(transaction)}"  />
+                                    <h:outputText rendered="#{transactionBean.getbyManager(transaction) != 'EU'}" value="#{transactionBean.getbyManager(transaction)}"  />
+                                    <h:outputText rendered="#{transactionBean.getbyManager(transaction) == 'EU'}" value="Cliente"  />
+
                                 </p:column>
 
                                 <p:column headerText="Produtos Consumidos" >
                                     <table>
 
-                                        <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}">
+                                        <ui:repeat var="group"  value="#{transactionBean.findProducts(transaction.id)}" varStatus="tid">
                                             <tr>
                                                 <td> <h:outputText value="#{productBean.findByid(group.product.id).getName()}" /></td>
                                                 <td> R$-<h:outputText  value="#{productBean.findByid(group.product.id).getValue()}" /></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td> <h:outputText value="Quantidade: " /></td>
+                                                <td> <h:outputText  value="#{transactionBean.getQts(transaction.id, group.product.id)}" /></td>
 
                                             </tr>
                                         </ui:repeat>
@@ -188,7 +181,7 @@
             <div class="col s12" style="padding: 3em 1em 1em 1em">
 
 
-                <h:form>
+                <h:form id="formB">
                     <input type="hidden" name="ra" value="#{searchView.userDTO.ra}" />
                     <input type="hidden" name="balance" value="#{searchView.userDTO.balance}" />
 
@@ -200,8 +193,9 @@
                     <p:selectCheckboxMenu id="menu"  value="#{transactionBean.selectedProducts}" label="Cardapio" scrollHeight="150"
                                           filter="true" filterMatchMode="startsWith" panelStyle="width:250px" >
                         <f:selectItems value="#{transactionBean.produtos}" />
-                        <p:ajax event="change"  update="selectedItemText" listener="#{transactionBean.atualizaTotal()}" />
-                        <p:ajax event="toggleSelect" update="selectedItemText" listener="#{transactionBean.atualizaTotal}" />
+                        <p:ajax event="change"  update="selectedItemText :formB:tot" listener="#{transactionBean.atualizaTotal()}" />
+                        <p:ajax event="toggleSelect" update="selectedItemText :formB:tot"  listener="#{transactionBean.atualizaTotal}" />
+
                     </p:selectCheckboxMenu>
                     <div jsf:id="selectedItemText">
 
@@ -222,15 +216,17 @@
                                     <h5><h:outputText   value="Valor" style="color: #e8eaf6;"   /></h5>
                                 </div>
                             </div>
-                            <ui:repeat value="#{transactionBean.selectedProducts}" var="value" varStatus="ind"  >
+                            <ui:repeat   value="#{transactionBean.selectedProducts}" var="value" varStatus="ind"  >
                                 <div class=" ">
                                     <div class="row ">
                                         <div class="col s3 ">
                                             <h:outputText   value="#{value}" style="color: #ef5350;"   />
                                         </div>
                                         <div class="col s3 ">
-                                            <p:inputNumber   class="col s4 offset-s2" minValue="0" maxValue="100" style="color: #ef5350;"    value="#{transactionBean.quantity}">
+                                            <p:inputNumber   class="col s4 offset-s2" minValue="0"  maxValue="100" style="color: #ef5350;"    value="#{transactionBean.quantity}">
                                                 <p:ajax  event="blur" update="#{inde.index}quantidade"  listener="#{transactionBean.atualizaQuantidade(value, ind.index)}"/>
+                                                <p:ajax  event="blur" update=":formB:tot"  listener="#{transactionBean.att()}"/>
+
 
                                             </p:inputNumber>
                                         </div>
@@ -239,6 +235,7 @@
                                             <h:outputText style="color:#ef5350;"     value="#{transactionBean.valorporProduto(value, transactionBean.quantity)}"   >
 
                                             </h:outputText>
+
 
 
                                         </div>
@@ -254,7 +251,7 @@
                                     TOTAL
                                 </div>
                                 <div class="col s4" jsf:rendered="#{max -1 == ind.index}" jsf:id="pjh" style="color:#ef5350;">
-                                    ---------------------------------------
+                                    ---------------------------------
 
                                 </div>
 
@@ -271,9 +268,7 @@
                         </h3>
                     </div>
 
-                    <div class="col s1 " style="margin-left:27%;">
-                        <p:commandButton  value="Calcular" id="ajax" update="tot"  actionListener="#{transactionBean.att()}" styleClass="ui-priority-primary" />
-                    </div>
+
                     <div class="col offset-s2">
                         <h:commandLink   class="waves-effect waves-light btn btn-large" actionListener="#{transactionBean.removeCredit(request.remoteUser)}">
                             <i class="material-icons">send</i>
@@ -304,8 +299,7 @@
                             }
                             //]]>
                         }, 1);
-                    });
-        </script>
+                    });</script>
 
     </ui:define>
 

@@ -8,13 +8,14 @@
 
     <ui:define name="content">
 
-        <h3>Cadastrar um novo gerente</h3>
-        <div class="stripes">
-            <span class="line"></span>
-        </div>
+
 
         <div class="row">
             <div class="col s12 m10 offset-m1">
+                <h3>Cadastrar um novo gerente</h3>
+                <div class="stripes">
+                    <span class="line"></span>
+                </div>
                 <div class="card">
                     <div class="card-content ">
                         <div class="row center-align">
@@ -52,6 +53,15 @@
                                             <p:watermark for="email"  value="Email"  />
 
                                         </div>
+                                        <div  class="col s11 input-field">
+                                            <p>Selecione o tipo de usuario</p>
+                                            <p:selectOneMenu
+                                                value="#{typeBean.typeID}"  filter="true" filterMatchMode="startsWith" >
+                                                <f:selectItems   value="#{typeBean.typeManagerList}" var="t"  itemLabel="#{t.description}" itemValue="#{t.id}"/>
+
+                                            </p:selectOneMenu>
+                                            <h:outputText id="tot" />
+                                        </div>
 
                                         <div class="col s11 input-field">
                                             <p:password id="pass" required="true" match="repass"  class="default-input" title="Informe sua senha, deve conter ao menos um numero e uma letra" binding="#{passwordComponent}"   placeholder="Senha" value="#{userBean.user.password}"  requiredMessage="Campo  senha e obrigatorio" onfocus="$(this).attr('placeholder', '');" onblur="$(this).attr('placeholder', 'Senha');"  />
@@ -65,6 +75,8 @@
                                             <p:tooltip id="tool6" for="repass" showEvent="focus" hideEvent="blur"  />
 
                                         </div>
+
+
 
                                         <div class="col s12 input-field center ">
 
@@ -87,7 +99,7 @@
                                             <p:growl widgetVar="email-error" life="5000" />
                                             <p:growl widgetVar="pass-error" life="5000"  />
                                             <p:growl widgetVar="raerror" life="5000"  />
-                                            <h:commandButton action="#{userBean.persistManager()}"   id="enviar" value="Cadastrar" type="submit" class="btn green"  ></h:commandButton>
+                                            <h:commandButton action="#{userBean.persistManager(typeBean.typeID)}"   id="enviar" value="Cadastrar" type="submit" class="btn green"  ></h:commandButton>
                                         </div>
                                     </div>
                                 </h:form>

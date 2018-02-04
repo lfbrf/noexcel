@@ -34,7 +34,7 @@ public class MenuDAO extends AbstractDAO<Long, Menu> {
 
     public Menu listrepeatFilds(long type_id, long product_id) {
         this.entityManager = JPAUtil.getEntityManager();
-        System.out.println("-------------" + product_id);
+        System.out.println("-------------" + product_id + "----" + type_id);
         String queryString = "SELECT o FROM Menu o where  o.type.id =:param AND  o.product.id  =:param2";
         Query query = entityManager.createQuery(queryString);
         query.setParameter("param", type_id);
@@ -46,6 +46,7 @@ public class MenuDAO extends AbstractDAO<Long, Menu> {
         Menu returnObject = null;
 
         if (!queryResult.isEmpty()) {
+            System.out.println("Euuu-------------");
             returnObject = queryResult.get(0);
         }
         return returnObject;

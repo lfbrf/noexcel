@@ -73,13 +73,23 @@ public class TransactionBean implements Serializable {
         String ra = FacesContext.getCurrentInstance().
                 getExternalContext().getRequestParameterMap().get("ra");
         User us = userService.getByProperty("login", ra);
-        Type t = typeService.getById(us.getType().getId());
-        Product prod = productService.getByProperty("name", p);
-        Menu m = discountService.listrepeatFilds(t.getId(), prod.getId());
-        BigDecimal z = prod.getValue();
-        BigDecimal sub;
-        sub = BigDecimal.valueOf(x);
-        sub = m.getValue().multiply(sub);
+        BigDecimal sub = BigDecimal.ZERO;
+        if (us != null) {
+            Type t = typeService.getById(us.getType().getId());
+            if (t != null) {
+                Product prod = productService.getByProperty("name", p);
+                if (prod != null) {
+                    Menu m = discountService.listrepeatFilds(t.getId(), prod.getId());
+                    if (m != null) {
+                        BigDecimal z = prod.getValue();
+
+                        sub = BigDecimal.valueOf(x);
+                        sub = m.getValue().multiply(sub);
+                    }
+                }
+            }
+
+        }
 
         return sub;
     }
@@ -141,10 +151,10 @@ public class TransactionBean implements Serializable {
             //soma = soma.add(k);
             User us = userService.getByProperty("login", login);
             Type t = typeService.getById(us.getType().getId());
-            System.out.println("+++++" + t.getId() + j.getId());
+            System.out.println("+++++" + t.getId());
             Menu d = discountService.listrepeatFilds(t.getId(), j.getId());
             if (d == null) {
-                System.out.println("TA NULO" + d.getValue());
+                System.out.println("TA NULO");
             }
             System.out.println("N TA NULO" + t.getId() + "----" + j.getId());
             k = k.multiply(d.getValue());
