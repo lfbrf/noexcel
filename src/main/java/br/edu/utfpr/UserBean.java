@@ -16,11 +16,13 @@ import br.edu.utfpr.util.MessageUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
@@ -153,11 +155,20 @@ public class UserBean {
 
     public String updateUs(Long type_id) {
         System.out.println("ID DO TIPO " + type_id);
+        Type tp = typeService.getById(type_id);
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        User x = (User) sessionMap.get("user");
+        UserRole ur = userRoleService.getById(x.getId());
+        if (tp.getDescription().substring(0, 8).equals("GERENTE-")) {
+            ur.setRole("MANAGER");
+        } else {
+            ur.setRole("USER");
+        }
+        userRoleService.update(ur);
+        System.out.println("NOME DO TIPO " + x.getName());
         String nome = this.user.getName();
         String email = this.user.getEmail();
-
-        System.out.println("ID DO USUARIO " + this.user.getId());
-        System.out.println("NOME DO USUARIO " + this.user.getName());
         user = userService.getById(this.user.getId());
         if (isBolsista(user.getLogin())) {
             user.setCheckuser(!this.user.isCheckuser());
@@ -271,8 +282,11 @@ public class UserBean {
     }
 
     public void edit(User user) {
-        System.out.println("INVOQUEI");
+        System.out.println("INVOQUEI" + user.getName());
         setContent(true);
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        sessionMap.put("user", user);
         this.user = user;
     }
 

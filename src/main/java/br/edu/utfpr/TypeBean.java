@@ -87,7 +87,7 @@ public class TypeBean {
         typeList = new ArrayList<>();
         typeManagerList = new ArrayList<>();
         typeService = new TypeService();
-        typeList = typeService.typesNotManager();
+        typeList = typeService.findAll();
         typeManagerList = typeService.typesManager();
     }
 

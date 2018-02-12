@@ -118,7 +118,7 @@
                                 </div>
                             </div>
 
-                            <div class="row" jsf:rendered="#{(userBean.isBolsista(userBean.user.login))}">
+                            <div class="row" >
                                 <h6 for="radio-vinculo" >Confirmar Condicao de Bolsista</h6>
                                 <p:selectOneRadio
                                     value="#{userBean.user.checkuser}"
@@ -137,7 +137,7 @@
 
 
                                 <h:commandLink  actionListener="#{userBean.updateUs(typeBean.typeID)}"   class="waves-effect waves-light btn " value="Atualizar">
-                                    <p:ajax transient="true" />
+
                                 </h:commandLink>
                             </div>
 

@@ -73,14 +73,12 @@ public class Seeder implements ServletContextListener {
         System.out.println("BLZ FELIPE");
         User admin = new User();
         Type type = new Type();
-        Type manager = new Type();
         Type gerente_visitante = new Type();
         Type gerente_estudante = new Type();
         Type gerente_bolsista = new Type();
         Type estudante = new Type();
         Type bolsista = new Type();
         Type visitante = new Type();
-        manager.setDescription("MANAGER");
         gerente_visitante.setDescription("GERENTE-VISITANTE");
         gerente_estudante.setDescription("GERENTE-ESTUDANTE");
         gerente_bolsista.setDescription("GERENTE-BOLSISTA");
@@ -99,7 +97,6 @@ public class Seeder implements ServletContextListener {
         admin.setType(type);
         User us = userService.getByProperty("login", "administrador");
         if (us == null) {
-            typeService.save(manager);
             typeService.save(estudante);
             typeService.save(gerente_visitante);
             typeService.save(gerente_estudante);

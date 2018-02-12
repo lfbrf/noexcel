@@ -9,12 +9,60 @@
 
     <ui:define name="content">
         <!-- intro -->
-        <div class="utf-intro green accent-3 z-depth-1">
+
+        <div class="utf-intro green accent-3 z-depth-0">
             <h1 class="grey-text text-lighten-5">No Excel</h1>
-            <h:graphicImage library="images" name="no-excel.png" class="responsive-img utf-brand"/><br/>
-            <h5>sistema para gerenciamento e controle do saldo pré-carregado para restaurantes universitários</h5>
+            <h:graphicImage class="responsive-img" style="height: 10em;" name="no-excel.png" library="images"></h:graphicImage>
+
+            <div class="slider ">
+                <ul class="slides">
+
+                    <li>
+                        <h:graphicImage   name="comidas.jpg" library="images"></h:graphicImage>
+
+                        <div class="caption center-align">
+                            <h4>Controle suas despesas, adicione saldo e evite filas no restaurante!</h4>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <a href='cadastro.jsf'>
+                            <h:graphicImage   name="users.png" library="images"></h:graphicImage>
+
+                            <div class="caption center-align">
+                                <h3>Cadastre-se agora mesmo.</h3>
+                                <h3>Clique aqui</h3>
+                                <h4 style='color:green;'>E rapido, facil, pratico e gratuito.</h4>
+
+                            </div>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href='login.jsf'>
+                            <h:graphicImage   name="entrar.png" library="images"></h:graphicImage>
+                            <div class="caption right-align">
+                                <h3 style="color:green;">Ja e cadastrado? Clique aqui.</h3>
+
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
         </div>
         <!-- intro -->
+        <script>
+            $(document).ready(function () {
+                $('.slider').slider();
+            });
+            $(document).ready(function () {
+                $('.materialboxed').materialbox();
+            });
+        </script>
     </ui:define>
 
 </ui:composition>

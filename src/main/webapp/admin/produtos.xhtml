@@ -34,10 +34,13 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <h:inputText id="valor"  value="#{productBean.product.value}"></h:inputText>
+
+                            <p:inputNumber  id="numero" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{productBean.product.value}" />
+
                             <h:outputLabel for="valor">Preco</h:outputLabel>
                         </div>
                     </div>
+
 
                     <div class="row">
                         <h:commandButton action="#{productBean.persist()}" class="waves-effect waves-light btn center-align" value="Enviar"></h:commandButton>
