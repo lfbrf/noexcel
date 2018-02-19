@@ -89,8 +89,8 @@ public class Seeder implements ServletContextListener {
         type.setDescription("ADMIN");
         admin.setEmail("ru@utfpr.com");
         admin.setName("Administrador");
-        admin.setLogin("administrador");
-        userRole.setLogin("administrador");
+        admin.setLogin("0000000");
+        userRole.setLogin("0000000");
         userRole.setRole("ADMIN");
         String password = org.apache.commons.codec.digest.DigestUtils.sha256Hex("administrador");
         admin.setPassword(password);

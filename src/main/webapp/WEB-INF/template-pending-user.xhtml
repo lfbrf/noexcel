@@ -35,7 +35,7 @@
                             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
                             <ul class="right hide-on-med-and-down">
                                 <li><a href="page.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Inicio"><i class="material-icons">dashboard</i></a></li>
-                                <li><a href="creditos.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Inserir Credito"><i class="material-icons">attach_money</i></a></li>
+                                <li jsf:rendered="#{!userBean.isPendeingBolsista(request.remoteUser)}"><a href="creditos.jsf"  class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Creditos"><i class="material-icons">attach_money</i></a></li>
 
                                 <h:panelGroup rendered="#{sessionScope.loggedIn}">
                                     <li ><h:form>
@@ -55,7 +55,7 @@
                                 <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="page.jsf"  >  <i class="material-icons blue-text text-darken-1">dashboard</i>Inicio</a>
                                 </li>
 
-                                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Inserir Credito</a>
+                                <li id="creditos" class="navbar-tags" jsf:rendered="#{!userBean.isPendeingBolsista(request.remoteUser)}"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Creditos</a>
                                 </li>
 
                                 <li><a href="#{login.logout()}">Logout</a></li>
@@ -72,7 +72,7 @@
                 <li id="inivio" class="navbar-tags  " ><a style="font-weight: bold; font-size: 15px !important;" href="page.jsf"  >  <i class="material-icons blue-text text-darken-1">dashboard</i>Inicio</a>
                 </li>
 
-                <li id="creditos" class="navbar-tags"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Inserir Credito</a>
+                <li id="creditos" class="navbar-tags" jsf:rendered="#{!userBean.isPendeingBolsista(request.remoteUser)}"><a style="font-weight: bold; font-size: 15px !important;" href="creditos.jsf"  >  <i class="material-icons blue-text text-darken-1">attach_money</i>Creditos</a>
                 </li>
 
             </ul>

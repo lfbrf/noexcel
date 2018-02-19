@@ -15,7 +15,7 @@
         <div class="brown hide" style="height: 200px;"></div>
 
 
-        <div class="main" style="background-image: url('../resources/images/atencao.jpg');background-repeat: no-repeat;
+        <div class="main" jsf:rendered="#{!userBean.isPendeingBolsista(request.remoteUser)}"  style="background-image: url('../resources/images/atencao.jpg');background-repeat: no-repeat;
              background-size: 100% 100%;
              background-size: cover; ">
             <div class="container-fluid" >
@@ -35,5 +35,27 @@
                 </div>
             </div>
         </div>
+
+        <div class="main" jsf:rendered="#{userBean.isPendeingBolsista(request.remoteUser)}"  style="background-image: url('../resources/images/atencao.jpg');background-repeat: no-repeat;
+             background-size: 100% 100%;
+             background-size: cover; ">
+            <div class="container-fluid" >
+
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div >
+                            <div class="center-align" style="margin-top: 28%; margin-bottom: 30%; color: #fff9f9;" >
+                                <h1>Seja bem vindo</h1>
+                                <h5>Por segurnaca sua conta sera efetivada somente quando encaminhar um comprovante de bolsista ao RU.</h5>
+                                <h5>Voce possui 7 dias para ativar sua conta. A equipe NOEXCEL agradece sua colaboracao!</h5>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </ui:define>
 </ui:composition>

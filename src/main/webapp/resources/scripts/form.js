@@ -1,9 +1,5 @@
-$(document).on("change", ":input", function () {
-    console.log("From change event on any input: " + this.id);
-    validateAll('#form');
-    $("#compid").mask("99/99/9999");
 
-});
+
 $(function ($) {
     // Aqui fazemos uso do plugin MASKED INPUT
 

@@ -137,7 +137,7 @@ public class UserBean {
         User u = userService.getByProperty("login", login);
         if (u != null) {
             Type t = typeService.getById(u.getType().getId());
-            if (t != null && t.getDescription().equals("BOLSISTA")) {
+            if (t != null && (t.getDescription().equals("BOLSISTA") || (t.getDescription().equals("GERENTE-bolsista")))) {
                 return true;
             }
         }
@@ -153,16 +153,16 @@ public class UserBean {
         return false;
     }
 
-    public String updateUs(Long type_id) {
-        System.out.println("ID DO TIPO " + type_id);
+    public String updateUs(Long type_id, boolean check) {
+        System.out.println("ID DO TIPO " + type_id + "AQUI--CHECK" + check);
         Type tp = typeService.getById(type_id);
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         User x = (User) sessionMap.get("user");
         UserRole ur = userRoleService.getById(x.getId());
-        if (tp.getDescription().substring(0, 8).equals("GERENTE-")) {
+        if (tp != null && tp.getDescription().substring(0, 8).equals("GERENTE-")) {
             ur.setRole("MANAGER");
-        } else {
+        } else if (type_id != 0) {
             ur.setRole("USER");
         }
         userRoleService.update(ur);
@@ -170,8 +170,8 @@ public class UserBean {
         String nome = this.user.getName();
         String email = this.user.getEmail();
         user = userService.getById(this.user.getId());
-        if (isBolsista(user.getLogin())) {
-            user.setCheckuser(!this.user.isCheckuser());
+        if (isBolsista(user.getLogin()) && !check) {
+            user.setCheckuser(false);
         }
         user.setName(nome);
         User up = userService.getByProperty("email", email);
@@ -288,6 +288,14 @@ public class UserBean {
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         sessionMap.put("user", user);
         this.user = user;
+    }
+
+    public boolean isPendeingBolsista(String login) {
+        User u = userService.getByProperty("login", login);
+        if (u.isCheckuser()) {
+            return true;
+        }
+        return false;
     }
 
     public boolean editProfile(String login) {
@@ -424,10 +432,10 @@ public class UserBean {
         List<String> us = null;
         us = userService.listByNames();
         int length = user.getLogin().length();
-        if (length == 8 && user.isCheckuser()) {
+        if (length == 7 && user.isCheckuser()) {
             user.setCheckuser(true);
             descricao = "Bolsista";
-        } else if (length == 8) {
+        } else if (length == 7) {
             descricao = "Estudante";
         } else {
             descricao = "Visitante";

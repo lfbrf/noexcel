@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -67,19 +68,37 @@ public class LoginBean implements Serializable {
         this.userService = userService;
     }
 
+    public boolean isMask() {
+        return mask;
+    }
+
+    public void setMask(boolean mask) {
+        this.mask = mask;
+    }
+
+    private boolean mask;
+
+    public void changeMask() {
+        System.out.println("AQ");
+        String str = usuario.replaceAll("\\D+", "");
+        if (str.length() >= 6) {
+            System.out.println("EII");
+
+            mask = true;
+            RequestContext.getCurrentInstance().update("login-fom:date");
+        }
+        System.out.println(str.length());
+    }
     private UserService userService;
 
     public String onClickLogar() throws IOException {
         FacesContext fc = FacesContext.getCurrentInstance();
         System.out.println("*****************************");
         System.out.println("Login: " + this.usuario + " Senha: " + this.senha);
+        String str = this.usuario.replaceAll("\\D+", "");
+        this.usuario = str;
         boolean isloggedin = false;
         User u = userService.getByProperty("login", this.usuario);
-        if (u.isCheckuser()) {
-            MessageUtil.showMessage("Por Favor Aguarde!!!", "Voce deve confirmar sua condicao de bolsista no restaurante.", FacesMessage.SEVERITY_ERROR);
-
-            return "";
-        }
 
         try {
             HttpServletRequest request = (HttpServletRequest) FacesContext.
